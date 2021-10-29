@@ -8,6 +8,8 @@ namespace LostMind.Classes.GameController
 {
     public class StartGameController
     {
-        public void runLogo() { }
+        public StartGameController() {
+            Console.Clear();
+        }
     }
 }

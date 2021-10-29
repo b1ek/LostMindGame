@@ -23,12 +23,5 @@ namespace LostMind.Classes.User
             return Console.ReadKey(intercept).KeyChar == key;
         }
         #endregion
-        static bool workerStarted = false;
-        static Dictionary<ConsoleKey, ulong> keysPressed = new Dictionary<ConsoleKey, ulong>();
-        static BackgroundWorker backgroundWorker = new BackgroundWorker();
-        public static void startWorker()
-        {
-            
-        }
     }
 }

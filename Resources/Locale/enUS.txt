@@ -1,0 +1,3 @@
+﻿Launching the game in 5 seconds. Please hold still.
+Is your name %NAME% correct?
+(Press Y or N key)
