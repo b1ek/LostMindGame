@@ -20,7 +20,7 @@ namespace LostMind
             anim.run();
 
             UserConsoleWriter writer = new UserConsoleWriter(Console.CursorLeft, Console.CursorTop);
-            writer.write("\n1114567547");
+            writer.fancyWrite("\n1114567547").Wait();
 
             Console.SetCursorPosition(Console.CursorLeft, Console.CursorTop + 3);
         }
