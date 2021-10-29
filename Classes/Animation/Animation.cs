@@ -10,7 +10,7 @@ namespace LostMind.Classes.Animation
     public class Animation
     {
         private FrameSequence frameSequence;
-        private User.UserConsoleWriter writer;
+        public User.UserConsoleWriter writer;
         public Animation(FrameSequence fs, int sx, int sy) {
             frameSequence = fs.forgeCopy();
             writer = new User.UserConsoleWriter(sx, sy);
@@ -18,9 +18,12 @@ namespace LostMind.Classes.Animation
 
         public void run() {
             var frames = frameSequence;
+            var y = 0;
             for (int i = 0; i < frames.Count; i++) {
                 frames[i].displayFrame(writer);
+                y++;
             }
+            Console.SetCursorPosition(writer._x, y + 2);
         }
 
 
