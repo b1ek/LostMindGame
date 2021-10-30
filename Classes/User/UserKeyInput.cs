@@ -23,5 +23,11 @@ namespace LostMind.Classes.User
             return Console.ReadKey(intercept).KeyChar == key;
         }
         #endregion
+        public static void awaitKeyPress() {
+            while (true)
+                if (Console.KeyAvailable)
+                    break;
+            
+        }
     }
 }

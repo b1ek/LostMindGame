@@ -10,4 +10,13 @@
     <PackageReference Include="MSTest.TestFramework" Version="2.2.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Resources\Locale\en-US.locale">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Locale\ru-RU.locale">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

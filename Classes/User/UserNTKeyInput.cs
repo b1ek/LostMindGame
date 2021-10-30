@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LostMind.Classes.User
 {
-    class UserNTKeyInput
+    public class UserNTKeyInput
     {
         public const int WM_HOTKEY_MSG_ID = 0x0312;
         public const int STD_OUTPUT_HANDLE = -11;
@@ -23,6 +23,6 @@ namespace LostMind.Classes.User
 
         static IntPtr hWnd = GetStdHandle(STD_OUTPUT_HANDLE);
 
-        
+
     }
 }

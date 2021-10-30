@@ -37,7 +37,7 @@ namespace LostMind.Classes.User {
             foreach (var c in value) {
                 write(c.ToString());
                 await Task.Delay(Util.RandomGen.getInt(1, 4));
-            } _y++; _x = _sx;
+            } _y++; _x = _sx; Console.SetCursorPosition(_x, _y);
         }
         
         public async Task fancyWrite(string value, int delay)
@@ -45,7 +45,7 @@ namespace LostMind.Classes.User {
             foreach (var c in value) {
                 write(c.ToString());
                 await Task.Delay(delay);
-            } _y++; _x = _sx;
+            } _y++; _x = _sx; Console.SetCursorPosition(_x, _y);
         }
         
         public async Task fancyWrite(string value, int floor, int roof)
@@ -53,7 +53,7 @@ namespace LostMind.Classes.User {
             foreach (var c in value) {
                 write(c.ToString());
                 await Task.Delay(Util.RandomGen.getInt(floor, roof));
-            } _y++; _x = _sx;
+            } _y++; _x = _sx; Console.SetCursorPosition(_x, _y);
         }
         
         public async Task fancyWrite(string value, string end)
