@@ -34,69 +34,41 @@ namespace LostMind.Classes.User {
         }
         
         public async Task fancyWrite(string value) {
-            string val2 = value;
             foreach (var c in value) {
                 write(c.ToString());
                 await Task.Delay(Util.RandomGen.getInt(1, 4));
-                val2 = val2.Remove(0, 1);
-                if (User.UserKeyInput.isKeyPressed(ConsoleKey.Spacebar, false)) {
-                    write(val2); _y++; _x = _sx; return;
-                }
             } _y++; _x = _sx;
         }
         
         public async Task fancyWrite(string value, int delay)
         {
-            string val2 = value;
             foreach (var c in value) {
                 write(c.ToString());
                 await Task.Delay(delay);
-                val2 = val2.Remove(0, 1);
-                if (User.UserKeyInput.isKeyPressed(ConsoleKey.Spacebar, false))
-                {
-                    write(val2); _y++; _x = _sx; return;
-                }
             } _y++; _x = _sx;
         }
         
         public async Task fancyWrite(string value, int floor, int roof)
         {
-            string val2 = value;
             foreach (var c in value) {
                 write(c.ToString());
                 await Task.Delay(Util.RandomGen.getInt(floor, roof));
-                val2 = val2.Remove(0, 1);
-                if (User.UserKeyInput.isKeyPressed(ConsoleKey.Spacebar, false))
-                {
-                    write(val2); _y++; _x = _sx; return;
-                }
             } _y++; _x = _sx;
         }
         
         public async Task fancyWrite(string value, string end)
         {
-            string val2 = value;
             foreach (var c in value) {
                 write(c.ToString());
                 await Task.Delay(Util.RandomGen.getInt(1, 4));
-                val2 = val2.Remove(0, 1);
-                if (User.UserKeyInput.isKeyPressed(ConsoleKey.Spacebar, false))
-                {
-                    write(val2); _y++; _x = _sx; return;
-                }
             } write(end);
         }
 
         public async Task fancyWrite(string value, int floor, int roof, string end)
         {
-            string val2 = value;
             foreach (var c in value) {
                 write(c.ToString());
                 await Task.Delay(Util.RandomGen.getInt(floor, roof));
-                val2 = val2.Remove(0, 1);
-                if (User.UserKeyInput.isKeyPressed(ConsoleKey.Spacebar, false)) {
-                    write(val2); _y++; _x = _sx; return;
-                }
             }
             write(end);
         }
