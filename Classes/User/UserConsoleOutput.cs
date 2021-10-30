@@ -34,6 +34,19 @@ namespace LostMind.Classes.User
             Console.Write(val);
             Console.SetCursorPosition(op.Left, op.Top);
         }
+        public static void WriteXY(int x, int y, string val, ConsoleColor bgClr, ConsoleColor txtClr)
+        {
+            var a = Console.BackgroundColor;
+            var b = Console.ForegroundColor;
+            Console.BackgroundColor = bgClr;
+            Console.ForegroundColor = txtClr;
+            var op = Console.GetCursorPosition();
+            Console.SetCursorPosition(x, y);
+            Console.Write(val);
+            Console.SetCursorPosition(op.Left, op.Top);
+            Console.BackgroundColor = a;
+            Console.ForegroundColor = b;
+        }
 
         public static void WriteLineXY(int x, int y, string val) {
             var op = Console.GetCursorPosition();

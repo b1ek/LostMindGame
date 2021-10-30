@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using LostMind.Classes.Animation;
 using System.Diagnostics;
+using LostMind.Classes.GameController;
 
 namespace LostMind
 {
@@ -16,6 +17,7 @@ namespace LostMind
         public static extern bool Beep(int freq, int duration);
 
         private static string locale = "en-US";
+        public static GameController gameController = new GameController();
 
         static void Main(string[] args) {
 
@@ -23,10 +25,10 @@ namespace LostMind
             Console.CursorVisible = false;
             var cp = Console.GetCursorPosition();
             Animation anim = Animation.createSimple(File.ReadAllText(@"C:\Users\blek\source\repos\MyLifeGame\Resources\Logo.txt"), cp.Left+16, cp.Top+1, 2);
-            anim.run();
-            #region Bootload
+            //anim.run();
+           //#region Bootload
             UserConsoleWriter writer = new UserConsoleWriter(Console.CursorLeft, Console.CursorTop);
-            writer.fancyWrite("Booting up...", 1).Wait();
+            /*writer.fancyWrite("Booting up...", 1).Wait();
             Thread.Sleep(64);
             writer.fancyWrite("Operating system: " + Environment.OSVersion, 1).Wait();
             writer.fancyWrite("Using .NET runtime version " + Environment.Version, 1).Wait();
@@ -51,6 +53,7 @@ namespace LostMind
             ah.Wait();
             writer.fancyWrite(" Done").Wait();
             #endregion
+            */
             writer.write("\nWould you like to change the language to Russian? Press Y or N" + 
                          "\nХотели бы вы сменить язык на русский? Нажмите Y или N\n\n");
             var userRussian = false;
@@ -71,7 +74,7 @@ namespace LostMind
             else {
                 writer.write("OK! Still using English.\nNote: you still can change it in Settings menu.");
             }
-
+            gameController.startGame();
         }
 
         static void OnProcessExit(object sender, EventArgs e)
