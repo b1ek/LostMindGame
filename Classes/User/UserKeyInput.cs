@@ -27,7 +27,12 @@ namespace LostMind.Classes.User
             while (true)
                 if (Console.KeyAvailable)
                     break;
-            
+        }
+        public static void awaitKeyPress(ConsoleKey key)
+        {
+            while (true)
+                if (Console.KeyAvailable)
+                    if (Console.ReadKey(true).Key == key) break;
         }
     }
 }

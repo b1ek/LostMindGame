@@ -8,22 +8,21 @@ namespace LostMind.Classes.UI
 {
     public class UIElement
     {
-        internal int _x;
-        internal int _y;
-        internal bool _intrctbl;
-        internal ConsoleColor _hbg;
-        internal ConsoleColor _hfg;
-        internal ConsoleColor _dbg;
-        internal ConsoleColor _dfg;
-        internal ConsoleColor _bg;
-        internal ConsoleColor _fg;
-        internal string _intxt;
-        internal bool currentlyHovered = false;
+        private protected int _x;
+        private protected int _y;
+        private protected bool _intrctbl;
+        private protected ConsoleColor _hbg;
+        private protected ConsoleColor _hfg;
+        private protected ConsoleColor _dbg;
+        private protected ConsoleColor _dfg;
+        private protected ConsoleColor _bg;
+        private protected ConsoleColor _fg;
+        private protected string _intxt;
+        private protected bool currentlyHovered = false;
+        bool displayed = false;
         public string innerText {
             get { return _intxt; }
-            set {
-                _intxt = value;
-            }
+            set { _intxt = value; }
         }
         public UIElement(bool interactable, ConsoleColor bgColor, ConsoleColor fgColor, ConsoleColor hoverBgColor, ConsoleColor hoverFgColor, ConsoleColor cmdBgDef, ConsoleColor cmdFgDef) {
             _intrctbl = interactable;
@@ -35,22 +34,50 @@ namespace LostMind.Classes.UI
             _fg = fgColor;
         }
         public void print(int x, int y) {
-            User.UserConsoleOutput.WriteXY(_x, _y, new string(' ', _intxt.Length), _dbg, _dfg); _x = x; _y = y;
-            User.UserConsoleOutput.WriteXY(x, y, _intxt, _bg, _fg);
+            print(x, y, true);
         }
         public void print(int x, int y, bool removeOld)
         {
-            if (removeOld) { User.UserConsoleOutput.WriteXY(_x, _y, new string(' ', _intxt.Length), _dbg, _dfg); _x = x; _y = y; }
-            User.UserConsoleOutput.WriteXY(x, y, _intxt, _bg, _fg);
+            if (removeOld) {
+                if (displayed) User.UserConsoleOutput.WriteXY(_x, _y, new string(' ', _intxt.Length), _dbg, _dfg);
+                _x = x;
+                _y = y;
+            }
+            User.UserConsoleOutput.WriteXY(_x, _y, _intxt, _bg, _fg);
+            displayed = true;
         }
+        public void remove() {
+            User.UserConsoleOutput.WriteXY(_x, _y, new string(' ', _intxt.Length), _dbg, _dfg);
+            displayed = false;
+        }
+
+        private protected ConsoleColor _crrntbg; private protected ConsoleColor _crrntfg;
+        public ConsoleColor bg {
+            get { return _crrntbg; }
+            set {
+                User.UserConsoleOutput.WriteXY(_x, _y, _intxt, value, _crrntfg);
+                _crrntbg = value;
+            }
+        } public ConsoleColor txt {
+            get { return _crrntfg; }
+            set {
+                User.UserConsoleOutput.WriteXY(_x, _y, _intxt, _crrntbg, value);
+                _crrntfg = value;
+            }
+        }
+
         public virtual void hover(bool hovered) {
             if (_intrctbl) { currentlyHovered = hovered;
                 if (hovered) {
-                    User.UserConsoleOutput.WriteXY(_x, _y, _intxt, _hbg, _hfg);
+                    User.UserConsoleOutput.WriteXY(_x, _y, _intxt);
+                    bg = _hbg;
+                    txt = _hfg;
                 } else {
-                    User.UserConsoleOutput.WriteXY(_x, _y, _intxt, _bg, _fg);
+                    User.UserConsoleOutput.WriteXY(_x, _y, _intxt);
+                    bg = _bg;
+                    txt = _fg;
                 }
-            }
+            }else
             throw new Exception("Element not interactable");
         }
 

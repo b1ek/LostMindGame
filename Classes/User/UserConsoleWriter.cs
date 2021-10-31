@@ -15,21 +15,32 @@ namespace LostMind.Classes.User {
             _sy = _y;
         } public void write(string value) {
             foreach (var current in value) {
-                UserConsoleOutput.WriteXY(_x, _y, current.ToString());
-                _x++;
-                if (current == '\n') {
+                if (current == '\n')
+                {
                     _x = _sx;
                     _y++;
+                }
+                else
+                {
+                    Console.SetCursorPosition(_x, _y);
+                    Console.Write(current);
+                    _x++;
                 }
             } Console.SetCursorPosition(_x, _y);
         } public void writeLine(string value) {
-            foreach (var current in value) {
-                UserConsoleOutput.WriteXY(_x, _y, current.ToString());
-                if (current == '\n') {
+            foreach (var current in value)
+            {
+                if (current == '\n')
+                {
                     _x = _sx;
                     _y++;
                 }
-                _x++;
+                else
+                {
+                    Console.SetCursorPosition(_x, _y);
+                    Console.Write(current);
+                    _x++;
+                }
             } _y++; Console.SetCursorPosition(_x, _y);
         }
         

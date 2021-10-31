@@ -6,6 +6,10 @@
     <StartupObject>LostMind.Program</StartupObject>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="MSTest.TestFramework" Version="2.2.3" />
   </ItemGroup>

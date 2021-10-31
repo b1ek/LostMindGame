@@ -8,6 +8,8 @@ using System.Text.Json.Serialization;
 using LostMind.Classes.Animation;
 using System.Diagnostics;
 using LostMind.Classes.GameController;
+using LostMind.Classes.UI;
+using LostMind.Classes.Util;
 
 namespace LostMind
 {
@@ -21,6 +23,8 @@ namespace LostMind
         public static GameController gameController = new GameController();
 
         static void Main(string[] args) {
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
             #region a
             /*
             if (22f/7f != 3.142857f) {
@@ -34,8 +38,6 @@ namespace LostMind
                 }
                 Console.BackgroundColor = ConsoleColor.Black; Console.Clear();
             }
-            AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
-            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
             Console.CursorVisible = false;
 
             var cp = Console.GetCursorPosition();
@@ -95,6 +97,20 @@ namespace LostMind
             */
             #endregion
             gameController.startGame();
+            Viewport viewport = new Viewport(0, 3, 34, 8);
+            var a = new UIButton("Start");
+            viewport.addElement(a);
+            viewport.addElement(new UIButton("About"));
+            viewport.addElement(new UIButton("Exit game"));
+            while (true) {
+                if (UserKeyInput.isKeyPressed(ConsoleKey.S)) {
+                    viewport.moveCursorDown();
+                }
+                if (UserKeyInput.isKeyPressed(ConsoleKey.W))
+                {
+                    viewport.moveCursorUp();
+                }
+            }
         }
 
         static void OnProcessExit(object sender, EventArgs e)
@@ -105,14 +121,16 @@ namespace LostMind
 
         static void UnhandledException(object s, UnhandledExceptionEventArgs e) {
             Console.SetCursorPosition(0, 0);
+            Console.SetWindowSize(120, 30);
+            Console.SetBufferSize(120, 30);
             Console.BackgroundColor = ConsoleColor.DarkBlue;
             Console.ForegroundColor = ConsoleColor.White;
             Console.Clear();
             Console.TreatControlCAsInput = true;
-            //new Thread(() => { while (true) {Beep(Classes.Util.RandomGen.getInt(1023, 1024), 1); } }).Start();
+            new Thread(() => { Beep(1024, int.MaxValue); }).Start();
             
             Console.WriteLine("A problem has been detected and the game was shut down to prevent damage to your computer.\n");
-            Console.WriteLine(e.ExceptionObject.GetType().Name.ToUpper());
+            Console.WriteLine(e.ExceptionObject.GetType().Name.ToUpper() + "\n> " + ((Exception) e.ExceptionObject).Message);
             Console.WriteLine("\nIf this is the first time you've seen this stop error screen, restart your computer.\nIf these screen appears again, follow these steps:\n");
             
             Console.WriteLine("Check to make sure any new mods or updates to the game or runtime was properly installed.");
@@ -125,14 +143,13 @@ namespace LostMind
 
             Console.WriteLine("*** STOP: 0x000000FE (0x00000008, 0x00000000666, 0x00000009, 0x847075cc).");
             Console.WriteLine("***   gv3.sys - Address F86B5A89 base at F8685000. DateStamp "+ new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString("X"));
+            Console.WriteLine("*** Press S to display StackTrace");
+            UserKeyInput.awaitKeyPress(ConsoleKey.S);
             Console.WriteLine("*** StackTrace: ");
             Console.WriteLine(Environment.StackTrace);
             Console.WriteLine("\nPress ESC to exit the program.");
-            while (true) {
-                if (Console.KeyAvailable) if (Console.ReadKey().Key == ConsoleKey.Escape)
-                        Environment.Exit(0x000000FE);
-            }
-
+            UserKeyInput.awaitKeyPress(ConsoleKey.Escape);
+            Environment.Exit(0x000000FE);
         }
     }
 }
