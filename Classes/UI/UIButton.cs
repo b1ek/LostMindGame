@@ -22,5 +22,8 @@ namespace LostMind.Classes.UI
         }
 
         public event EventHandler OnButtonClick;
+        public void processKeyEvent(ConsoleKey key) {
+
+        }
     }
 }
