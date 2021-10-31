@@ -18,6 +18,7 @@ namespace LostMind.Classes.UI
         internal ConsoleColor _bg;
         internal ConsoleColor _fg;
         internal string _intxt;
+        internal bool currentlyHovered = false;
         public string innerText {
             get { return _intxt; }
             set {
@@ -42,8 +43,8 @@ namespace LostMind.Classes.UI
             if (removeOld) { User.UserConsoleOutput.WriteXY(_x, _y, new string(' ', _intxt.Length), _dbg, _dfg); _x = x; _y = y; }
             User.UserConsoleOutput.WriteXY(x, y, _intxt, _bg, _fg);
         }
-        public void hover(bool hovered) {
-            if (_intrctbl) {
+        public virtual void hover(bool hovered) {
+            if (_intrctbl) { currentlyHovered = hovered;
                 if (hovered) {
                     User.UserConsoleOutput.WriteXY(_x, _y, _intxt, _hbg, _hfg);
                 } else {
