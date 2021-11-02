@@ -10,6 +10,8 @@ namespace LostMind.Classes.UI
     {
         private protected int _x;
         private protected int _y;
+        public int lastX { get { return _x; } }
+        public int lastY { get { return _y; } }
         private protected bool _intrctbl;
         private protected ConsoleColor _hbg;
         private protected ConsoleColor _hfg;

@@ -13,7 +13,11 @@ namespace LostMind.Classes.User
         [DllImport("kernel32.dll")]
         public static extern bool Beep(int freq, int duration);
 
-        public static async Task beep(int freq, int duration) {
+        public static void FlushConsole() {
+            Console.ResetColor(); Console.Clear();
+        }
+
+        public static async Task BeepAsync(int freq, int duration) {
             Beep(freq, duration);
             await Task.Delay(0);
         }
@@ -22,7 +26,6 @@ namespace LostMind.Classes.User
             var cv = val.ToCharArray();
             foreach (var c in cv) {
                 await Task.Delay(Util.RandomGen.getInt(1, 2));
-                await beep(800, 1);
                 Console.Write(c);
             }
             Console.Write("\n");

@@ -27,6 +27,7 @@ namespace LostMind.Classes.Animation
         public void displayFrame(User.UserConsoleWriter writer) {
             writer.write(_contents);
             writer._y = writer._sy;
+            writer._x = writer._sx;
             Thread.Sleep(_delay);
         }
     }

@@ -14,6 +14,7 @@ namespace LostMind.Classes.GameController
 
         public void startGame() {
             Console.Clear();
+            Console.CursorVisible = true;
             string titleString = $"[{locale.gameTitle}] | [0/100] | [Main Menu]";
             string sepString = new string('-', titleString.Length);
             Console.WriteLine(sepString);

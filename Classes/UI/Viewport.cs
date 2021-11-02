@@ -8,12 +8,14 @@ using System.Threading.Tasks;
 
 namespace LostMind.Classes.UI
 {
+    public class TooMuchElementsException : Exception {}
     public class Viewport {
         int _x = 0;
         int _y = 0;
         int selection = 0;
         List<UIElement> _elements = new List<UIElement>();
         public List<UIElement> Elements { get { return _elements; } }
+        public const int maxElements = 256;
         int _marginLeft;
         int _marginTop;
         public int marginLeft { get { return _marginLeft; }
@@ -43,9 +45,12 @@ namespace LostMind.Classes.UI
 
         public void OnKeyPress(ConsoleKeyInfo key) {
             ConsoleKey k = key.Key;
-            if (k == ConsoleKey.W) moveCursorUp();
-            if (k == ConsoleKey.S) moveCursorDown();
-            if (k == ConsoleKey.Spacebar) clickSelection();
+            foreach (var _key in UISysConfig.UIMoveUpKey)
+                if (_key == k) moveCursorUp();
+            foreach (var _key in UISysConfig.UIMoveDownKey)
+                if (_key == k) moveCursorDown();
+            foreach (var _key in UISysConfig.UIEnterKey)
+                if (_key == k) clickSelection();
         }
 
         public void drawElements() {
@@ -56,37 +61,30 @@ namespace LostMind.Classes.UI
             }
         }
         public void addElement(UIElement element) {
-            _elements.Add(element);
+            if (_elements.Count < maxElements) _elements.Add(element);
+            else throw new TooMuchElementsException();
             element.print(_marginLeft + _x, _marginTop + _y + Elements.Count);
             if (_elements.Count == 1) {
                 _elements[0].hover(true);
             }
         }
 
-        public void clickSelection() {
-            _elements[selection].click();
-        }
-
-        public void moveCursorUp()
-        {
-            if (selection - 1 < _elements.Count)
-            {
+        #region Cursor
+        public void clickSelection() => _elements[selection].click();
+        public void moveCursorUp() {
+            if (selection - 1 < _elements.Count) {
                 if (selection == 0) { }
                 else { _elements[selection].hover(false); selection--; _elements[selection].hover(true); }
+                Console.SetCursorPosition(_elements[selection].lastX, _elements[selection].lastY);
             }
         }
         public void moveCursorDown() {
-            if (selection + 1 < _elements.Count)
-            {
+            if (selection + 1 < _elements.Count) {
                 if (selection == _elements.Count) { }
-                else
-                {
-                    _elements[selection].hover(false);
-                    selection++;
-                    _elements[selection].hover(true);
-                }
+                else { _elements[selection].hover(false); selection++; _elements[selection].hover(true); }
+                Console.SetCursorPosition(_elements[selection].lastX, _elements[selection].lastY);
             }
         }
-        
+        #endregion
     }
 }

@@ -40,10 +40,11 @@ namespace LostMind
                 Console.BackgroundColor = ConsoleColor.Black; Console.Clear();
             }
             Console.CursorVisible = false;
+            throw new Exception();
 
             var cp = Console.GetCursorPosition();
             Animation anim = Animation.createSimple(File.ReadAllText(@"C:\Users\blek\source\repos\MyLifeGame\Resources\Logo.txt"), cp.Left+16, cp.Top+1, 2);
-            anim.run();
+            //anim.run();
             #region Bootload
             UserConsoleWriter writer = new UserConsoleWriter(Console.CursorLeft, Console.CursorTop);
             writer.fancyWrite("Booting up...", 1).Wait();
@@ -96,9 +97,9 @@ namespace LostMind
 
             UserKeyInput.awaitKeyPress();
 
-            Console.ResetColor(); Console.Clear();
+            UserConsoleOutput.FlushConsole();
             gameController.startGame();
-            viewport = new Viewport(0, 3, 34, 8);
+            viewport = new Viewport(0, 3, 64, 32);
             viewport.marginLeft = 5;
             viewport.addElement(new UIButton("Start", start));
             viewport.addElement(new UIButton("About"));
@@ -114,11 +115,16 @@ namespace LostMind
 
         static void OnProcessExit(object sender, EventArgs e)
         {
+            Console.ResetColor(); Console.Clear();
             Console.SetCursorPosition(0, Console.CursorTop+3);
             Console.CursorVisible = true;
+            Environment.Exit(0);
         }
 
+        static bool exceptionHandled = false;
         static void UnhandledException(object s, UnhandledExceptionEventArgs e) {
+            if (exceptionHandled) Environment.Exit(0x000000FE);
+            Console.ResetColor();
             Console.SetCursorPosition(0, 0);
             Console.SetWindowSize(120, 30);
             Console.SetBufferSize(120, 30);
@@ -144,12 +150,13 @@ namespace LostMind
             Console.WriteLine("*** STOP: 0x000000FE (0x00000008, 0x00000000666, 0x00000009, 0x847075cc).");
             Console.WriteLine("***   gv3.sys - Address F86B5A89 base at F8685000. DateStamp "+ new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString("X"));
             Console.WriteLine("*** Press S to display StackTrace");
-            UserKeyInput.awaitKeyPress(ConsoleKey.S);
+            while (true) if (Console.KeyAvailable) if (Console.ReadKey(true).Key == ConsoleKey.S) break;
             Console.WriteLine("*** StackTrace: ");
             Console.WriteLine(Environment.StackTrace);
-            Console.WriteLine("\nPress ESC to exit the program.");
-            UserKeyInput.awaitKeyPress(ConsoleKey.Escape);
-            Environment.Exit(254);
+            Console.WriteLine("\nPress any key to exit the program.");
+            while (true) if (Console.KeyAvailable) break;
+            beep.Abort();
+            Environment.Exit(0);
         }
     }
 }
