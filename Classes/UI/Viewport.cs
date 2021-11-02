@@ -33,6 +33,15 @@ namespace LostMind.Classes.UI
             get { return loop; }
         }
 
+        /**
+         * <summary>
+         * Crete new viewport
+         * </summary>
+         * <param name="x">The left x point</param>
+         * <param name="y">The left y point</param>
+         * <param name="width">Width of rectangle</param>
+         * <param name="height">Height of rectangle</param>
+         */
         public Viewport(int x, int y, int width, int height) {
             _x = x;
             _y = y;
@@ -43,6 +52,7 @@ namespace LostMind.Classes.UI
             UserKeyInput.KeyPress += OnKeyPress;
         }
 
+        /**<summary>Key press event handler.</summary>*/
         public void OnKeyPress(ConsoleKeyInfo key) {
             ConsoleKey k = key.Key;
             foreach (var _key in UISysConfig.UIMoveUpKey)
@@ -53,14 +63,17 @@ namespace LostMind.Classes.UI
                 if (_key == k) clickSelection();
         }
 
-        public void drawElements() {
+        /**<summary>Draw viewport elements.</summary>*/
+        public void DrawElements() {
             int i = 0;
             foreach (var elem in _elements) {
                 elem.print(_marginLeft+_x, _marginTop+_y+i);
                 i++;
             }
         }
-        public void addElement(UIElement element) {
+
+        /**<summary>Add element to viewport.</summary>*/
+        public void AddElement(UIElement element) {
             if (_elements.Count < maxElements) _elements.Add(element);
             else throw new TooMuchElementsException();
             element.print(_marginLeft + _x, _marginTop + _y + Elements.Count);

@@ -20,10 +20,16 @@ namespace LostMind
         public static extern bool Beep(int freq, int duration);
 
         static string locale = "en-US";
+        /**<summary>Current localization of the program.</summary>*/
         public static Classes.Localization.Localization.Localizations localization = Classes.Localization.Localization.getLocale(locale);
-        public static GameController gameController = new GameController();
-        static Viewport viewport;
 
+        /**<summary>Game controller.</summary>*/
+        public static GameController gameController = new GameController();
+
+        /**<summary>
+         * Main entry point.
+         * </summary>
+         */
         static void Main(string[] args) {
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
@@ -98,20 +104,9 @@ namespace LostMind
 
             UserConsoleOutput.FlushConsole();
             gameController.startGame();
-            viewport = new Viewport(0, 3, 64, 32);
-            viewport.marginLeft = 5;
-            viewport.addElement(new UIButton("Start", start));
-            viewport.addElement(new UIButton("About"));
-            viewport.addElement(new UIButton("Exit game"));
-
-            //SoundController.playMusic(SoundController.Music.MainMenu);
         }
 
-        static void start() {
-            viewport.addElement(new UIButton("Test button"));
-        }
-
-
+        /**<summary>Method that is called on program exit.</summary>*/
         static void OnProcessExit(object sender, EventArgs e)
         {
             Console.ResetColor(); Console.Clear();
@@ -121,6 +116,7 @@ namespace LostMind
         }
 
         static bool exceptionHandled = false;
+        /**<summary>BSOD exception handler.</summary>*/
         static void UnhandledException(object s, UnhandledExceptionEventArgs e) {
             if (exceptionHandled) Environment.Exit(0x000000FE);
             Console.ResetColor();
