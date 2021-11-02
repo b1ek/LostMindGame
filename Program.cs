@@ -10,6 +10,7 @@ using System.Diagnostics;
 using LostMind.Classes.GameController;
 using LostMind.Classes.UI;
 using LostMind.Classes.Util;
+using LostMind.Classes.Sound;
 
 namespace LostMind
 {
@@ -25,6 +26,7 @@ namespace LostMind
         static void Main(string[] args) {
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
+
             #region a
             /*
             if (22f/7f != 3.142857f) {
@@ -96,21 +98,17 @@ namespace LostMind
             UserKeyInput.awaitKeyPress();
             */
             #endregion
+            Console.ResetColor(); Console.Clear();
             gameController.startGame();
             Viewport viewport = new Viewport(0, 3, 34, 8);
+            viewport.marginLeft = 5;
             var a = new UIButton("Start");
             viewport.addElement(a);
             viewport.addElement(new UIButton("About"));
             viewport.addElement(new UIButton("Exit game"));
-            while (true) {
-                if (UserKeyInput.isKeyPressed(ConsoleKey.S)) {
-                    viewport.moveCursorDown();
-                }
-                if (UserKeyInput.isKeyPressed(ConsoleKey.W))
-                {
-                    viewport.moveCursorUp();
-                }
-            }
+            viewport.startLoop();
+            Thread.Sleep(int.MaxValue);
+            //SoundController.playMusic(SoundController.Music.MainMenu);
         }
 
         static void OnProcessExit(object sender, EventArgs e)
@@ -127,7 +125,8 @@ namespace LostMind
             Console.ForegroundColor = ConsoleColor.White;
             Console.Clear();
             Console.TreatControlCAsInput = true;
-            new Thread(() => { Beep(1024, int.MaxValue); }).Start();
+            var beep = new Thread(() => { Beep(1024, int.MaxValue); });
+            beep.Start();
             
             Console.WriteLine("A problem has been detected and the game was shut down to prevent damage to your computer.\n");
             Console.WriteLine(e.ExceptionObject.GetType().Name.ToUpper() + "\n> " + ((Exception) e.ExceptionObject).Message);
@@ -149,7 +148,8 @@ namespace LostMind
             Console.WriteLine(Environment.StackTrace);
             Console.WriteLine("\nPress ESC to exit the program.");
             UserKeyInput.awaitKeyPress(ConsoleKey.Escape);
-            Environment.Exit(0x000000FE);
+            beep.Abort();
+            Environment.Exit(254);
         }
     }
 }

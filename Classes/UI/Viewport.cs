@@ -26,6 +26,10 @@ namespace LostMind.Classes.UI
                 _marginTop = value;
             }
         }
+        Thread _loop;
+        public Task loop {
+            get { return loop; }
+        }
 
         public Viewport(int x, int y, int width, int height) {
             _x = x;
@@ -51,19 +55,58 @@ namespace LostMind.Classes.UI
         }
         public void moveCursorUp()
         {
-            if (selection - 1 < _elements.Count) return;
-            if (selection == 0) { }
-            else { _elements[selection].hover(false); selection--; _elements[selection].hover(true); }
+            if (selection - 1 < _elements.Count)
+            {
+                if (selection == 0) { }
+                else { _elements[selection].hover(false); selection--; _elements[selection].hover(true); }
+            }
         }
         public void moveCursorDown() {
-            if (selection + 1 > _elements.Count) return;
-            if (selection == _elements.Count){}
-            else {
-                _elements[selection].hover(false);
-                selection++;
-                _elements[selection].hover(true);
+            if (selection + 1 < _elements.Count)
+            {
+                if (selection == _elements.Count) { }
+                else
+                {
+                    _elements[selection].hover(false);
+                    selection++;
+                    _elements[selection].hover(true);
+                }
             }
         }
         
+        public Thread createLoopThread() {
+            var a = new Thread(() => {
+                new Thread(() => {
+                    while (true) {
+                        if (Console.KeyAvailable) {
+                            var key = Console.ReadKey(true).Key;
+                            foreach (var _key in UISysConfig.UIMoveUpKey) {
+                                if (key == _key)
+                                    moveCursorUp();
+                            }
+                        }
+                    }
+                }).Start();
+
+                new Thread(() => {
+                    while (true) {
+                        if (Console.KeyAvailable) {
+                            var key = Console.ReadKey(true).Key;
+                            foreach (var _key in UISysConfig.UIMoveDownKey) {
+                                if (key == _key)
+                                    moveCursorDown();
+                            }
+                        }
+                    }
+                }).Start();
+            });
+            return a;
+        }
+
+        public void startLoop() {
+            _loop = createLoopThread();
+            _loop.Start();
+        }
+
     }
 }
