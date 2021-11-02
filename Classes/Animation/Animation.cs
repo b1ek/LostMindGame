@@ -12,7 +12,7 @@ namespace LostMind.Classes.Animation
         private FrameSequence frameSequence;
         public User.UserConsoleWriter writer;
         private ConsoleColor _color;
-        public ConsoleColor color { get => _color; }
+        public ConsoleColor color { get => _color; set { _color = value; } }
         public Animation(FrameSequence fs, int sx, int sy) {
             frameSequence = fs.forgeCopy();
             writer = new User.UserConsoleWriter(sx, sy);
@@ -50,7 +50,9 @@ namespace LostMind.Classes.Animation
                 _ss = _ss + _s[i] + "\n";
                 _fs.add(new Frame(_ss, frameDelay));
             }
-            return new Animation(_fs, sx, sy);
+            var _anim = new Animation(_fs, sx, sy);
+            _anim.color = color;
+            return _anim;
         }
     }
 }
