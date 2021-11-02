@@ -24,8 +24,8 @@ namespace LostMind.Classes.GameController
             Console.WriteLine(titleString);
             Console.WriteLine(sepString + "\n");
             UserConsoleOutput.SetSize(titleString.Length + 3, 16);
-            Viewport viewport = new Viewport(0, 4, titleString.Length + 3, 12);
-            viewport.Paint(ConsoleColor.DarkBlue, ConsoleColor.White);
+            //Viewport viewport = new Viewport(4, 4, titleString.Length + 3, 12);
+            //viewport.AddElement(new UIButton("hi"));
         }
     }
 }

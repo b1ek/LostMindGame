@@ -76,6 +76,8 @@ namespace LostMind.Classes.UI
         #region Key event handler
         /**<summary>Key press event handler.</summary>*/
         public void OnKeyPress(ConsoleKeyInfo key) {
+            if (_elements == null) return;
+            if (_elements.Count == 0) return;
             ConsoleKey k = key.Key;
             foreach (var _key in UISysConfig.UIMoveUpKey)
                 if (_key == k) moveCursorUp();
@@ -99,10 +101,10 @@ namespace LostMind.Classes.UI
         public void AddElement(UIElement element) {
             if (_elements.Count < maxElements) _elements.Add(element);
             else throw new TooMuchElementsException();
-            element.print(_marginLeft + _x, _marginTop + _y + Elements.Count);
             if (_elements.Count == 1) {
                 _elements[0].hover(true);
             }
+            DrawElements();
         }
         #endregion
         #region Cursor

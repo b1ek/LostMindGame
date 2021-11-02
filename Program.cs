@@ -12,6 +12,7 @@ using LostMind.Classes.UI;
 using LostMind.Classes.Util;
 using LostMind.Classes.Sound;
 using LostMind.Classes.Config;
+using System.Threading.Tasks;
 
 namespace LostMind
 {
@@ -36,8 +37,8 @@ namespace LostMind
             UserConsoleOutput.FlushConsole();
             UserConsoleOutput.SetSize(120, 30);
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
-            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
-            UserKeyInput.installHook();
+            if (RegistryConfig.AllowBSODStyleException) AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
+            UserKeyInput.InstallHook();
             if (22f/7f != 3.142857f) {
                 Console.BackgroundColor = ConsoleColor.DarkRed; Console.Clear();
                 Console.WriteLine("WARNING: Your PC may be broken. The calculation result of 22 / 7 is "+ 22f/7f + ", but it should be 3.142857.");
@@ -101,7 +102,8 @@ namespace LostMind
             Console.ResetColor(); Console.Clear();
             Console.SetCursorPosition(0, Console.CursorTop+3);
             Console.CursorVisible = true;
-            Environment.Exit(0);
+            UserKeyInput.stopThread();
+            Process.GetCurrentProcess().Kill();
         }
 
         static bool exceptionHandled = false;
@@ -116,8 +118,7 @@ namespace LostMind
             Console.ForegroundColor = ConsoleColor.White;
             Console.Clear();
             Console.TreatControlCAsInput = true;
-            var beep = new Thread(() => { Beep(1024, int.MaxValue); });
-            beep.Start();
+            _ = Task.Run(() => { Beep(1024, int.MaxValue); });
             
             Console.WriteLine("A problem has been detected and the game was shut down to prevent damage to your computer.\n");
             Console.WriteLine(e.ExceptionObject.GetType().Name.ToUpper() + "\n> " + ((Exception) e.ExceptionObject).Message);
@@ -139,7 +140,6 @@ namespace LostMind
             Console.WriteLine(Environment.StackTrace);
             Console.WriteLine("\nPress any key to exit the program.");
             while (true) if (Console.KeyAvailable) break;
-            beep.Abort();
             Environment.Exit(0);
         }
     }

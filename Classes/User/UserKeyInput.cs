@@ -11,10 +11,19 @@ namespace LostMind.Classes.User
     public static class UserKeyInput
     {
         #region Hook
-        static Thread hookLoopThread;
+        static Task hookLoopTask;
+        static CancellationTokenSource cts = new CancellationTokenSource();
         static bool terminateThread = false;
+        /**<summary>
+         * End the thread loop, which in theory will make it stop.
+         * </summary>
+         */
         public static void stopThread() {
             terminateThread = true;
+
+            cts.Cancel();
+            cts.Dispose();
+            hookLoopTask.Dispose();
         }
         /**
          <summary>
@@ -22,18 +31,19 @@ namespace LostMind.Classes.User
          Should be called in the first lines of the main method.
          </summary>
          */
-        public static void installHook() {
+        public static void InstallHook() {
             terminateThread = false;
-            hookLoopThread = new Thread( () => {
-                while (true) {
-                    if (Console.KeyAvailable) {
-                        ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);
-                        KeyPress?.Invoke(consoleKeyInfo);
-                    }
-                    if (terminateThread) return;
-                }
-            });
-            hookLoopThread.Start();
+            hookLoopTask = new Task(() => {
+                ProcessConsoleKeys();
+            }, cts.Token);
+            KeyPress += (key) => { Console.Beep(); };
+        }
+
+        public static void ProcessConsoleKeys() {
+            while (!terminateThread)
+                if (Console.KeyAvailable)
+                    KeyPress?.Invoke(Console.ReadKey(true));
+            Console.Beep(500, 1000);
         }
 
         public delegate void KeyPressEvent(ConsoleKeyInfo key);

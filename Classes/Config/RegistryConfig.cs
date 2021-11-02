@@ -10,6 +10,8 @@ namespace LostMind.Classes.Config
     static class RegistryConfig
     {
         public static RegistryKey root = Registry.CurrentUser.CreateSubKey("SOFTWARE").CreateSubKey("blek").CreateSubKey("LostMind");
+        //                               HKEY_CURRENT_USER/SOFTWARE/blek/LostMind
+
         public static bool startGameWithoutBootloader {
             get {
                 var val = root.GetValue("startGameWithoutBootload", false);
@@ -20,6 +22,13 @@ namespace LostMind.Classes.Config
         public static bool noStartupLogoAnim {
             get {
                 var val = root.GetValue("noStartupLogoAnim", false);
+                if (val == null) return false;
+                return val.ToString().ToLower() == "true";
+            }
+        }
+        public static bool AllowBSODStyleException {
+            get {
+                var val = root.GetValue("AllowBSODStyleException", false);
                 if (val == null) return false;
                 return val.ToString().ToLower() == "true";
             }
