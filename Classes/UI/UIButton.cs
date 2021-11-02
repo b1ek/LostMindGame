@@ -22,7 +22,6 @@ namespace LostMind.Classes.UI
             btnText = btnText.First().ToString().ToUpper() + string.Join("", btnText.Skip(1));
             _btnTxt = btnText;
             innerText = _prefix + btnText;
-            OnButtonClick += eventHandler;
         }
 
         internal bool _beingPressed = false;
@@ -51,12 +50,6 @@ namespace LostMind.Classes.UI
             } else {
                 this.OnButtonUnClick?.Invoke(this, new EventArgs());
                 _beingPressed = false;
-            }
-        }
-
-        internal void eventHandler(object s, EventArgs e) {
-            if (_beingPressed) {
-                
             }
         }
 

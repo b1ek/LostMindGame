@@ -61,6 +61,11 @@ namespace LostMind.Classes.UI
                 _elements[0].hover(true);
             }
         }
+
+        public void clickSelection() {
+            //_elements[selection].cli
+        }
+
         public void moveCursorUp()
         {
             if (selection - 1 < _elements.Count)

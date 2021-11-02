@@ -36,8 +36,7 @@ namespace LostMind.Classes.UI
         public void print(int x, int y) {
             print(x, y, true);
         }
-        public void print(int x, int y, bool removeOld)
-        {
+        public void print(int x, int y, bool removeOld) {
             if (removeOld) {
                 if (displayed) User.UserConsoleOutput.WriteXY(_x, _y, new string(' ', _intxt.Length), _dbg, _dfg);
                 _x = x;
@@ -80,6 +79,14 @@ namespace LostMind.Classes.UI
             }else
             throw new Exception("Element not interactable");
         }
+
+        public void click() {
+            OnClick?.Invoke();
+        }
+
+        public delegate void OnClickEvent();
+        public event OnClickEvent OnClick;
+
 
     }
 }
