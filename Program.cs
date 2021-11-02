@@ -11,6 +11,7 @@ using LostMind.Classes.GameController;
 using LostMind.Classes.UI;
 using LostMind.Classes.Util;
 using LostMind.Classes.Sound;
+using LostMind.Classes.Config;
 
 namespace LostMind
 {
@@ -31,6 +32,9 @@ namespace LostMind
          * </summary>
          */
         static void Main(string[] args) {
+            Console.CursorVisible = false;
+            UserConsoleOutput.FlushConsole();
+            UserConsoleOutput.SetSize(120, 30);
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
             UserKeyInput.installHook();
@@ -45,37 +49,45 @@ namespace LostMind
                 }
                 Console.BackgroundColor = ConsoleColor.Black; Console.Clear();
             }
-            Console.CursorVisible = false;
 
-            UserConsoleOutput.FlushConsole();
             var cp = Console.GetCursorPosition();
-            Animation anim = Animation.createSimple(File.ReadAllText(@"C:\Users\blek\source\repos\MyLifeGame\Resources\Logo.txt"),
-            cp.Left+16, cp.Top+1, 32);
-            anim.run();
+            if (!RegistryConfig.noStartupLogoAnim)
+            {
+                Animation anim = Animation.createSimple(File.ReadAllText(@"C:\Users\blek\source\repos\MyLifeGame\Resources\Logo.txt"), 16, 1, 32);
+                anim.run();
+            }
+            else
+            {
+                Animation anim = Animation.createSimple(File.ReadAllText(@"C:\Users\blek\source\repos\MyLifeGame\Resources\Logo.txt"), 16, 1, 0, ConsoleColor.DarkGreen);
+                anim.run();
+            }
             #region Bootload
-            UserConsoleWriter writer = new UserConsoleWriter(Console.CursorLeft, Console.CursorTop);
-            writer.FancyWrite("Booting up...", 1).Wait();
-            Thread.Sleep(64);
-            writer.FancyWrite("Operating system: " + Environment.OSVersion, 1).Wait();
-            writer.FancyWrite("Using .NET runtime version " + Environment.Version, 1).Wait();
+            if (!RegistryConfig.startGameWithoutBootloader)
+            {
+                UserConsoleWriter writer = new UserConsoleWriter(Console.CursorLeft, Console.CursorTop);
+                writer.FancyWrite("Booting up...", 1).Wait();
+                Thread.Sleep(64);
+                writer.FancyWrite("Operating system: " + Environment.OSVersion, 1).Wait();
+                writer.FancyWrite("Using .NET runtime version " + Environment.Version, 1).Wait();
 
-            var myProcess = Process.GetCurrentProcess();
+                var myProcess = Process.GetCurrentProcess();
 
-            writer.Write("\n");
-            writer._sx+=2; writer._x = writer._sx;
-            var msg = 
-            $"Physical memory usage     : " + myProcess.WorkingSet64 + "\n" +
-            $"Base priority             : " + myProcess.BasePriority + "\n" +
-            $"Priority class            : " + myProcess.PriorityClass + "\n" +
-            $"User processor time       : " + myProcess.UserProcessorTime + "\n" +
-            $"Privileged processor time : " + myProcess.PrivilegedProcessorTime + "\n" +
-            $"Total processor time      : " + myProcess.TotalProcessorTime + "\n" +
-            $"Paged system memory size  : " + myProcess.PagedSystemMemorySize64 + "\n" +
-            $"Paged memory size         : " + myProcess.PagedMemorySize64 + "\n"; writer.Write(msg);
-            writer._sx-=2; writer._x = writer._sx;
-            Thread.Sleep(512);
+                writer.Write("\n");
+                writer._sx += 2; writer._x = writer._sx;
+                var msg =
+                $"Physical memory usage     : " + myProcess.WorkingSet64 + "\n" +
+                $"Base priority             : " + myProcess.BasePriority + "\n" +
+                $"Priority class            : " + myProcess.PriorityClass + "\n" +
+                $"User processor time       : " + myProcess.UserProcessorTime + "\n" +
+                $"Privileged processor time : " + myProcess.PrivilegedProcessorTime + "\n" +
+                $"Total processor time      : " + myProcess.TotalProcessorTime + "\n" +
+                $"Paged system memory size  : " + myProcess.PagedSystemMemorySize64 + "\n" +
+                $"Paged memory size         : " + myProcess.PagedMemorySize64 + "\n"; writer.Write(msg);
+                writer._sx -= 2; writer._x = writer._sx;
+                Thread.Sleep(512);
+                writer.FancyWrite("\n\nPress any key to launch the game...").Wait();
+            } else { UserConsoleOutput.WriteXY(16, Console.CursorTop + 1, "Press any key to launch the game..."); }
             #endregion
-            writer.FancyWrite("\n\nPress any key to launch the game...").Wait();
 
             UserKeyInput.awaitKeyPress();
 

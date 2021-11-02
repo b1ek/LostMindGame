@@ -19,6 +19,18 @@ namespace LostMind.Classes.User
             Console.Clear();
         }
 
+        /**<summary>
+         * Alias to<br/>
+         * Console.SetBuffer/WindowSize(width, height);
+         * </summary>
+         * <param name="width">Console width</param>
+         * <param name="height">Console height</param>
+         */
+        public static void SetSize(int width, int height) {
+            Console.SetWindowSize(width, height);
+            Console.SetBufferSize(width, height);
+        }
+
         public static async Task BeepAsync(int freq, int duration) {
             Beep(freq, duration);
             await Task.Delay(0);

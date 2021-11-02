@@ -12,7 +12,15 @@ namespace LostMind.Classes.UI
     public class Viewport {
         int _x = 0;
         int _y = 0;
+        int _width = 0;
+        int _height = 0;
         int _selection = 0;
+
+        /**<summary>Rect height of Viewport rectangle</summary>*/
+        public int rectHeight { get => _height; }
+
+        /**<summary>Rect width of Viewport rectangle</summary>*/
+        public int rectWidth { get => _width; }
 
         /**<summary>Start X point of Viewport</summary>*/
         public int rectX { get => _x; }
@@ -28,7 +36,7 @@ namespace LostMind.Classes.UI
 
         /**<summary>Max elements limiter</summary>*/
         public const int maxElements = 128;
-
+        #region margin
         int _marginLeft;
         int _marginTop;
 
@@ -45,6 +53,7 @@ namespace LostMind.Classes.UI
                 _marginTop = value;
             }
         }
+        #endregion
 
         /**
          * <summary>
@@ -64,7 +73,7 @@ namespace LostMind.Classes.UI
             }
             UserKeyInput.KeyPress += OnKeyPress;
         }
-
+        #region Key event handler
         /**<summary>Key press event handler.</summary>*/
         public void OnKeyPress(ConsoleKeyInfo key) {
             ConsoleKey k = key.Key;
@@ -75,7 +84,8 @@ namespace LostMind.Classes.UI
             foreach (var _key in UISysConfig.UIEnterKey)
                 if (_key == k) clickSelection();
         }
-
+        #endregion
+        #region Elements
         /**<summary>Draw viewport elements.</summary>*/
         public void DrawElements() {
             int i = 0;
@@ -94,7 +104,7 @@ namespace LostMind.Classes.UI
                 _elements[0].hover(true);
             }
         }
-
+        #endregion
         #region Cursor
         public void clickSelection() => _elements[_selection].click();
         public void moveCursorUp() {
@@ -112,5 +122,11 @@ namespace LostMind.Classes.UI
             }
         }
         #endregion
+        public void Paint(ConsoleColor background, ConsoleColor foreground) {
+            for (int i = 0; i > _width; i++)
+            {
+                UserConsoleOutput.WriteXY(_x, _y + i, new string(' ', _width), background, foreground);
+            }
+        }
     }
 }

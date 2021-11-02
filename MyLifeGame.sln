@@ -5,7 +5,12 @@ VisualStudioVersion = 16.0.31624.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LostMind", "LostMind.csproj", "{C99CCF07-2B22-4972-AE6F-DDD6A25C3B9D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LostTests", "..\LostTests\LostTests.csproj", "{578923BB-6F54-4B2E-B4EF-068D1B9B647B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LostTests", "..\LostTests\LostTests.csproj", "{578923BB-6F54-4B2E-B4EF-068D1B9B647B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{93C7459A-6CE5-4DE5-B0F2-80952EBD3409}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

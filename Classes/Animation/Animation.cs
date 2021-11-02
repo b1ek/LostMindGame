@@ -21,10 +21,13 @@ namespace LostMind.Classes.Animation
         public void run() {
             var frames = frameSequence;
             var y = 0;
+            var lc = Console.ForegroundColor;
+            Console.ForegroundColor = color;
             for (int i = 0; i < frames.Count; i++) {
                 frames[i].displayFrame(writer);
                 y++;
             }
+            Console.ForegroundColor = lc;
             Console.SetCursorPosition(writer._x, y + 2);
         }
 
