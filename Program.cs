@@ -40,7 +40,6 @@ namespace LostMind
                 Console.BackgroundColor = ConsoleColor.Black; Console.Clear();
             }
             Console.CursorVisible = false;
-            throw new Exception();
 
             var cp = Console.GetCursorPosition();
             Animation anim = Animation.createSimple(File.ReadAllText(@"C:\Users\blek\source\repos\MyLifeGame\Resources\Logo.txt"), cp.Left+16, cp.Top+1, 2);
