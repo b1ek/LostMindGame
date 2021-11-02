@@ -45,6 +45,7 @@ namespace LostMind.Classes.UI
             ConsoleKey k = key.Key;
             if (k == ConsoleKey.W) moveCursorUp();
             if (k == ConsoleKey.S) moveCursorDown();
+            if (k == ConsoleKey.Spacebar) clickSelection();
         }
 
         public void drawElements() {
@@ -63,7 +64,7 @@ namespace LostMind.Classes.UI
         }
 
         public void clickSelection() {
-            //_elements[selection].cli
+            _elements[selection].click();
         }
 
         public void moveCursorUp()

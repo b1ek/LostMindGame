@@ -50,9 +50,8 @@ Constructor: Viewport(x, y, width, height)
 ```cs
 UserKeyInput.installHook(); // THIS IS IMPORTANT. CALL THIS METHOD IN THE FIRST LINES OF YOUR START POINT
 var view = new Viewport(0, 0, 32, 8);
-view.addElement(new UIButton("Exit"));
+view.addElement(new UIButton("Exit", onClickHandler()));
 ```
-Buttons are not onClickable tho.
 
 ### UserConsoleWriter
 ---

@@ -18,10 +18,25 @@ namespace LostMind.Classes.UI
             get { return _btnTxt; }
             set { _btnTxt = value; innerText = _prefix + _btnTxt; }
         }
+        public List<Action> lazyHandlers = new List<Action>();
         public UIButton(string btnText) : base(true, ConsoleColor.Black, ConsoleColor.White, ConsoleColor.DarkGray, ConsoleColor.White, ConsoleColor.Black, ConsoleColor.White) {
             btnText = btnText.First().ToString().ToUpper() + string.Join("", btnText.Skip(1));
             _btnTxt = btnText;
             innerText = _prefix + btnText;
+        }
+        public UIButton(string btnText, Action onclick) : base(true, ConsoleColor.Black, ConsoleColor.White, ConsoleColor.DarkGray, ConsoleColor.White, ConsoleColor.Black, ConsoleColor.White)
+        {
+            btnText = btnText.First().ToString().ToUpper() + string.Join("", btnText.Skip(1));
+            _btnTxt = btnText;
+            innerText = _prefix + btnText;
+            lazyHandlers.Add(onclick);
+            OnClick += procLazyHandlers;
+        }
+        
+        void procLazyHandlers() {
+            foreach( var method in lazyHandlers ) {
+                method?.Invoke();
+            }
         }
 
         internal bool _beingPressed = false;
@@ -32,24 +47,6 @@ namespace LostMind.Classes.UI
                 User.UserConsoleOutput.WriteXY(_x, _y, _intxt, _hbg, _hfg);
             } else {
                 User.UserConsoleOutput.WriteXY(_x, _y, _intxt, _bg, _fg);
-            }
-        }
-
-        /**
-         <summary>Calls when user selects the button ans hits Enter/E/Spacebar</summary>
-         */
-        public event EventHandler OnButtonClick;
-        /**
-         <summary>Calls when user stop selecting the button ans hit Enter/E/Spacebar</summary>
-         */
-        public event EventHandler OnButtonUnClick;
-        public void processKeyEvent(ConsoleKey key) {
-            if (UISysConfig.UIEnterKey.Contains(key)) {
-                this.OnButtonClick?.Invoke(this, new EventArgs());
-                _beingPressed = true;
-            } else {
-                this.OnButtonUnClick?.Invoke(this, new EventArgs());
-                _beingPressed = false;
             }
         }
 

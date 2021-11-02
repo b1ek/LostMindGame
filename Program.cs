@@ -22,6 +22,7 @@ namespace LostMind
         static string locale = "en-US";
         public static Classes.Localization.Localization.Localizations localization = Classes.Localization.Localization.getLocale(locale);
         public static GameController gameController = new GameController();
+        static Viewport viewport;
 
         static void Main(string[] args) {
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
@@ -100,13 +101,17 @@ namespace LostMind
             #endregion
             Console.ResetColor(); Console.Clear();
             gameController.startGame();
-            Viewport viewport = new Viewport(0, 3, 34, 8);
+            viewport = new Viewport(0, 3, 34, 8);
             viewport.marginLeft = 5;
-            viewport.addElement(new UIButton("Start"));
+            viewport.addElement(new UIButton("Start", start));
             viewport.addElement(new UIButton("About"));
             viewport.addElement(new UIButton("Exit game"));
 
             //SoundController.playMusic(SoundController.Music.MainMenu);
+        }
+
+        static void start() {
+            viewport.addElement(new UIButton("Test button"));
         }
 
 
