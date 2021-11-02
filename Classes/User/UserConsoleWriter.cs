@@ -14,19 +14,16 @@ namespace LostMind.Classes.User {
             _sx = _x;
             _sy = _y;
         } public void write(string value) {
-            foreach (var current in value) {
-                if (current == '\n')
-                {
-                    _x = _sx;
-                    _y++;
-                }
-                else
-                {
-                    Console.SetCursorPosition(_x, _y);
-                    Console.Write(current);
-                    _x++;
-                }
-            } Console.SetCursorPosition(_x, _y);
+            Console.SetCursorPosition(_x, _y);
+            var valueSpl = value.Split('\n');
+            int lx = 0;
+            foreach (var val in valueSpl) {
+                UserConsoleOutput.WriteXY(_x, _y, val);
+                _y++;
+                lx = _x;
+                _x = _sx;
+            } _x = lx+1; _y--;
+            Console.SetCursorPosition(_x, _y);
         } public void writeLine(string value) {
             foreach (var current in value)
             {
