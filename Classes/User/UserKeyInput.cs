@@ -63,7 +63,9 @@ namespace LostMind.Classes.User
         }
         public static bool isKeyPressed(ConsoleKey key)
         {
-            return Console.ReadKey(true).Key == key;
+            if (Console.KeyAvailable)
+                return Console.ReadKey(true).Key == key;
+            return false;
         }
     }
 }

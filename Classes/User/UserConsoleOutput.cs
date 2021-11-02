@@ -14,7 +14,9 @@ namespace LostMind.Classes.User
         public static extern bool Beep(int freq, int duration);
 
         public static void FlushConsole() {
-            Console.ResetColor(); Console.Clear();
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Clear();
         }
 
         public static async Task BeepAsync(int freq, int duration) {
