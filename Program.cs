@@ -26,7 +26,7 @@ namespace LostMind
         static void Main(string[] args) {
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
-
+            UserKeyInput.installHook();
             #region a
             /*
             if (22f/7f != 3.142857f) {
@@ -102,14 +102,13 @@ namespace LostMind
             gameController.startGame();
             Viewport viewport = new Viewport(0, 3, 34, 8);
             viewport.marginLeft = 5;
-            var a = new UIButton("Start");
-            viewport.addElement(a);
+            viewport.addElement(new UIButton("Start"));
             viewport.addElement(new UIButton("About"));
             viewport.addElement(new UIButton("Exit game"));
-            viewport.startLoop();
-            Thread.Sleep(int.MaxValue);
+
             //SoundController.playMusic(SoundController.Music.MainMenu);
         }
+
 
         static void OnProcessExit(object sender, EventArgs e)
         {
@@ -148,7 +147,6 @@ namespace LostMind
             Console.WriteLine(Environment.StackTrace);
             Console.WriteLine("\nPress ESC to exit the program.");
             UserKeyInput.awaitKeyPress(ConsoleKey.Escape);
-            beep.Abort();
             Environment.Exit(254);
         }
     }

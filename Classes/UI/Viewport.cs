@@ -38,7 +38,15 @@ namespace LostMind.Classes.UI
             for (int i = 0; i > height; i++) {
                 UserConsoleOutput.WriteXY(x, y + i, new string(' ', width), ConsoleColor.DarkRed, ConsoleColor.White);
             }
+            UserKeyInput.KeyPress += OnKeyPress;
         }
+
+        public void OnKeyPress(ConsoleKeyInfo key) {
+            ConsoleKey k = key.Key;
+            if (k == ConsoleKey.W) moveCursorUp();
+            if (k == ConsoleKey.S) moveCursorDown();
+        }
+
         public void drawElements() {
             int i = 0;
             foreach (var elem in _elements) {
@@ -74,39 +82,5 @@ namespace LostMind.Classes.UI
             }
         }
         
-        public Thread createLoopThread() {
-            var a = new Thread(() => {
-                new Thread(() => {
-                    while (true) {
-                        if (Console.KeyAvailable) {
-                            var key = Console.ReadKey(true).Key;
-                            foreach (var _key in UISysConfig.UIMoveUpKey) {
-                                if (key == _key)
-                                    moveCursorUp();
-                            }
-                        }
-                    }
-                }).Start();
-
-                new Thread(() => {
-                    while (true) {
-                        if (Console.KeyAvailable) {
-                            var key = Console.ReadKey(true).Key;
-                            foreach (var _key in UISysConfig.UIMoveDownKey) {
-                                if (key == _key)
-                                    moveCursorDown();
-                            }
-                        }
-                    }
-                }).Start();
-            });
-            return a;
-        }
-
-        public void startLoop() {
-            _loop = createLoopThread();
-            _loop.Start();
-        }
-
     }
 }
