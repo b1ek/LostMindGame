@@ -12,25 +12,38 @@ namespace LostMind.Classes.UI
     public class Viewport {
         int _x = 0;
         int _y = 0;
-        int selection = 0;
+        int _selection = 0;
+
+        /**<summary>Start X point of Viewport</summary>*/
+        public int rectX { get { return _x; } }
+
+        /**<summary>Start Y point of Viewport</summary>*/
+        public int rectY { get { return _y; } }
+
+        /**<summary>Returns current selection</summary>*/
+        public int selection { get { return _selection; } }
+
         List<UIElement> _elements = new List<UIElement>();
         public List<UIElement> Elements { get { return _elements; } }
-        public const int maxElements = 256;
+
+        /**<summary>Max elements limiter</summary>*/
+        public const int maxElements = 128;
+
         int _marginLeft;
         int _marginTop;
+
+        /**<summary>Left margin of elements, css-like</summary>*/
         public int marginLeft { get { return _marginLeft; }
             set {
                 _marginLeft = value;
             }
         }
+
+        /**<summary>Top margin of elements, css-like</summary>*/
         public int marginTop { get { return _marginTop; }
             set {
                 _marginTop = value;
             }
-        }
-        Thread _loop;
-        public Task loop {
-            get { return loop; }
         }
 
         /**
@@ -83,19 +96,19 @@ namespace LostMind.Classes.UI
         }
 
         #region Cursor
-        public void clickSelection() => _elements[selection].click();
+        public void clickSelection() => _elements[_selection].click();
         public void moveCursorUp() {
-            if (selection - 1 < _elements.Count) {
-                if (selection == 0) { }
-                else { _elements[selection].hover(false); selection--; _elements[selection].hover(true); }
-                Console.SetCursorPosition(_elements[selection].lastX, _elements[selection].lastY);
+            if (_selection - 1 < _elements.Count) {
+                if (_selection == 0) { }
+                else { _elements[_selection].hover(false); _selection--; _elements[_selection].hover(true); }
+                Console.SetCursorPosition(_elements[_selection].lastX, _elements[_selection].lastY);
             }
         }
         public void moveCursorDown() {
-            if (selection + 1 < _elements.Count) {
-                if (selection == _elements.Count) { }
-                else { _elements[selection].hover(false); selection++; _elements[selection].hover(true); }
-                Console.SetCursorPosition(_elements[selection].lastX, _elements[selection].lastY);
+            if (_selection + 1 < _elements.Count) {
+                if (_selection == _elements.Count) { }
+                else { _elements[_selection].hover(false); _selection++; _elements[_selection].hover(true); }
+                Console.SetCursorPosition(_elements[_selection].lastX, _elements[_selection].lastY);
             }
         }
         #endregion
