@@ -15,16 +15,16 @@ namespace LostMind.Classes.UI
         int _selection = 0;
 
         /**<summary>Start X point of Viewport</summary>*/
-        public int rectX { get { return _x; } }
+        public int rectX { get => _x; }
 
         /**<summary>Start Y point of Viewport</summary>*/
-        public int rectY { get { return _y; } }
+        public int rectY { get => _y; }
 
         /**<summary>Returns current selection</summary>*/
-        public int selection { get { return _selection; } }
+        public int selection { get => _selection; }
 
         List<UIElement> _elements = new List<UIElement>();
-        public List<UIElement> Elements { get { return _elements; } }
+        public List<UIElement> Elements { get => _elements; }
 
         /**<summary>Max elements limiter</summary>*/
         public const int maxElements = 128;

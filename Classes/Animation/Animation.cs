@@ -11,6 +11,8 @@ namespace LostMind.Classes.Animation
     {
         private FrameSequence frameSequence;
         public User.UserConsoleWriter writer;
+        private ConsoleColor _color;
+        public ConsoleColor color { get => _color; }
         public Animation(FrameSequence fs, int sx, int sy) {
             frameSequence = fs.forgeCopy();
             writer = new User.UserConsoleWriter(sx, sy);
@@ -33,6 +35,18 @@ namespace LostMind.Classes.Animation
             FrameSequence _fs = new FrameSequence();
             var _ss = "";
             for (int i = 0; i < _s.Length; i++) {
+                _ss = _ss + _s[i] + "\n";
+                _fs.add(new Frame(_ss, frameDelay));
+            }
+            return new Animation(_fs, sx, sy);
+        }
+        public static Animation createSimple(string s, int sx, int sy, int frameDelay, ConsoleColor color)
+        {
+            var _s = s.Replace("\r", "").Replace("\t", "    ").Split("\n");
+            FrameSequence _fs = new FrameSequence();
+            var _ss = "";
+            for (int i = 0; i < _s.Length; i++)
+            {
                 _ss = _ss + _s[i] + "\n";
                 _fs.add(new Frame(_ss, frameDelay));
             }
