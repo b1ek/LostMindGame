@@ -49,7 +49,7 @@ namespace LostMind
 
             var cp = Console.GetCursorPosition();
             Animation anim = Animation.createSimple(File.ReadAllText(@"C:\Users\blek\source\repos\MyLifeGame\Resources\Logo.txt"), cp.Left+16, cp.Top+1, 2);
-            //anim.run();
+            anim.run();
             #region Bootload
             UserConsoleWriter writer = new UserConsoleWriter(Console.CursorLeft, Console.CursorTop);
             writer.fancyWrite("Booting up...", 1).Wait();
