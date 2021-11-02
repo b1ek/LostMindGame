@@ -23,7 +23,7 @@ The game engine library
  - Animation ✔
  - GUI ✔
  - Game ✕
- - Documentation - about 20%
+ - Documentation - about 50%
  
 ### Animation
 ---
