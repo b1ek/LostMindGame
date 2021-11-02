@@ -28,8 +28,6 @@ namespace LostMind
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
             UserKeyInput.installHook();
-            #region a
-            /*
             if (22f/7f != 3.142857f) {
                 Console.BackgroundColor = ConsoleColor.DarkRed; Console.Clear();
                 Console.WriteLine("WARNING: Your PC may be broken. The calculation result of 22 / 7 is "+ 22f/7f + ", but it should be 3.142857.");
@@ -97,8 +95,7 @@ namespace LostMind
             writer.fancyWrite("\n\nPress any key to launch the game...").Wait();
 
             UserKeyInput.awaitKeyPress();
-            */
-            #endregion
+
             Console.ResetColor(); Console.Clear();
             gameController.startGame();
             viewport = new Viewport(0, 3, 34, 8);

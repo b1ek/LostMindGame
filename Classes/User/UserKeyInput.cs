@@ -49,15 +49,21 @@ namespace LostMind.Classes.User
         }
         #endregion
 
-        public static void awaitKeyPress(ConsoleKey key)
-        {
-            while (true)
-            {
-                if (Console.KeyAvailable)
-                {
+        public static void awaitKeyPress(ConsoleKey key) {
+            while (true) {
+                if (Console.KeyAvailable) {
                     if (Console.ReadKey(true).Key == key) return;
                 }
             }
+        }
+        public static void awaitKeyPress() {
+            while (true) {
+                if (Console.KeyAvailable) return;
+            }
+        }
+        public static bool isKeyPressed(ConsoleKey key)
+        {
+            return Console.ReadKey(true).Key == key;
         }
     }
 }
