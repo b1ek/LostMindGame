@@ -1,4 +1,5 @@
 ﻿using LostMind.Classes.User;
+using LostMind.Classes.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -113,6 +114,12 @@ namespace LostMind.Classes.UI
 
         public Thread WrapLoopInThread() => new Thread(mainloop);
         public async Task WrapLoopAsync() => await Task.Run(mainloop);
+        public LoopThread WrapLoopThread() {
+            return new LoopThread(() => {
+                if (Console.KeyAvailable)
+                    UserKeyInput.CallEvent(Console.ReadKey(true));
+            });
+        }
 
         /**<summary>Add element to viewport.</summary>*/
         public void AddElement(UIElement element) {
