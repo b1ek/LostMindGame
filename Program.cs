@@ -6,6 +6,10 @@ using LostMind.Classes.GameController;
 using LostMind.Classes.UI;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using LostMind.Classes.Animation;
+using LostMind.Classes.Config;
+using System.IO;
+using System.Threading;
 
 namespace LostMind
 {
@@ -43,7 +47,7 @@ namespace LostMind
          * </summary>
          */
         static void Main(string[] args) {
-            /*Console.CursorVisible = false;
+            Console.CursorVisible = false;
             UserConsoleOutput.FlushConsole();
             UserConsoleOutput.SetSize(120, 30);
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
@@ -62,20 +66,22 @@ namespace LostMind
             }
 
             var cp = Console.GetCursorPosition();
-            if (!RegistryConfig.noStartupLogoAnim)
+            const int animMarginTop = 3;
+            const int animMarginLeft = 20;
+            if (RegistryConfig.noStartupLogoAnim)
             {
-                Animation anim = Animation.createSimple(File.ReadAllText(@"C:\Users\blek\source\repos\MyLifeGame\Resources\Logo.txt"), 16, 1, 32);
+                Animation anim = Animation.createSimple(File.ReadAllText(@"C:\Users\blek\source\repos\MyLifeGame\Resources\Logo.txt"), animMarginLeft, animMarginTop, 1, ConsoleColor.DarkGreen);
                 anim.run();
             }
             else
             {
-                Animation anim = Animation.createSimple(File.ReadAllText(@"C:\Users\blek\source\repos\MyLifeGame\Resources\Logo.txt"), 16, 1, 0, ConsoleColor.DarkGreen);
+                Animation anim = Animation.createSimple(File.ReadAllText(@"C:\Users\blek\source\repos\MyLifeGame\Resources\Logo.txt"), animMarginLeft, animMarginTop, 32);
                 anim.run();
             }
             #region Bootload
             if (!RegistryConfig.startGameWithoutBootloader)
             {
-                UserConsoleWriter writer = new UserConsoleWriter(Console.CursorLeft, Console.CursorTop);
+                UserConsoleWriter writer = new UserConsoleWriter(animMarginLeft, Console.CursorTop+2);
                 writer.FancyWrite("Booting up...", 1).Wait();
                 Thread.Sleep(64);
                 writer.FancyWrite("Operating system: " + Environment.OSVersion, 1).Wait();
@@ -97,20 +103,13 @@ namespace LostMind
                 writer._sx -= 2; writer._x = writer._sx;
                 Thread.Sleep(512);
                 writer.FancyWrite("\n\nPress any key to launch the game...").Wait();
-            } else { UserConsoleOutput.WriteXY(16, Console.CursorTop + 1, "Press any key to launch the game..."); }
+            } else { UserConsoleOutput.WriteXY(animMarginLeft, Console.CursorTop + 2, "Press any key to launch the game..."); }
             #endregion
 
             UserKeyInput.awaitKeyPress();
 
-            UserConsoleOutput.FlushConsole();*/
+            UserConsoleOutput.FlushConsole();
             gameController.startGame();
-
-            Viewport viewport = new Viewport(0, 3, 34, 8);
-            viewport.marginLeft = 5;
-            viewport.AddElement(new UIButton("Start"));
-            viewport.AddElement(new UIButton("About"));
-            viewport.AddElement(new UIButton("Exit game"));
-            viewport.mainloop();
         }
         static bool _exit = false;
         /**<summary>Method that is called on program exit.</summary>*/

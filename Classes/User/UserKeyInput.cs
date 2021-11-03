@@ -36,7 +36,6 @@ namespace LostMind.Classes.User
             hookLoopTask = new Task(() => {
                 ProcessConsoleKeys();
             }, cts.Token);
-            KeyPress += (key) => { Console.Beep(); };
         }
 
         public static void ProcessConsoleKeys() {

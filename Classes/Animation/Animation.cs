@@ -11,11 +11,15 @@ namespace LostMind.Classes.Animation
     {
         private FrameSequence frameSequence;
         public User.UserConsoleWriter writer;
-        private ConsoleColor _color;
+        private ConsoleColor _color = ConsoleColor.White;
         public ConsoleColor color { get => _color; set { _color = value; } }
         public Animation(FrameSequence fs, int sx, int sy) {
             frameSequence = fs.forgeCopy();
             writer = new User.UserConsoleWriter(sx, sy);
+        }
+        public Animation(FrameSequence fs, User.UserConsoleWriter consoleWriter) {
+            frameSequence = fs.forgeCopy();
+            writer = consoleWriter;
         }
 
         public void run() {

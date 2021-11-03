@@ -111,14 +111,16 @@ namespace LostMind.Classes.UI
                     UserKeyInput.CallEvent(Console.ReadKey(true));
         }
 
+        public Thread WrapLoopInThread() => new Thread(mainloop);
+        public async Task WrapLoopAsync() => await Task.Run(mainloop);
+
         /**<summary>Add element to viewport.</summary>*/
         public void AddElement(UIElement element) {
             if (_elements.Count < maxElements) _elements.Add(element);
             else throw new TooMuchElementsException();
-            if (_elements.Count == 1) {
-                _elements[0].hover(true);
-            }
             DrawElements();
+            if (_elements.Count == 1) 
+                _elements[0].hover(true);
         }
         #endregion
         #region Cursor

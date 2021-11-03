@@ -12,13 +12,16 @@ namespace LostMind.Classes.UI
         private protected int _y;
         public int lastX { get { return _x; } }
         public int lastY { get { return _y; } }
-        private protected bool _intrctbl;
-        private protected ConsoleColor _hbg;
-        private protected ConsoleColor _hfg;
-        private protected ConsoleColor _dbg;
-        private protected ConsoleColor _dfg;
-        private protected ConsoleColor _bg;
-        private protected ConsoleColor _fg;
+
+        private protected bool _intrctbl; // interactable
+
+        private protected ConsoleColor _hbg; // hover background
+        private protected ConsoleColor _hfg; //       foreground
+        private protected ConsoleColor _dbg; // default background
+        private protected ConsoleColor _dfg; //         foreground
+        private protected ConsoleColor _bg; // background
+        private protected ConsoleColor _fg; // foreground
+
         private protected string _intxt;
         private protected bool currentlyHovered = false;
         bool displayed = false;
@@ -48,7 +51,7 @@ namespace LostMind.Classes.UI
             displayed = true;
         }
         public void remove() {
-            User.UserConsoleOutput.WriteXY(_x, _y, new string(' ', _intxt.Length), _dbg, _dfg);
+            if (displayed) User.UserConsoleOutput.WriteXY(_x, _y, new string(' ', _intxt.Length), _dbg, _dfg);
             displayed = false;
         }
 
@@ -70,11 +73,9 @@ namespace LostMind.Classes.UI
         public virtual void hover(bool hovered) {
             if (_intrctbl) { currentlyHovered = hovered;
                 if (hovered) {
-                    User.UserConsoleOutput.WriteXY(_x, _y, _intxt);
                     bg = _hbg;
                     txt = _hfg;
                 } else {
-                    User.UserConsoleOutput.WriteXY(_x, _y, _intxt);
                     bg = _bg;
                     txt = _fg;
                 }

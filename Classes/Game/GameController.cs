@@ -25,6 +25,10 @@ namespace LostMind.Classes.GameController
             Console.WriteLine(sepString);
             Console.WriteLine(titleString);
             Console.WriteLine(sepString + "\n");
+            Viewport viewport = new Viewport(0, 4, titleString.Length + 3, 13);
+            viewport.AddElement(new UIButton("hi!"));
+            viewport.AddElement(new UIButton("hi!"));
+            viewport.mainloop();
             
 
         }
