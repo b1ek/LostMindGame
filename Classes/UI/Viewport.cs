@@ -92,9 +92,23 @@ namespace LostMind.Classes.UI
         public void DrawElements() {
             int i = 0;
             foreach (var elem in _elements) {
+                elem.remove();
                 elem.print(_marginLeft+_x, _marginTop+_y+i);
                 i++;
             }
+        }
+
+        bool closed = false;
+        /**<summary>Close the viewport.</summary>*/
+        public void close() {
+            foreach (var elem in _elements) elem.remove();
+            closed = true;
+        }
+        
+        public void mainloop() {
+            while (!closed)
+                if (Console.KeyAvailable)
+                    UserKeyInput.CallEvent(Console.ReadKey(true));
         }
 
         /**<summary>Add element to viewport.</summary>*/

@@ -46,6 +46,11 @@ namespace LostMind.Classes.User
             Console.Beep(500, 1000);
         }
 
+        internal static void CallEvent(ConsoleKeyInfo key)
+        {
+            KeyPress?.Invoke(key);
+        }
+
         public delegate void KeyPressEvent(ConsoleKeyInfo key);
         /**
          <summary>An event that calls when user pressed a key.</summary>

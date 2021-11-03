@@ -33,5 +33,12 @@ namespace LostMind.Classes.Config
                 return val.ToString().ToLower() == "true";
             }
         }
+        public static string customGameTitle {
+            get {
+                var val = root.GetValue("customGameTitle", null);
+                if (val == null) return null;
+                return Convert.ToString(val);
+            }
+        }
     }
 }

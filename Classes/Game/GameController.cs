@@ -10,22 +10,23 @@ namespace LostMind.Classes.GameController
 {
     public class GameController
     {
-        private UserConsoleWriter writer = new UserConsoleWriter(0, 0);
-        private Localization.Localization.Localizations locale = Program.localization;
+        UserConsoleWriter writer = new UserConsoleWriter(0, 0);
+        Localization.Localization.Localizations locale = Program.localization;
+        string titleString;
 
         public void startGame() {
             Console.Clear();
             
             Console.CursorVisible = false;
+            titleString = $"   [{locale.gameTitle}] | [0/100] | [Main Menu]";
+            UserConsoleOutput.SetSize(titleString.Length + 3, 16);
             Console.Title = "LostMind - Main Menu";
-            string titleString = $"   [{locale.gameTitle}] | [0/100] | [Main Menu]";
             string sepString = "  " + new string('-', titleString.Length-1);
             Console.WriteLine(sepString);
             Console.WriteLine(titleString);
             Console.WriteLine(sepString + "\n");
-            UserConsoleOutput.SetSize(titleString.Length + 3, 16);
-            //Viewport viewport = new Viewport(4, 4, titleString.Length + 3, 12);
-            //viewport.AddElement(new UIButton("hi"));
+            
+
         }
     }
 }

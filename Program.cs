@@ -1,18 +1,11 @@
 ﻿using System;
-using System.Threading;
 using System.Runtime.InteropServices;
 using LostMind.Classes.User;
-using System.IO;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using LostMind.Classes.Animation;
 using System.Diagnostics;
 using LostMind.Classes.GameController;
 using LostMind.Classes.UI;
-using LostMind.Classes.Util;
-using LostMind.Classes.Sound;
-using LostMind.Classes.Config;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace LostMind
 {
@@ -28,12 +21,29 @@ namespace LostMind
         /**<summary>Game controller.</summary>*/
         public static GameController gameController = new GameController();
 
+        [DllImport("user32.dll")]
+        static extern bool EnableMenuItem(IntPtr hMenu, uint uIDEnableItem, uint uEnable);
+        [DllImport("user32.dll")]
+        static extern IntPtr GetSystemMenu(IntPtr hWnd, bool bRevert);
+        [DllImport("kernel32.dll", SetLastError = true)]
+        static extern IntPtr GetStdHandle(int nStdHandle);
+        internal const UInt32 SC_CLOSE = 0xF060;
+        internal const UInt32 MF_ENABLED = 0x00000000;
+        internal const UInt32 MF_GRAYED = 0x00000001;
+        internal const UInt32 MF_DISABLED = 0x00000002;
+        internal const uint MF_BYCOMMAND = 0x00000000;
+        public static void EnableCloseButton(bool bEnabled)
+        {
+            IntPtr hSystemMenu = GetSystemMenu(GetStdHandle(-11), false);
+            EnableMenuItem(hSystemMenu, SC_CLOSE, (uint)(MF_ENABLED | (bEnabled ? MF_ENABLED : MF_GRAYED)));
+        }
+
         /**<summary>
          * Main entry point.
          * </summary>
          */
         static void Main(string[] args) {
-            Console.CursorVisible = false;
+            /*Console.CursorVisible = false;
             UserConsoleOutput.FlushConsole();
             UserConsoleOutput.SetSize(120, 30);
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
@@ -92,18 +102,28 @@ namespace LostMind
 
             UserKeyInput.awaitKeyPress();
 
-            UserConsoleOutput.FlushConsole();
+            UserConsoleOutput.FlushConsole();*/
             gameController.startGame();
-        }
 
+            Viewport viewport = new Viewport(0, 3, 34, 8);
+            viewport.marginLeft = 5;
+            viewport.AddElement(new UIButton("Start"));
+            viewport.AddElement(new UIButton("About"));
+            viewport.AddElement(new UIButton("Exit game"));
+            viewport.mainloop();
+        }
+        static bool _exit = false;
         /**<summary>Method that is called on program exit.</summary>*/
         static void OnProcessExit(object sender, EventArgs e)
         {
-            Console.ResetColor(); Console.Clear();
-            Console.SetCursorPosition(0, Console.CursorTop+3);
-            Console.CursorVisible = true;
-            UserKeyInput.stopThread();
-            Process.GetCurrentProcess().Kill();
+            if (_exit)
+            {
+                Console.ResetColor(); Console.Clear();
+                Console.SetCursorPosition(0, Console.CursorTop + 3);
+                Console.CursorVisible = true;
+                UserKeyInput.stopThread();
+                Process.GetCurrentProcess().Kill();
+            }
         }
 
         static bool exceptionHandled = false;
@@ -121,7 +141,7 @@ namespace LostMind
             _ = Task.Run(() => { Beep(1024, int.MaxValue); });
             
             Console.WriteLine("A problem has been detected and the game was shut down to prevent damage to your computer.\n");
-            Console.WriteLine(e.ExceptionObject.GetType().Name.ToUpper() + "\n> " + ((Exception) e.ExceptionObject).Message);
+            Console.WriteLine(Regex.Replace(e.ExceptionObject.GetType().Name.ToUpper(), "(\\B[A-Z])", " $1") + "\n> " + ((Exception) e.ExceptionObject).Message);
             Console.WriteLine("\nIf this is the first time you've seen this stop error screen, restart your computer.\nIf these screen appears again, follow these steps:\n");
             
             Console.WriteLine("Check to make sure any new mods or updates to the game or runtime was properly installed.");

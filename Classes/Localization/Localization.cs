@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LostMind.Classes.Config;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -23,6 +24,7 @@ namespace LostMind.Classes.Localization
             string lf = File.ReadAllText(@".\Resources\Locale\" + code + ".locale");
             string[] _lf = lf.Replace("\r", "").Split("\n");
             a.gameTitle = _lf[0];
+            if (RegistryConfig.customGameTitle != null) a.gameTitle = RegistryConfig.customGameTitle;
             a.gameSetup = _lf[1];
 
             return a;
