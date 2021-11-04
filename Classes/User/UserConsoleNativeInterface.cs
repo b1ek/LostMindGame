@@ -54,6 +54,9 @@ namespace LostMind.Classes.User
         [DllImport("kernel32.dll")]
         static extern IntPtr GetConsoleWindow();
 
+        [DllImport("user32.dll")]
+        static extern bool SetWindowTextA(IntPtr hWnd, string lpString);
+
         const int STD_OUTPUT_HANDLE = -11;
         const int STD_INPUT_HANDLE = -10;
         const int TMPF_TRUETYPE = 4;
@@ -104,14 +107,16 @@ namespace LostMind.Classes.User
             } catch (Exception) { /* ignored */ }
         }
 
-        public static bool setTransparency(byte alpha) {
+        /**<summary>Set console window transparency.</summary>*/
+        public static void setTransparency(byte alpha) {
             UInt32 color = (UInt32) ColorTranslator.ToWin32(Color.FromArgb(155, 155, 155));
-            bool retval = SetLayeredWindowAttributes(GetConsoleWindow(), color, alpha, 2);
-            if (!retval) {
-                var errcode = GetLastError();
-                throw new WinApiError(errcode);
-            }
-            return retval;
+            if (!SetLayeredWindowAttributes(GetConsoleWindow(), color, alpha, 2))
+                throw new WinApiError(GetLastError());
+        }
+        /**<summary>Macro to SetWindowTextA() but without any hWnd</summary>*/
+        public static void setTitle(string title) {
+            if (!SetWindowTextA(hWnd, title))
+                throw new WinApiError(GetLastError());
         }
     }
     public class NoConsoleException : Exception { public NoConsoleException(string msg):base(msg) {} }
