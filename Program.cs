@@ -77,13 +77,11 @@ namespace LostMind
             const int animMarginTop = 3;
             const int animMarginLeft = 20;
             string pathToLogo = Environment.CurrentDirectory + @"a\Resources\Logo.txt";
-            if (RegistryConfig.noStartupLogoAnim)
-            {
+            if (RegistryConfig.noStartupLogoAnim) {
                 Animation anim = Animation.createSimple(File.ReadAllText(pathToLogo), animMarginLeft, animMarginTop, 1, ConsoleColor.DarkGreen);
                 anim.run();
             }
-            else
-            {
+            else {
                 Animation anim = Animation.createSimple(File.ReadAllText(pathToLogo), animMarginLeft, animMarginTop, 32);
                 anim.run();
             }
@@ -172,10 +170,9 @@ namespace LostMind
             Console.WriteLine("\nPress any key to exit the program.");
             while (true) if (Console.KeyAvailable) break;
 
-            for (byte i = 255; i > 1; i--) {
+            for (byte i = 255; i > 1; i--)
                 UserConsoleNativeInterface.setTransparency(i);
 
-            }
 
             Environment.Exit(0);
         }
