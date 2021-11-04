@@ -14,6 +14,7 @@
 ```
 ## LostMind
 [![Time wasted for this shit](https://wakatime.com/badge/github/b1ek/LostMindGame.svg)](https://wakatime.com/badge/github/b1ek/LostMindGame)
+
 My first game. Building an engine for it from scratch
 using C# and .NET 5.
 Code has not too much documentation for now, but it will be in future.
