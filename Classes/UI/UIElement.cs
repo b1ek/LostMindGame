@@ -38,10 +38,19 @@ namespace LostMind.Classes.UI
             _bg = bgColor;
             _fg = fgColor;
         }
-        public void print(int x, int y) {
+        public UIElement(bool interactable) {
+            _intrctbl = interactable;
+            _hbg = ConsoleColor.Gray;
+            _hfg = ConsoleColor.White;
+            _dbg = ConsoleColor.Black;
+            _dfg = ConsoleColor.White;
+            _bg = ConsoleColor.Black;
+            _fg = ConsoleColor.White;
+        }
+        public virtual void print(int x, int y) {
             print(x, y, true);
         }
-        public void print(int x, int y, bool removeOld) {
+        public virtual void print(int x, int y, bool removeOld) {
             if (removeOld) {
                 if (displayed) User.UserConsoleOutput.WriteXY(_x, _y, new string(' ', _intxt.Length), _dbg, _dfg);
                 _x = x;
@@ -50,7 +59,7 @@ namespace LostMind.Classes.UI
             User.UserConsoleOutput.WriteXY(_x, _y, _intxt, _bg, _fg);
             displayed = true;
         }
-        public void remove() {
+        public virtual void remove() {
             if (displayed) User.UserConsoleOutput.WriteXY(_x, _y, new string(' ', _intxt.Length), _dbg, _dfg);
             displayed = false;
         }
@@ -83,7 +92,7 @@ namespace LostMind.Classes.UI
             throw new Exception("Element not interactable");
         }
 
-        public void click() {
+        public virtual void click() {
             OnClick?.Invoke();
         }
 

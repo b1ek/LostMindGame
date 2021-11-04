@@ -80,6 +80,11 @@ namespace LostMind.Classes.UI
             if (_elements == null) return;
             if (_elements.Count == 0) return;
             ConsoleKey k = key.Key;
+            if (_elements[_selection].GetType() == typeof(UITextInput)) {
+                UITextInput ti = (UITextInput) _elements[_selection];
+                ti.addChar(key.KeyChar);
+                ti.moveCursor(1);
+            }
             foreach (var _key in UISysConfig.UIMoveUpKey)
                 if (_key == k) moveCursorUp();
             foreach (var _key in UISysConfig.UIMoveDownKey)

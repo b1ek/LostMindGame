@@ -30,6 +30,7 @@ namespace LostMind.Classes.User
             Console.SetWindowSize(width, height);
             Console.SetBufferSize(width, height);
         }
+        public static void TrySetSize(int width, int height) { try { SetSize(width, height); } catch (Exception) { } }
 
         public static async Task BeepAsync(int freq, int duration) {
             Beep(freq, duration);

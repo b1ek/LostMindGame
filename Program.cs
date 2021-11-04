@@ -49,7 +49,8 @@ namespace LostMind
         static void Main(string[] args) {
             Console.CursorVisible = false;
             UserConsoleOutput.FlushConsole();
-            UserConsoleOutput.SetSize(120, 30);
+            UserConsoleOutput.TrySetSize(120, 30);
+            UserConsoleNativeInterface.trySetFont("Comic Sans MS", 20);
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
             if (RegistryConfig.AllowBSODStyleException) AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
             UserKeyInput.InstallHook();
