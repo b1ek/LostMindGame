@@ -12,6 +12,7 @@
                                      Forged in the depths of hell
                                                 by blek
 ```
+[![Time wasted](https://wakatime.com/badge/github/b1ek/LostMindGame.svg)](https://wakatime.com/badge/github/b1ek/LostMindGame)
 ## LostMind
 My first game. Building an engine for it from scratch
 using C# and .NET 5.

@@ -4,6 +4,7 @@ using LostMind.Classes.User;
 using System.Diagnostics;
 using LostMind.Classes.GameController;
 using LostMind.Classes.UI;
+using LostMind.Classes.Util;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using LostMind.Classes.Animation;
@@ -47,12 +48,18 @@ namespace LostMind
          * </summary>
          */
         static void Main(string[] args) {
+
+            // DONT TOUCH
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
+            if (RegistryConfig.AllowBSODStyleException) AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
+
+
+
             Console.CursorVisible = false;
             UserConsoleOutput.FlushConsole();
             UserConsoleOutput.TrySetSize(120, 30);
-            UserConsoleNativeInterface.setFont("Courier New", 1, 16, -1);
-            AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
-            if (RegistryConfig.AllowBSODStyleException) AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
+            UserConsoleNativeInterface.setFont("system", 1, 10, -1);
+            UserConsoleNativeInterface.setTransparency(255);
             UserKeyInput.InstallHook();
             if (22f/7f != 3.142857f) {
                 Console.BackgroundColor = ConsoleColor.DarkRed; Console.Clear();
@@ -69,14 +76,15 @@ namespace LostMind
             var cp = Console.GetCursorPosition();
             const int animMarginTop = 3;
             const int animMarginLeft = 20;
+            string pathToLogo = Environment.CurrentDirectory + @"a\Resources\Logo.txt";
             if (RegistryConfig.noStartupLogoAnim)
             {
-                Animation anim = Animation.createSimple(File.ReadAllText(@"C:\Users\blek\source\repos\MyLifeGame\Resources\Logo.txt"), animMarginLeft, animMarginTop, 1, ConsoleColor.DarkGreen);
+                Animation anim = Animation.createSimple(File.ReadAllText(pathToLogo), animMarginLeft, animMarginTop, 1, ConsoleColor.DarkGreen);
                 anim.run();
             }
             else
             {
-                Animation anim = Animation.createSimple(File.ReadAllText(@"C:\Users\blek\source\repos\MyLifeGame\Resources\Logo.txt"), animMarginLeft, animMarginTop, 32);
+                Animation anim = Animation.createSimple(File.ReadAllText(pathToLogo), animMarginLeft, animMarginTop, 32);
                 anim.run();
             }
             #region Bootload
@@ -132,24 +140,27 @@ namespace LostMind
             if (exceptionHandled) Environment.Exit(0x000000FE);
             Console.ResetColor();
             Console.SetCursorPosition(0, 0);
+            UserConsoleNativeInterface.setFont("Consolas", 2, 14, -1);
             Console.SetWindowSize(120, 30);
             Console.SetBufferSize(120, 30);
             Console.BackgroundColor = ConsoleColor.DarkBlue;
             Console.ForegroundColor = ConsoleColor.White;
             Console.Clear();
             Console.TreatControlCAsInput = true;
-            _ = Task.Run(() => { Beep(1024, int.MaxValue); });
-            
+            var beepTask = Task.Run(() => { Beep(1024, int.MaxValue); });
+
             Console.WriteLine("A problem has been detected and the game was shut down to prevent damage to your computer.\n");
-            Console.WriteLine(Regex.Replace(e.ExceptionObject.GetType().Name.ToUpper(), "(\\B[A-Z])", " $1") + "\n> " + ((Exception) e.ExceptionObject).Message);
+            Console.WriteLine(Util.camelCaseSplit(e.ExceptionObject.GetType().Name).ToUpper().Replace(' ', '_') + "\n> " + ((Exception)e.ExceptionObject).Message);
             Console.WriteLine("\nIf this is the first time you've seen this stop error screen, restart your computer.\nIf these screen appears again, follow these steps:\n");
-            
+
             Console.WriteLine("Check to make sure any new mods or updates to the game or runtime was properly installed.");
             Console.WriteLine("If this is a new installation, ask your geek firend about it and he might help,");
             Console.WriteLine("you may need some windows/runtime updates.\n");
-            
+            Console.WriteLine("\nIf you are  developer who changed something and it stopped working,");
+            Console.WriteLine("undo your changes.");
+
             Console.WriteLine("If problems continue, disable or remove any newly installed hardware or software. Disable BIOS memory options such as caching or shadowing.\nIf you need to use safe mode to remove or disable components, restart your computer, save your game saves to save location, and re-install the game or .NET runtime.");
-            
+
             Console.WriteLine("\nTechnical information:");
 
             Console.WriteLine("*** STOP: 0x000000FE (0x00000008, 0x00000000666, 0x00000009, 0x847075cc).");
@@ -160,6 +171,12 @@ namespace LostMind
             Console.WriteLine(Environment.StackTrace);
             Console.WriteLine("\nPress any key to exit the program.");
             while (true) if (Console.KeyAvailable) break;
+
+            for (byte i = 255; i > 1; i--) {
+                UserConsoleNativeInterface.setTransparency(i);
+
+            }
+
             Environment.Exit(0);
         }
     }

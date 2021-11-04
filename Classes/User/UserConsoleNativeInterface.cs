@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Drawing;
+using System.Diagnostics;
 
 namespace LostMind.Classes.User
 {
@@ -45,7 +46,13 @@ namespace LostMind.Classes.User
                ref CONSOLE_FONT_INFO_EX consoleCurrentFontEx);
 
         [DllImport("user32.dll")]
-        static extern bool SetLayeredWindowAttributes(IntPtr hWnd, uint crKey, byte bAlpha, uint dwFlags);
+        static extern bool SetLayeredWindowAttributes(IntPtr hwnd, uint crKey, byte bAlpha, uint dwFlags);
+
+        [DllImport("kernel32.dll")]
+        static extern uint GetLastError();
+
+        [DllImport("kernel32.dll")]
+        static extern IntPtr GetConsoleWindow();
 
         const int STD_OUTPUT_HANDLE = -11;
         const int STD_INPUT_HANDLE = -10;
@@ -56,7 +63,8 @@ namespace LostMind.Classes.User
         public static IntPtr StdOut { get => GetStdHandle(STD_OUTPUT_HANDLE); }
         /**<summary>Gets STD_INPUT_HANDLE pointer.</summary>*/
         public static IntPtr StdIn { get => GetStdHandle(STD_INPUT_HANDLE); }
-        static IntPtr hWnd = StdOut;
+        public static IntPtr hWnd { get => Process.GetCurrentProcess().MainWindowHandle; }
+        static IntPtr _stdout = StdOut;
 
         /**<summary>
          * Set entire console font.
@@ -69,9 +77,9 @@ namespace LostMind.Classes.User
          */
         public static void setFont(string fontName = "Lucida Console", short charWidth = 4, short charHeight = 12, short fontWeight = 1) {
                 unsafe {
-                if (hWnd == INVALID_HANDLE_VALUE) {
-                    hWnd = StdOut;
-                    if (hWnd == INVALID_HANDLE_VALUE) {
+                if (_stdout == INVALID_HANDLE_VALUE) {
+                    _stdout = StdOut;
+                    if (_stdout == INVALID_HANDLE_VALUE) {
                         throw new NoConsoleException("No console output was found!");
                     }
                 }
@@ -83,7 +91,7 @@ namespace LostMind.Classes.User
                 // char width/height & font Width
                 newInfo.dwFontSize = new COORD(charWidth, charHeight);
                 newInfo.FontWeight = fontWeight;
-                SetCurrentConsoleFontEx(hWnd, false, ref newInfo);
+                SetCurrentConsoleFontEx(_stdout, false, ref newInfo);
             }
         }
         /**<summary>
@@ -96,9 +104,16 @@ namespace LostMind.Classes.User
             } catch (Exception) { /* ignored */ }
         }
 
-        public static void setTransparency(int aplha) {
-
+        public static bool setTransparency(byte alpha) {
+            UInt32 color = (UInt32) ColorTranslator.ToWin32(Color.FromArgb(155, 155, 155));
+            bool retval = SetLayeredWindowAttributes(GetConsoleWindow(), color, alpha, 2);
+            if (!retval) {
+                var errcode = GetLastError();
+                throw new WinApiError(errcode);
+            }
+            return retval;
         }
     }
     public class NoConsoleException : Exception { public NoConsoleException(string msg):base(msg) {} }
+    public class WinApiError : Exception { public WinApiError(uint errcode) : base("Error code: " + Convert.ToString(errcode) + " (reference: https://bit.ly/3EHMJUy)") { } }
 }
