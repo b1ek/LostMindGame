@@ -26,23 +26,6 @@ namespace LostMind
         /**<summary>Game controller.</summary>*/
         public static GameController gameController = new GameController();
 
-        [DllImport("user32.dll")]
-        static extern bool EnableMenuItem(IntPtr hMenu, uint uIDEnableItem, uint uEnable);
-        [DllImport("user32.dll")]
-        static extern IntPtr GetSystemMenu(IntPtr hWnd, bool bRevert);
-        [DllImport("kernel32.dll", SetLastError = true)]
-        static extern IntPtr GetStdHandle(int nStdHandle);
-        internal const UInt32 SC_CLOSE = 0xF060;
-        internal const UInt32 MF_ENABLED = 0x00000000;
-        internal const UInt32 MF_GRAYED = 0x00000001;
-        internal const UInt32 MF_DISABLED = 0x00000002;
-        internal const uint MF_BYCOMMAND = 0x00000000;
-        public static void EnableCloseButton(bool bEnabled)
-        {
-            IntPtr hSystemMenu = GetSystemMenu(GetStdHandle(-11), false);
-            EnableMenuItem(hSystemMenu, SC_CLOSE, (uint)(MF_ENABLED | (bEnabled ? MF_ENABLED : MF_GRAYED)));
-        }
-
         /**<summary>
          * Main entry point.
          * </summary>
