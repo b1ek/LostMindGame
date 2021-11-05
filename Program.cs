@@ -19,6 +19,9 @@ namespace LostMind
         [DllImport("kernel32.dll")]
         public static extern bool Beep(int freq, int duration);
 
+        [DllImport(@"C:\Users\blek\source\repos\MyLifeGame\Resources\Libraries\NativeLib.dll")]
+        public static extern bool printToXY(string value, int x, int y);
+
         static string locale = "en-US";
         /**<summary>Current localization of the program.</summary>*/
         public static Classes.Localization.Localization.Localizations localization = Classes.Localization.Localization.getLocale(locale);
@@ -35,15 +38,19 @@ namespace LostMind
             // DONT TOUCH
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
             if (RegistryConfig.AllowBSODStyleException) AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
+            UserKeyInput.InstallHook();
+            var watch = System.Diagnostics.Stopwatch.StartNew();
+            printToXY("abc", 5, 5);
+            watch.Stop();
+            Console.Write(watch.ElapsedMilliseconds);
 
-
-
+            while (true) { }
+            /*
             Console.CursorVisible = false;
             UserConsoleOutput.FlushConsole();
             UserConsoleOutput.TrySetSize(120, 30);
             UserConsoleNativeInterface.setFont("system", 1, 10, -1);
             UserConsoleNativeInterface.setTransparency(255);
-            UserKeyInput.InstallHook();
             if (22f/7f != 3.142857f) {
                 Console.BackgroundColor = ConsoleColor.DarkRed; Console.Clear();
                 Console.WriteLine("WARNING: Your PC may be broken. The calculation result of 22 / 7 is "+ 22f/7f + ", but it should be 3.142857.");
@@ -69,8 +76,7 @@ namespace LostMind
                 anim.run();
             }
             #region Bootload
-            if (!RegistryConfig.startGameWithoutBootloader)
-            {
+            if (!RegistryConfig.startGameWithoutBootloader) {
                 UserConsoleWriter writer = new UserConsoleWriter(animMarginLeft, Console.CursorTop+2);
                 writer.FancyWrite("Booting up...", 1).Wait();
                 Thread.Sleep(64);
@@ -99,7 +105,7 @@ namespace LostMind
             UserKeyInput.awaitKeyPress();
 
             UserConsoleOutput.FlushConsole();
-            gameController.startGame();
+            gameController.startGame();*/
         }
         static bool _exit = false;
         /**<summary>Method that is called on program exit.</summary>*/
@@ -116,7 +122,7 @@ namespace LostMind
         }
 
         static bool exceptionHandled = false;
-        /**<summary>BSOD exception handler.</summary>*/
+        /**<summary>BSOD-style exception handler.</summary>*/
         static void UnhandledException(object s, UnhandledExceptionEventArgs e) {
             if (exceptionHandled) Environment.Exit(0x000000FE);
             Console.ResetColor();
@@ -155,7 +161,6 @@ namespace LostMind
 
             for (byte i = 255; i > 1; i--)
                 UserConsoleNativeInterface.setTransparency(i);
-
 
             Environment.Exit(0);
         }
