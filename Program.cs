@@ -19,8 +19,16 @@ namespace LostMind
         [DllImport("kernel32.dll")]
         public static extern bool Beep(int freq, int duration);
 
-        [DllImport(@"C:\Users\blek\source\repos\MyLifeGame\Resources\Libraries\NativeLib.dll")]
+        [DllImport(@"Resources\Libraries\NativeLib.dll")]
         public static extern bool printToXY(string value, int x, int y);
+
+        [DllImport(@"Resources\Libraries\NativeLib.dll")]
+        public static extern void placeButton(string buttonText, int x, int y);
+
+        [DllImport(@"Resources\Libraries\NativeLib.dll")]
+        public static extern void displayMessage(string message);
+
+
 
         static string locale = "en-US";
         /**<summary>Current localization of the program.</summary>*/
@@ -40,9 +48,10 @@ namespace LostMind
             if (RegistryConfig.AllowBSODStyleException) AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
             UserKeyInput.InstallHook();
             var watch = System.Diagnostics.Stopwatch.StartNew();
-            printToXY("abc", 5, 5);
+            _ = Task.Run(() => { displayMessage("hi"); });
             watch.Stop();
             Console.Write(watch.ElapsedMilliseconds);
+            Console.Write($"\n{UserConsoleNativeInterface.GetLastError()}");
 
             while (true) { }
             /*

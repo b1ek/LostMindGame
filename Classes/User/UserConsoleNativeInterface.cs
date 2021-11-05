@@ -49,13 +49,16 @@ namespace LostMind.Classes.User
         static extern bool SetLayeredWindowAttributes(IntPtr hwnd, uint crKey, byte bAlpha, uint dwFlags);
 
         [DllImport("kernel32.dll")]
-        static extern uint GetLastError();
+        public static extern uint GetLastError();
 
         [DllImport("kernel32.dll")]
         static extern IntPtr GetConsoleWindow();
 
         [DllImport("user32.dll")]
         static extern bool SetWindowTextA(IntPtr hWnd, string lpString);
+
+        [DllImport(@"Resources\Libraries\NativeLib.dll")]
+        public static extern bool printToXY(string value, int x, int y);
 
         const int STD_OUTPUT_HANDLE = -11;
         const int STD_INPUT_HANDLE = -10;

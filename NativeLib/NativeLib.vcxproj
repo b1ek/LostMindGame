@@ -92,7 +92,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;NATIVELIB_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
@@ -166,7 +166,7 @@
       <ShowProgress>LinkVerbose</ShowProgress>
     </Link>
     <PostBuildEvent>
-      <Command>copy /B "C:\Users\blek\source\repos\MyLifeGame\WinApiDLL\x64\Release" "C:\Users\blek\source\repos\MyLifeGame\Resources\Libraries"</Command>
+      <Command>copy /B "C:\Users\blek\source\repos\MyLifeGame\NativeLib\x64\Release" "C:\Users\blek\source\repos\MyLifeGame\Resources\Libraries"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
