@@ -30,7 +30,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Locale\en-US.locale">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Locale\ru-RU.locale">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

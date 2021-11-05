@@ -1,5 +1,6 @@
 ﻿using LostMind.Classes.UI;
 using LostMind.Classes.User;
+using LostMind.Classes.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,30 @@ using System.Threading.Tasks;
 namespace LostMind.Classes.GameController
 {
     public class GameController {
-        
+        Viewport titleView;
+        int consoleWidth = 0;
+        int consoleHeight = 16;
+        const int maxXP = 100;
+        int xp = 0;
+        Locale locale = new();
+        public void run() {
+            string title = $"{locale.gameTitle} | {xp}/{maxXP} | {locale.mainMenu}";
+            string sep = new string('-', title.Length + 2);
+
+            consoleWidth = title.Length + 3;
+            consoleHeight = Convert.ToInt32(consoleWidth / 2);
+            UserConsoleOutput.TrySetSize(consoleWidth, consoleHeight);
+
+            titleView = new Viewport(0, 0, consoleWidth, 3);
+            titleView.AddElement(new UILabel(" " + sep));
+            titleView.AddElement(new UILabel("  " + title));
+            titleView.AddElement(new UILabel(" " + sep));
+
+            Viewport mainMenu = new Viewport(0, 4, consoleWidth, consoleHeight - titleView.rectHeight);
+            mainMenu.AddElement(new UIButton("Start"));
+            mainMenu.AddElement(new UIButton("Options"));
+            mainMenu.AddElement(new UIButton("Exit game"));
+            mainMenu.mainloop();
+        }
     }
 }

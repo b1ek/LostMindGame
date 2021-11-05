@@ -14,6 +14,7 @@ namespace LostMind.Classes.UI
         public int lastY { get { return _y; } }
 
         private protected bool _intrctbl; // interactable
+        public bool Interactable { get => _intrctbl; }
 
         private protected ConsoleColor _hbg; // hover background
         private protected ConsoleColor _hfg; //       foreground

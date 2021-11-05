@@ -19,20 +19,7 @@ namespace LostMind
         [DllImport("kernel32.dll")]
         public static extern bool Beep(int freq, int duration);
 
-        [DllImport(@"Resources\Libraries\NativeLib.dll")]
-        public static extern bool printToXY(string value, int x, int y);
-
-        [DllImport(@"Resources\Libraries\NativeLib.dll")]
-        public static extern void placeButton(string buttonText, int x, int y);
-
-        [DllImport(@"Resources\Libraries\NativeLib.dll")]
-        public static extern void displayMessage(string message);
-
-
-
         static string locale = "en-US";
-        /**<summary>Current localization of the program.</summary>*/
-        public static Classes.Localization.Localization.Localizations localization = Classes.Localization.Localization.getLocale(locale);
 
         /**<summary>Game controller.</summary>*/
         public static GameController gameController = new GameController();
@@ -47,14 +34,7 @@ namespace LostMind
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
             if (RegistryConfig.AllowBSODStyleException) AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
             UserKeyInput.InstallHook();
-            var watch = System.Diagnostics.Stopwatch.StartNew();
-            _ = Task.Run(() => { displayMessage("hi"); });
-            watch.Stop();
-            Console.Write(watch.ElapsedMilliseconds);
-            Console.Write($"\n{UserConsoleNativeInterface.GetLastError()}");
 
-            while (true) { }
-            /*
             Console.CursorVisible = false;
             UserConsoleOutput.FlushConsole();
             UserConsoleOutput.TrySetSize(120, 30);
@@ -75,7 +55,7 @@ namespace LostMind
             var cp = Console.GetCursorPosition();
             const int animMarginTop = 3;
             const int animMarginLeft = 20;
-            string pathToLogo = Environment.CurrentDirectory + @"a\Resources\Logo.txt";
+            string pathToLogo = Environment.CurrentDirectory + @"\Resources\Logo.txt";
             if (RegistryConfig.noStartupLogoAnim) {
                 Animation anim = Animation.createSimple(File.ReadAllText(pathToLogo), animMarginLeft, animMarginTop, 1, ConsoleColor.DarkGreen);
                 anim.run();
@@ -114,7 +94,7 @@ namespace LostMind
             UserKeyInput.awaitKeyPress();
 
             UserConsoleOutput.FlushConsole();
-            gameController.startGame();*/
+            gameController.run();
         }
         static bool _exit = false;
         /**<summary>Method that is called on program exit.</summary>*/
@@ -136,12 +116,14 @@ namespace LostMind
             if (exceptionHandled) Environment.Exit(0x000000FE);
             Console.ResetColor();
             Console.SetCursorPosition(0, 0);
-            UserConsoleNativeInterface.setFont("Consolas", 2, 14, -1);
+            UserConsoleNativeInterface.setFont("Consolas", 2, 15, -1);
             Console.SetWindowSize(120, 30);
             Console.SetBufferSize(120, 30);
-            Console.BackgroundColor = ConsoleColor.DarkBlue;
             Console.ForegroundColor = ConsoleColor.White;
+            //Console.BackgroundColor = ConsoleColor.DarkBlue;
+            Console.Write("\x1b[48;2;1;0;171m");
             Console.Clear();
+
             Console.TreatControlCAsInput = true;
             var beepTask = Task.Run(() => { Beep(1024, int.MaxValue); });
 

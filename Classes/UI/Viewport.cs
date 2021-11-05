@@ -110,7 +110,7 @@ namespace LostMind.Classes.UI
             foreach (var elem in _elements) elem.remove();
             closed = true;
         }
-        
+
         public void mainloop() {
             while (!closed)
                 if (Console.KeyAvailable)
@@ -131,24 +131,24 @@ namespace LostMind.Classes.UI
             if (_elements.Count < maxElements) _elements.Add(element);
             else throw new TooMuchElementsException();
             DrawElements();
-            if (_elements.Count == 1) 
+            if (_elements.Count == 1 && _elements[0].Interactable)
                 _elements[0].hover(true);
         }
         #endregion
         #region Cursor
-        public void clickSelection() => _elements[_selection].click();
+        public void clickSelection() {
+            if (_elements[selection].Interactable) _elements[_selection].click();
+        }
         public void moveCursorUp() {
             if (_selection - 1 < _elements.Count) {
                 if (_selection == 0) { }
                 else { _elements[_selection].hover(false); _selection--; _elements[_selection].hover(true); }
-                Console.SetCursorPosition(_elements[_selection].lastX, _elements[_selection].lastY);
             }
         }
         public void moveCursorDown() {
             if (_selection + 1 < _elements.Count) {
                 if (_selection == _elements.Count) { }
                 else { _elements[_selection].hover(false); _selection++; _elements[_selection].hover(true); }
-                Console.SetCursorPosition(_elements[_selection].lastX, _elements[_selection].lastY);
             }
         }
         #endregion
