@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Management;
+using System.Diagnostics;
 
 namespace LostMind.Classes.GameController
 {
@@ -32,7 +34,7 @@ namespace LostMind.Classes.GameController
             Viewport mainMenu = new Viewport(0, 4, consoleWidth, consoleHeight - titleView.rectHeight);
             mainMenu.AddElement(new UIButton("Start"));
             mainMenu.AddElement(new UIButton("Options"));
-            mainMenu.AddElement(new UIButton("Exit game"));
+            mainMenu.AddElement(new UIButton("Exit game", () => { Process.GetCurrentProcess().Kill(); }));
             mainMenu.mainloop();
         }
     }
