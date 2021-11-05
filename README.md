@@ -36,6 +36,7 @@ Or you can split an ascii art using Animation.createSimple("YOUR_ART_STRING", st
 
 #### Example
 ```cs
+UserKeyInput.installHook(); // THIS IS IMPORTANT. CALL THIS METHOD IN THE FIRST LINES OF YOUR START POINT
 var anim = Animation.createSimple("artString", 0, 0, 15);
 anim.run();
 ```
