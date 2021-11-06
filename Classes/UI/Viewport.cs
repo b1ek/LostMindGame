@@ -35,6 +35,8 @@ namespace LostMind.Classes.UI
         List<UIElement> _elements = new List<UIElement>();
         public List<UIElement> Elements { get => _elements; }
 
+        public bool breakLoop = false;
+
         /**<summary>Max elements limiter</summary>*/
         public const int maxElements = 128;
         #region margin
@@ -112,9 +114,12 @@ namespace LostMind.Classes.UI
         }
 
         public void mainloop() {
-            while (!closed)
+            breakLoop = false;
+            while (!closed) {
+                if (breakLoop) break;
                 if (Console.KeyAvailable)
                     UserKeyInput.CallEvent(Console.ReadKey(true));
+            }
         }
 
         public Thread WrapLoopInThread() => new Thread(mainloop);
