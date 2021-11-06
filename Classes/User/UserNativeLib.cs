@@ -13,10 +13,24 @@ namespace LostMind.Classes.User {
         public static extern bool printToXY(string value, int x, int y);
 
         [DllImport(@"Resources\Libraries\NativeLib.dll")]
-        public static extern bool print(string value = "");
+        static extern bool print(string value = "");
+
+        public static void Write(string value) {
+            print(value);
+        }
+        public static void Write(char c) {
+            print(new string(c, 1));
+        }
 
         [DllImport(@"Resources\Libraries\NativeLib.dll")]
         public static extern bool printLn(string value = "");
+
+        public static void WriteLn(string value) {
+            print(value + "\n");
+        }
+        public static void WriteLn(char c) {
+            print(new string(c, 1) + "\n");
+        }
 
         [DllImport(@"Resources\Libraries\NativeLib.dll")]
         public static extern void placeButton(string buttonText, int x, int y);
