@@ -13,7 +13,16 @@ namespace LostMind.Classes.User {
         public static extern bool printToXY(string value, int x, int y);
 
         [DllImport(@"Resources\Libraries\NativeLib.dll")]
+        public static extern bool print(string value = "");
+
+        [DllImport(@"Resources\Libraries\NativeLib.dll")]
+        public static extern bool printLn(string value = "");
+
+        [DllImport(@"Resources\Libraries\NativeLib.dll")]
         public static extern void placeButton(string buttonText, int x, int y);
+
+        [DllImport(@"Resources\Libraries\NativeLib.dll")]
+        public static extern void flushConsole();
 
         public const uint MB_ABORTRETRYIGNORE = 2;
         public const uint MB_CANCELTRYCONTINUE = 6;

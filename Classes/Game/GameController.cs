@@ -36,7 +36,7 @@ namespace LostMind.Classes.GameController
             mainMenu.AddElement(new UIButton("Options"));
             mainMenu.AddElement(new UIButton("Exit game", () => { Process.GetCurrentProcess().Kill(); }));
             mainMenu.mainloop();
-
+ 
         }
     }
 }

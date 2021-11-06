@@ -98,7 +98,7 @@ namespace LostMind
         }
         static bool _exit = false;
         /**<summary>Method that is called on program exit.</summary>*/
-        static void OnProcessExit(object sender, EventArgs e)
+        public static void OnProcessExit(object sender, EventArgs e)
         {
             if (_exit)
             {
@@ -112,7 +112,7 @@ namespace LostMind
 
         static bool exceptionHandled = false;
         /**<summary>BSOD-style exception handler.</summary>*/
-        static void UnhandledException(object s, UnhandledExceptionEventArgs e) {
+        public static void UnhandledException(object s, UnhandledExceptionEventArgs e) {
             if (exceptionHandled) Environment.Exit(0x000000FE);
             Console.ResetColor();
             Console.SetCursorPosition(0, 0);
