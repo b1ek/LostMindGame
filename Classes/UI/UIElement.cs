@@ -53,15 +53,15 @@ namespace LostMind.Classes.UI
         }
         public virtual void print(int x, int y, bool removeOld) {
             if (removeOld) {
-                if (displayed) User.UserConsoleOutput.WriteXY(_x, _y, new string(' ', _intxt.Length), _dbg, _dfg);
+                if (displayed) User.UCO.WriteXY(_x, _y, new string(' ', _intxt.Length), _dbg, _dfg);
                 _x = x;
                 _y = y;
             }
-            User.UserConsoleOutput.WriteXY(_x, _y, _intxt, _bg, _fg);
+            User.UCO.WriteXY(_x, _y, _intxt, _bg, _fg);
             displayed = true;
         }
         public virtual void remove() {
-            if (displayed) User.UserConsoleOutput.WriteXY(_x, _y, new string(' ', _intxt.Length), _dbg, _dfg);
+            if (displayed) User.UCO.WriteXY(_x, _y, new string(' ', _intxt.Length), _dbg, _dfg);
             displayed = false;
         }
 
@@ -69,13 +69,13 @@ namespace LostMind.Classes.UI
         public ConsoleColor bg {
             get { return _crrntbg; }
             set {
-                User.UserConsoleOutput.WriteXY(_x, _y, _intxt, value, _crrntfg);
+                User.UCO.WriteXY(_x, _y, _intxt, value, _crrntfg);
                 _crrntbg = value;
             }
         } public ConsoleColor txt {
             get { return _crrntfg; }
             set {
-                User.UserConsoleOutput.WriteXY(_x, _y, _intxt, _crrntbg, value);
+                User.UCO.WriteXY(_x, _y, _intxt, _crrntbg, value);
                 _crrntfg = value;
             }
         }

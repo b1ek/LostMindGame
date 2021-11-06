@@ -36,8 +36,8 @@ namespace LostMind
             UserKeyInput.InstallHook();
 
             Console.CursorVisible = false;
-            UserConsoleOutput.FlushConsole();
-            UserConsoleOutput.TrySetSize(120, 30);
+            UCO.FlushConsole();
+            UCO.TrySetSize(120, 30);
             UserConsoleNativeInterface.setFont("system", 1, 10, -1);
             UserConsoleNativeInterface.setTransparency(255);
             if (22f/7f != 3.142857f) {
@@ -88,12 +88,12 @@ namespace LostMind
                 writer._sx -= 2; writer._x = writer._sx;
                 Thread.Sleep(512);
                 writer.FancyWrite("\n\nPress any key to launch the game...").Wait();
-            } else { UserConsoleOutput.WriteXY(animMarginLeft, Console.CursorTop + 2, "Press any key to launch the game..."); }
+            } else { UCO.WriteXY(animMarginLeft, Console.CursorTop + 2, "Press any key to launch the game..."); }
             #endregion
 
             UserKeyInput.awaitKeyPress();
 
-            UserConsoleOutput.FlushConsole();
+            UCO.FlushConsole();
             gameController.run();
         }
         static bool _exit = false;

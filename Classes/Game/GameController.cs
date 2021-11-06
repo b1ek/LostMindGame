@@ -24,7 +24,7 @@ namespace LostMind.Classes.GameController
 
             consoleWidth = title.Length + 3;
             consoleHeight = Convert.ToInt32(consoleWidth / 2);
-            UserConsoleOutput.TrySetSize(consoleWidth, consoleHeight);
+            UCO.TrySetSize(consoleWidth, consoleHeight);
 
             titleView = new Viewport(0, 0, consoleWidth, 3);
             titleView.AddElement(new UILabel(" " + sep));

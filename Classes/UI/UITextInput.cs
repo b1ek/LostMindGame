@@ -53,9 +53,9 @@ namespace LostMind.Classes.UI
         public override void print(int x, int y) {
             try {
                 int curr = _cursor;
-                User.UserConsoleOutput.WriteXY(x, y, "[" + new string(' ', _text.Length) + "]", bg, txt);
-                User.UserConsoleOutput.WriteXY(x + 1, y, _text, bg, txt);
-                User.UserConsoleOutput.WriteXY(x + curr+1, y, _text[curr].ToString(), ConsoleColor.DarkBlue, txt);
+                User.UCO.WriteXY(x, y, "[" + new string(' ', _text.Length) + "]", bg, txt);
+                User.UCO.WriteXY(x + 1, y, _text, bg, txt);
+                User.UCO.WriteXY(x + curr+1, y, _text[curr].ToString(), ConsoleColor.DarkBlue, txt);
             } catch (Exception) { }
             this._x = x;
             this._y = y;

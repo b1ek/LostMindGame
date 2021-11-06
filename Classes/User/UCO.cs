@@ -8,7 +8,12 @@ using System.Threading.Tasks;
 
 namespace LostMind.Classes.User
 {
-    public static class UserConsoleOutput
+    /**<summary>
+     * <b>UCO - User Console Output</b><br/>
+     * Macros for easy console output
+     * </summary>
+     */
+    public static class UCO
     {
         [DllImport("kernel32.dll")]
         public static extern bool Beep(int freq, int duration);

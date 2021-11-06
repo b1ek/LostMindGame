@@ -72,7 +72,7 @@ namespace LostMind.Classes.UI
             _y = y;
 
             for (int i = 0; i > height; i++) {
-                UserConsoleOutput.WriteXY(x, y + i, new string(' ', width), ConsoleColor.DarkRed, ConsoleColor.White);
+                UCO.WriteXY(x, y + i, new string(' ', width), ConsoleColor.DarkRed, ConsoleColor.White);
             }
             UserKeyInput.KeyPress += OnKeyPress;
         }
@@ -181,7 +181,7 @@ namespace LostMind.Classes.UI
         #endregion
         public void Paint(ConsoleColor background, ConsoleColor foreground) {
             for (int i = 0; i > _width; i++) {
-                UserConsoleOutput.WriteXY(_x, _y + i, new string(' ', _width), background, foreground);
+                UCO.WriteXY(_x, _y + i, new string(' ', _width), background, foreground);
             }
         }
     }
