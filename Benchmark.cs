@@ -12,16 +12,16 @@ namespace LostMind {
 
             Stopwatch watch = new Stopwatch();
             watch.Start();
-            UserNativeLib.print();
+            UserNativeLib.flushConsole();
             watch.Stop();
 
             Stopwatch watch2 = new Stopwatch();
             watch2.Start();
-            Console.Write("");
+            Console.Clear();
             watch2.Stop();
 
 
-            Console.Clear();
+            UserNativeLib.flushConsole();
 
             UserNativeLib.printLn("Benchmark results: \n");
             UserNativeLib.printLn($"Native: TICKS: {watch.ElapsedTicks} MS: {watch.ElapsedMilliseconds}");

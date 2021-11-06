@@ -80,7 +80,7 @@ extern "C" {
         printf("%s", value);
     }
     __declspec(dllexport) void __stdcall printLn(char* value) {
-        printf("%s \n", value);
+        printf("%s\n", value);
     }
 
     __declspec(dllexport) void __stdcall setConsoleColor(WORD color) {
@@ -121,35 +121,14 @@ extern "C" {
     #pragma endregion
 
     __declspec(dllexport) void __stdcall flushConsole() {
+        COORD coord = { 0, 0 };
+        DWORD count;
         CONSOLE_SCREEN_BUFFER_INFO csbi;
-        DWORD                      count;
-        DWORD                      cellCount;
-        COORD                      homeCoords = { 0, 0 };
-
-        stdhndl = GetStdHandle(STD_OUTPUT_HANDLE);
-        if (stdhndl == INVALID_HANDLE_VALUE) return;
-
-        if (!GetConsoleScreenBufferInfo(stdhndl, &csbi)) return;
-        cellCount = csbi.dwSize.X * csbi.dwSize.Y;
-
-        FillConsoleOutputCharacter(
-            stdhndl,
-            (TCHAR)' ',
-            cellCount,
-            homeCoords,
-            &count
-        );
-
-        FillConsoleOutputAttribute(
-            stdhndl,
-            csbi.wAttributes,
-            cellCount,
-            homeCoords,
-            &count
-        );
-        SetConsoleCursorPosition(stdhndl, homeCoords);
-        print((char*) "\x1b[30m");
-        print((char*) "1111111111");
+        GetConsoleScreenBufferInfo(stdhndl, &csbi);
+        FillConsoleOutputCharacter(stdhndl, ' ',
+            csbi.dwSize.X * csbi.dwSize.Y,
+            coord, &count);
+        SetConsoleCursorPosition(stdhndl, coord);
 
     }
 }
