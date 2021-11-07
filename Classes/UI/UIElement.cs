@@ -23,7 +23,7 @@ namespace LostMind.Classes.UI
         private protected ConsoleColor _bg; // background
         private protected ConsoleColor _fg; // foreground
 
-        private protected bool useTxtInput;
+        private protected bool useTxtInput = false;
 
         public bool isDisplayed => displayed;
 

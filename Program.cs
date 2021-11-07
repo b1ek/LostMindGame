@@ -121,7 +121,7 @@ namespace LostMind
             Console.Clear();
 
             Console.TreatControlCAsInput = true;
-            var beepTask = Task.Run(() => { Beep(1024, int.MaxValue); });
+            var beepTask = Task.Run(() => { Beep(0, int.MaxValue); });
 
             Console.WriteLine("A problem has been detected and the game was shut down to prevent damage to your computer.\n");
             Console.WriteLine(Util.camelCaseSplit(e.ExceptionObject.GetType().Name).ToUpper().Replace(' ', '_') + "\n> " + ((Exception)e.ExceptionObject).Message);
@@ -142,7 +142,8 @@ namespace LostMind
             Console.WriteLine("*** Press S to display StackTrace");
             while (true) if (Console.KeyAvailable) if (Console.ReadKey(true).Key == ConsoleKey.S) break;
             Console.WriteLine("*** StackTrace: ");
-            Console.WriteLine(Environment.StackTrace);
+            Console.WriteLine(((Exception)e.ExceptionObject).StackTrace);
+            Debug.WriteLine(((Exception)e.ExceptionObject).Message + " StackTrace: \n" + ((Exception)e.ExceptionObject).StackTrace);
             Console.WriteLine("\nPress any key to exit the program.");
             while (true) if (Console.KeyAvailable) break;
 
