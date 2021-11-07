@@ -27,11 +27,14 @@ namespace LostMind
          * </summary>
          */
         static void Main(string[] args) {
+            MachineTest.runDefaultNotBrokenTest();
 
             // DONT TOUCH
             Process.GetCurrentProcess().EnableRaisingEvents = true;
             Process.GetCurrentProcess().Exited += (s, e) => { OnProcessExit(s, e); };
             if (RegistryConfig.AllowBSODStyleException) AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
+
+
             UserKeyInput.InstallHook();
 
             Console.CursorVisible = false;
@@ -39,17 +42,7 @@ namespace LostMind
             UCO.TrySetSize(120, 30);
             UserConsoleNativeInterface.setFont("system", 1, 10, -1);
             UserConsoleNativeInterface.setTransparency(255);
-            if (22f/7f != 3.142857f) {
-                Console.BackgroundColor = ConsoleColor.DarkRed; Console.Clear();
-                Console.WriteLine("WARNING: Your PC may be broken. The calculation result of 22 / 7 is "+ 22f/7f + ", but it should be 3.142857.");
-                Console.WriteLine("Anyway, press ESC if you read that and want to proceed.");
-                while(true) {
-                    if (Console.KeyAvailable) {
-                        if (Console.ReadKey().Key == ConsoleKey.Escape) break;
-                    }
-                }
-                Console.BackgroundColor = ConsoleColor.Black; Console.Clear();
-            }
+
 
             var cp = Console.GetCursorPosition();
             const int animMarginTop = 3;
@@ -86,8 +79,8 @@ namespace LostMind
                 $"Paged memory size         : " + myProcess.PagedMemorySize64 + "\n"; writer.Write(msg);
                 writer._sx -= 2; writer._x = writer._sx;
                 Thread.Sleep(512);
-                writer.FancyWrite("\n\nPress any key to launch the game...").Wait();
-            } else { UCO.WriteXY(animMarginLeft, Console.CursorTop + 2, "Press any key to launch the game..."); }
+                writer.FancyWrite("\n\nPress ESC to launch the game...").Wait();
+            } else { UCO.WriteXY(animMarginLeft, Console.CursorTop + 2, "Press ESC to launch the game..."); }
             #endregion
 
             UserKeyInput.awaitKeyPress();

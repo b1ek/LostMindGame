@@ -2,6 +2,7 @@
 using LostMind.Classes.Util;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -15,7 +16,7 @@ namespace LostMind.Classes.UI
         int _y = 0;
         int _width = 0;
         int _height = 0;
-        int _selection = 0;
+        int _selection = -1;
 
         /**<summary>Rect height of Viewport rectangle</summary>*/
         public int rectHeight { get => _height; }
@@ -81,6 +82,7 @@ namespace LostMind.Classes.UI
         public void OnKeyPress(ConsoleKeyInfo key) {
             if (_elements == null) return;
             if (_elements.Count == 0) return;
+            if (!loopLooping) return;
             ConsoleKey k = key.Key;
             if (_elements[_selection].usesTextInput) {
                 if (k == UISysConfig.UIMoveUpKey_txtIn)
@@ -124,13 +126,43 @@ namespace LostMind.Classes.UI
             foreach (var elem in _elements) elem.remove();
             closed = true;
         }
+
+        /**<summary>Add element to viewport.</summary>*/
+        public void AddElement(UIElement element) {
+            if (_elements.Count < maxElements) _elements.Add(element);
+            else throw new TooMuchElementsException();
+            DrawElements();
+        }
+        public void removeElement(int index) {
+            if (_elements[index].isDisplayed) _elements[index].remove();
+            _elements.RemoveAt(index);
+            DrawElements();
+        }
+        public bool tryRemoveElement(int index) {
+            try { removeElement(index); }
+            catch (Exception e) { Debug.WriteLine($"Got an exception: {e.Message}\nStackTrace: \n{e.StackTrace}"); return false; }
+            return true;
+        }
+        public void removeAllElements() {
+            for (; ;) {
+                Debug.WriteLine($"Removing element {_elements.Count-1}");
+                bool ret = tryRemoveElement(_elements.Count-1);
+                if (!ret) break;
+            }
+        }
+        #endregion
+        #region loop
+        bool loopLooping = false;
         public void mainloop() {
             breakLoop = false;
+            loopLooping = true;
             while (!closed) {
                 if (breakLoop) break;
                 if (Console.KeyAvailable)
                     UserKeyInput.CallEvent(Console.ReadKey(true));
             }
+            loopLooping = false;
+            breakLoop = false;
         }
         public void breakMainLoop() {
             _ = Task.Run(() => {
@@ -148,32 +180,11 @@ namespace LostMind.Classes.UI
                     UserKeyInput.CallEvent(Console.ReadKey(true));
             });
         }
-
-        /**<summary>Add element to viewport.</summary>*/
-        public void AddElement(UIElement element) {
-            if (_elements.Count < maxElements) _elements.Add(element);
-            else throw new TooMuchElementsException();
-            DrawElements();
-        }
         #endregion
-        public void removeElement(int index) {
-            if (_elements[index].) _elements[index].remove();
-            _elements.RemoveAt(index);
-            DrawElements();
-        }
-        public bool tryRemoveElement(int index) {
-            try { removeElement(index); }
-            catch (Exception) { return false; }
-            return true;
-        }
-        public void removeAllElements() {
-            int i = 0;
-            for (; _elements.Count == 0; i++) {
-                removeElement(i);
-            }
-        }
         #region Cursor
         public void clickSelection() {
+            if (_selection < 0) return;
+            if (!loopLooping) return;
             if (_elements[selection].Interactable) _elements[_selection].click();
         }
         /**<summary>Moves cursor up from the current position.\nBenchmark results: 1 ms (~10000 ticks) at 3.2 GHz clock CPU.</summary>*/
