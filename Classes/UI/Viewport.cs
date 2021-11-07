@@ -146,8 +146,10 @@ namespace LostMind.Classes.UI {
             if (_elements.Count < maxElements) _elements.Add(element);
             else throw new TooMuchElementsException();
             DrawElements();
-            if (_elements.Count == 1 && _elements[0].Interactable)
+            if (_elements.Count == 1 && _elements[0].Interactable) {
                 _elements[0].hover(true);
+                _elements[0].print(_marginLeft + _x, _marginTop + _y);
+            }
         }
 
         public void RemoveElement(int index) {

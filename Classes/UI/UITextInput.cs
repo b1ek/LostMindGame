@@ -50,15 +50,20 @@ namespace LostMind.Classes.UI
             if (_cursor + moveCharsToRight > _text.Length | _cursor + moveCharsToRight < 0) return;
             _cursor += moveCharsToRight;
         }
-        public override void print(int x, int y) {
+        public override void print(int x, int y, bool displayCursor = true) {
             try {
                 int curr = _cursor;
                 User.UCO.WriteXY(x, y, "[" + new string(' ', _text.Length) + "]", bg, txt);
                 User.UCO.WriteXY(x + 1, y, _text, bg, txt);
-                User.UCO.WriteXY(x + curr+1, y, _text[curr].ToString(), ConsoleColor.DarkBlue, txt);
+                if (displayCursor)  User.UCO.WriteXY(x + curr+2, y, _text[curr+1].ToString(), ConsoleColor.DarkBlue, txt);
             } catch (Exception) { }
             this._x = x;
             this._y = y;
+        }
+
+        public override void hover(bool hovered) {
+            base.hover(hovered);
+            print(_x, _y, hovered);
         }
     }
 }

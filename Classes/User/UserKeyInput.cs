@@ -91,5 +91,15 @@ namespace LostMind.Classes.User
                 return Console.ReadKey(true).Key == key;
             return false;
         }
+        public static bool isKeyPressed(ConsoleKey[] keys) {
+            bool tru = false;
+            if (Console.KeyAvailable) {
+                var key = Console.ReadKey(true);
+                foreach(var i in keys) {
+                    if (i == key.Key) tru = true;
+                }
+            }
+            return tru;
+        }
     }
 }

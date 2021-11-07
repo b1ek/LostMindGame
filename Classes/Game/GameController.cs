@@ -34,14 +34,21 @@ namespace LostMind.Classes.GameController
             titleView.AddElement(new UILabel(" " + sep));
 
             Viewport mainMenu = new Viewport(0, 4, consoleWidth, consoleHeight - titleView.rectHeight);
+
+            mainMenu.marginLeft = 4;
+
             mainMenu.AddElement(new UIButton("Start", () => { mainMenu.breakMainLoop(); }));
             mainMenu.AddElement(new UIButton("Options"));
             mainMenu.AddElement(new UIButton("Exit game", () => { Program.DoSafeExit(); }));
             mainMenu.DrawElements();
-            UserKeyInput.awaitKeyPress(new ConsoleKey[] { ConsoleKey.Spacebar, ConsoleKey.Enter });
+            if (UserKeyInput.isKeyPressed(new ConsoleKey[] { ConsoleKey.Spacebar, ConsoleKey.Enter }))UserKeyInput.awaitKeyPress(new ConsoleKey[] { ConsoleKey.Spacebar, ConsoleKey.Enter });
             mainMenu.mainloop();
             mainMenu.RemoveAllElements();
-            Console.Read();
+
+            mainMenu.AddElement(new UILabel("Enter your nickname:"));
+            mainMenu.AddElement(new UITextInput(24));
+            mainMenu.AddElement(new UIButton("SUBMIT"));
+            mainMenu.mainloop();
 
             Program.DoSafeExit();
         }

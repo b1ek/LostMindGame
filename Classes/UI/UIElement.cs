@@ -95,8 +95,7 @@ namespace LostMind.Classes.UI
                     bg = _bg;
                     txt = _fg;
                 }
-            }else
-            throw new Exception("Element not interactable");
+            }
         }
 
         public virtual void click() {
