@@ -34,12 +34,12 @@ namespace LostMind.Classes.GameController
             titleView.AddElement(new UILabel(" " + sep));
 
             Viewport mainMenu = new Viewport(0, 4, consoleWidth, consoleHeight - titleView.rectHeight);
-            mainMenu.AddElement(new UIButton("Start", () => { mainMenu.breakMainLoop(); }));
+            //mainMenu.AddElement(new UIButton("Start", () => { mainMenu.breakMainLoop(); }));
             mainMenu.AddElement(new UIButton("Options"));
             mainMenu.AddElement(new UIButton("Exit game", () => { Program.DoSafeExit(); }));
-            mainMenu.mainloop();
             mainMenu.removeAllElements();
             mainMenu.DrawElements();
+            mainMenu.mainloop();
 
         }
     }

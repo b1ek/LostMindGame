@@ -25,9 +25,10 @@ namespace LostMind.Classes.UI
 
         private protected bool useTxtInput;
 
-        public bool usesTextInput {
-            get => useTxtInput;
-        }
+        public bool isDisplayed => displayed;
+
+        public bool usesTextInput => useTxtInput;
+
         private protected string _intxt;
         private protected bool currentlyHovered = false;
         bool displayed = false;

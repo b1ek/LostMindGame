@@ -118,6 +118,7 @@ namespace LostMind.Classes.UI
         }
 
         bool closed = false;
+
         /**<summary>Close the viewport.</summary>*/
         public void close() {
             foreach (var elem in _elements) elem.remove();
@@ -153,13 +154,11 @@ namespace LostMind.Classes.UI
             if (_elements.Count < maxElements) _elements.Add(element);
             else throw new TooMuchElementsException();
             DrawElements();
-            if (_elements.Count == 1 && _elements[0].Interactable)
-                _elements[0].hover(true);
         }
         #endregion
         public void removeElement(int index) {
-            _elements[index].remove();
-            _elements.Remove(_elements[index]);
+            if (_elements[index].) _elements[index].remove();
+            _elements.RemoveAt(index);
             DrawElements();
         }
         public bool tryRemoveElement(int index) {
@@ -168,8 +167,10 @@ namespace LostMind.Classes.UI
             return true;
         }
         public void removeAllElements() {
-            for (int i = 0; i > _elements.Count; i++)
+            int i = 0;
+            for (; _elements.Count == 0; i++) {
                 removeElement(i);
+            }
         }
         #region Cursor
         public void clickSelection() {

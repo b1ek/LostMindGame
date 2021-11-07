@@ -98,7 +98,7 @@ extern "C" {
     }
     __declspec(dllexport) void __stdcall placeButton(char* buttonText, int x, int y) {
         HWND button = CreateWindow(L"BUTTON", getLPCWSTR(buttonText), WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,
-            x, y, 75, 23, GetConsoleWindow(), NULL, (HINSTANCE)GetWindowLongPtr(GetConsoleWindow(), GWLP_HINSTANCE), NULL);
+            x, y, 75, 23, NULL, NULL, (HINSTANCE)GetWindowLongPtr(GetConsoleWindow(), GWLP_HINSTANCE), NULL);
     }
     #pragma region Messages
 
@@ -130,5 +130,16 @@ extern "C" {
             csbi.dwSize.X * csbi.dwSize.Y,
             coord, &count);
         SetConsoleCursorPosition(stdhndl, coord);
+    }
+
+    __declspec(dllexport) void __stdcall centerWindow() {
+        RECT rc;
+        HWND hWnd = GetConsoleWindow();
+        GetWindowRect(hWnd, &rc);
+
+        int xPos = (GetSystemMetrics(SM_CXSCREEN) - rc.right) / 2;
+        int yPos = (GetSystemMetrics(SM_CYSCREEN) - rc.bottom) / 2;
+
+        SetWindowPos(hWnd, 0, xPos, yPos, 0, 0, SWP_NOZORDER | SWP_NOSIZE);
     }
 }

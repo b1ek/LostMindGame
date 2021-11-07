@@ -45,8 +45,10 @@ namespace LostMind.Classes.UI
         public override void hover(bool hovered) {
             currentlyHovered = hovered;
             if (hovered) {
+                innerText = _hprefx + buttonText;
                 User.UCO.WriteXY(_x, _y, _intxt, _hbg, _hfg);
             } else {
+                innerText = _prefix + buttonText;
                 User.UCO.WriteXY(_x, _y, _intxt, _bg, _fg);
             }
         }

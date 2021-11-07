@@ -41,6 +41,9 @@ namespace LostMind.Classes.User {
         [DllImport(@"Resources\Libraries\NativeLib.dll")]
         public static extern string readAllFileText(string path);
 
+        [DllImport(@".\Resources\Libraries\NativeLib.dll")]
+        public static extern void centerWindow();
+
         public const uint MB_ABORTRETRYIGNORE = 2;
         public const uint MB_CANCELTRYCONTINUE = 6;
         public const uint MB_HELP = 4000;
