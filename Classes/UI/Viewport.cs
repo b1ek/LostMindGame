@@ -123,7 +123,6 @@ namespace LostMind.Classes.UI
             foreach (var elem in _elements) elem.remove();
             closed = true;
         }
-
         public void mainloop() {
             breakLoop = false;
             while (!closed) {
@@ -131,6 +130,13 @@ namespace LostMind.Classes.UI
                 if (Console.KeyAvailable)
                     UserKeyInput.CallEvent(Console.ReadKey(true));
             }
+        }
+        public void breakMainLoop() {
+            _ = Task.Run(() => {
+                breakLoop = true;
+                Task.Delay(15);
+                breakLoop = false;
+            });
         }
 
         public Thread WrapLoopInThread() => new Thread(mainloop);
@@ -151,6 +157,20 @@ namespace LostMind.Classes.UI
                 _elements[0].hover(true);
         }
         #endregion
+        public void removeElement(int index) {
+            _elements[index].remove();
+            _elements.Remove(_elements[index]);
+            DrawElements();
+        }
+        public bool tryRemoveElement(int index) {
+            try { removeElement(index); }
+            catch (Exception) { return false; }
+            return true;
+        }
+        public void removeAllElements() {
+            for (int i = 0; i > _elements.Count; i++)
+                removeElement(i);
+        }
         #region Cursor
         public void clickSelection() {
             if (_elements[selection].Interactable) _elements[_selection].click();

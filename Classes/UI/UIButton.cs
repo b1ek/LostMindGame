@@ -9,6 +9,7 @@ namespace LostMind.Classes.UI
     public class UIButton : UIElement
     {
         string _prefix = "> ";
+        string _hprefx = "= ";
         string _btnTxt = "";
         public string prefix {
             get { return _prefix; }
@@ -32,7 +33,7 @@ namespace LostMind.Classes.UI
             lazyHandlers.Add(onclick);
             OnClick += procLazyHandlers;
         }
-        
+
         void procLazyHandlers() {
             foreach( var method in lazyHandlers ) {
                 method?.Invoke();

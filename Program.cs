@@ -29,12 +29,13 @@ namespace LostMind
         static void Main(string[] args) {
 
             // DONT TOUCH
-            AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
+            Process.GetCurrentProcess().EnableRaisingEvents = true;
+            Process.GetCurrentProcess().Exited += (s, e) => { OnProcessExit(s, e); };
             if (RegistryConfig.AllowBSODStyleException) AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
             UserKeyInput.InstallHook();
 
             Console.CursorVisible = false;
-            UCO.FlushConsole();
+            Console.ResetColor(); Console.Clear();
             UCO.TrySetSize(120, 30);
             UserConsoleNativeInterface.setFont("system", 1, 10, -1);
             UserConsoleNativeInterface.setTransparency(255);
@@ -94,18 +95,22 @@ namespace LostMind
             UCO.FlushConsole();
             gameController.run();
         }
-        static bool _exit = false;
+
         /**<summary>Method that is called on program exit.</summary>*/
-        public static void OnProcessExit(object sender, EventArgs e)
-        {
-            if (_exit)
-            {
-                Console.ResetColor(); Console.Clear();
-                Console.SetCursorPosition(0, Console.CursorTop + 3);
-                Console.CursorVisible = true;
-                UserKeyInput.stopThread();
-                Process.GetCurrentProcess().Kill();
-            }
+        public static void OnProcessExit(object sender, EventArgs e) {
+            Console.ResetColor(); Console.Clear();
+            Console.SetCursorPosition(0, Console.CursorTop + 16);
+            Console.CursorVisible = true;
+            UserKeyInput.stopThread();
+            Process.GetCurrentProcess().Kill();
+        }
+
+        public static void DoSafeExit() {
+            Console.ResetColor(); Console.Clear();
+            Console.SetCursorPosition(0, Console.CursorTop + 16);
+            Console.CursorVisible = true;
+            UserKeyInput.stopThread();
+            Process.GetCurrentProcess().Kill();
         }
 
         static bool exceptionHandled = false;
