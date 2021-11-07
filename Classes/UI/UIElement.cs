@@ -23,6 +23,11 @@ namespace LostMind.Classes.UI
         private protected ConsoleColor _bg; // background
         private protected ConsoleColor _fg; // foreground
 
+        private protected bool useTxtInput;
+
+        public bool usesTextInput {
+            get => useTxtInput;
+        }
         private protected string _intxt;
         private protected bool currentlyHovered = false;
         bool displayed = false;

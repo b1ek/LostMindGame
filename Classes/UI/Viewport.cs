@@ -72,7 +72,7 @@ namespace LostMind.Classes.UI
             _y = y;
 
             for (int i = 0; i > height; i++) {
-                UCO.WriteXY(x, y + i, new string(' ', width), ConsoleColor.DarkRed, ConsoleColor.White);
+                UCO.WriteXY(x, y + i, new string(' ', width), ConsoleColor.Blue, ConsoleColor.White);
             }
             UserKeyInput.KeyPress += OnKeyPress;
         }
@@ -82,7 +82,18 @@ namespace LostMind.Classes.UI
             if (_elements == null) return;
             if (_elements.Count == 0) return;
             ConsoleKey k = key.Key;
-            if (_elements[_selection].GetType() == typeof(UITextInput)) {
+            if (_elements[_selection].usesTextInput) {
+                if (k == UISysConfig.UIMoveUpKey_txtIn)
+                    moveCursorUp();
+                if (k == UISysConfig.UIMoveDownKey_txtIn)
+                    moveCursorDown();
+                if (k == UISysConfig.UIEnterKey_txtIn)
+                    clickSelection();
+                if (k == UISysConfig.UIMoveUpKey_txtIn |
+                    k == UISysConfig.UIMoveDownKey_txtIn |
+                    k == UISysConfig.UIEnterKey_txtIn)
+                        return;
+
                 UITextInput ti = (UITextInput) _elements[_selection];
                 ti.addChar(key.KeyChar);
                 ti.moveCursor(1);

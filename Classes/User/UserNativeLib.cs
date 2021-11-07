@@ -39,7 +39,7 @@ namespace LostMind.Classes.User {
         public static extern void flushConsole();
 
         [DllImport(@"Resources\Libraries\NativeLib.dll")]
-        public static extern void readAllFileText(string path);
+        public static extern string readAllFileText(string path);
 
         public const uint MB_ABORTRETRYIGNORE = 2;
         public const uint MB_CANCELTRYCONTINUE = 6;

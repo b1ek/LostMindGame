@@ -11,7 +11,8 @@ using System.Diagnostics;
 
 namespace LostMind.Classes.GameController
 {
-    public class GameController {
+    // THIS IS NOT A PART OF A GAME ENGINE
+    internal class GameController {
         Viewport titleView;
         int consoleWidth = 0;
         int consoleHeight = 16;
@@ -19,7 +20,7 @@ namespace LostMind.Classes.GameController
         int xp = 0;
         Locale locale = new();
         public void run() {
-            string title = $"{locale.gameTitle} | {xp}/{maxXP} | {locale.mainMenu}";
+            string title = $"[{locale.gameTitle}] | [{xp}/{maxXP}] | [{locale.mainMenu}]";
             string sep = new string('-', title.Length + 2);
 
             consoleWidth = title.Length + 3;
@@ -32,11 +33,11 @@ namespace LostMind.Classes.GameController
             titleView.AddElement(new UILabel(" " + sep));
 
             Viewport mainMenu = new Viewport(0, 4, consoleWidth, consoleHeight - titleView.rectHeight);
-            mainMenu.AddElement(new UIButton("Start", () => { mainMenu.breakLoop = true; }));
+            mainMenu.AddElement(new UIButton("Start"));
             mainMenu.AddElement(new UIButton("Options"));
             mainMenu.AddElement(new UIButton("Exit game", () => { Process.GetCurrentProcess().Kill(); }));
             mainMenu.mainloop();
- 
+
         }
     }
 }
