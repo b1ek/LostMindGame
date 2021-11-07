@@ -23,7 +23,7 @@ namespace LostMind.Classes.User {
         }
 
         [DllImport(@"Resources\Libraries\NativeLib.dll")]
-        public static extern bool printLn(string value = "");
+        static extern bool printLn(string value = "");
 
         public static void WriteLn(string value) {
             print(value + "\n");
@@ -37,6 +37,9 @@ namespace LostMind.Classes.User {
 
         [DllImport(@"Resources\Libraries\NativeLib.dll")]
         public static extern void flushConsole();
+
+        [DllImport(@"Resources\Libraries\NativeLib.dll")]
+        public static extern void readAllFileText(string path);
 
         public const uint MB_ABORTRETRYIGNORE = 2;
         public const uint MB_CANCELTRYCONTINUE = 6;

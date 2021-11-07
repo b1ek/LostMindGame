@@ -19,8 +19,6 @@ namespace LostMind
         [DllImport("kernel32.dll")]
         public static extern bool Beep(int freq, int duration);
 
-        static string locale = "en-US";
-
         /**<summary>Game controller.</summary>*/
         public static GameController gameController = new GameController();
 

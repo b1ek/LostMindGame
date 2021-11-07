@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <conio.h>
+#include "fileUtil.h"
 
 HANDLE stdhndl;
 
@@ -129,6 +130,5 @@ extern "C" {
             csbi.dwSize.X * csbi.dwSize.Y,
             coord, &count);
         SetConsoleCursorPosition(stdhndl, coord);
-
     }
 }
