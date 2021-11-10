@@ -46,10 +46,10 @@ namespace LostMind.Classes.UI
             currentlyHovered = hovered;
             if (hovered) {
                 innerText = _hprefx + buttonText;
-                User.UCO.WriteXY(_x, _y, _intxt, _hbg, _hfg);
+                User.UCO.WriteXY(_x, _y, _intxt, colors.hoverBackground, colors.hoverForeground);
             } else {
                 innerText = _prefix + buttonText;
-                User.UCO.WriteXY(_x, _y, _intxt, _bg, _fg);
+                User.UCO.WriteXY(_x, _y, _intxt, colors.background, colors.foreground);
             }
         }
 

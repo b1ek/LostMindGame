@@ -17,7 +17,7 @@ namespace LostMind.Classes.UI
         }
         int _width;
         public UITextInput(int width) : base(true) {
-            this._hfg = ConsoleColor.DarkGreen;
+            this.colors.defaultForeground = ConsoleColor.DarkGreen;
             _width = width;
             _text = new string(' ', _width);
 
