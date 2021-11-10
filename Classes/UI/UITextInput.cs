@@ -17,11 +17,11 @@ namespace LostMind.Classes.UI
         }
         int _width;
         public UITextInput(int width) : base(true) {
-            this.colors.defaultForeground = ConsoleColor.DarkGreen;
+            colors.defaultForeground = ConsoleColor.DarkGreen;
             _width = width;
             _text = new string(' ', _width);
 
-            this.innerText = "[" + new string(' ', width) + "]";
+            innerText = "[" + new string(' ', width) + "]";
         }
         public void addChar(char c) {
             if (c == 8) {
@@ -57,8 +57,8 @@ namespace LostMind.Classes.UI
                 User.UCO.WriteXY(x + 1, y, _text, bg, txt);
                 if (displayCursor)  User.UCO.WriteXY(x + curr+2, y, _text[curr+1].ToString(), ConsoleColor.DarkBlue, txt);
             } catch (Exception) { }
-            this._x = x;
-            this._y = y;
+            _x = x;
+            _y = y;
         }
 
         public override void hover(bool hovered) {

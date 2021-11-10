@@ -41,7 +41,7 @@ namespace LostMind.Classes.GameController
             mainMenu.AddElement(new UIButton("Options"));
             mainMenu.AddElement(new UIButton("Exit game", () => { Program.DoSafeExit(); }));
             mainMenu.DrawElements();
-            if (UserKeyInput.isKeyPressed(new ConsoleKey[] { ConsoleKey.Spacebar, ConsoleKey.Enter }))UserKeyInput.awaitKeyPress(new ConsoleKey[] { ConsoleKey.Spacebar, ConsoleKey.Enter });
+            mainMenu.WaitForEnterKeyUnpress();
             mainMenu.mainloop();
             mainMenu.RemoveAllElements();
 

@@ -210,9 +210,23 @@ namespace LostMind.Classes.UI {
             }
         }
         #endregion
-        public void Paint(ConsoleColor background, ConsoleColor foreground) {
+        public void FillColor(ConsoleColor background, ConsoleColor foreground) {
             for (int i = 0; i > _width; i++) {
                 UCO.WriteXY(_x, _y + i, new string(' ', _width), background, foreground);
+            }
+        }
+        public void WaitForEnterKeyUnpress() {
+            bool isPressed = false;
+            ConsoleKey[] keysPressed = new ConsoleKey[UISysConfig.UIEnterKey.Length];
+            int ic = 0;
+            foreach (var i in UISysConfig.UIEnterKey) {
+                if (UserKeyInput.isKeyPressed(i)) {
+                    keysPressed[ic] = i;
+                }
+                ic++;
+            }
+            if (isPressed) {
+                UserKeyInput.awaitKeyPress(keysPressed);
             }
         }
     }
