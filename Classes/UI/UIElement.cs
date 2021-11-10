@@ -4,71 +4,90 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LostMind.Classes.UI
-{
-    public class UIElement
-    {
-        private protected int _x;
-        private protected int _y;
+namespace LostMind.Classes.UI {
+    public class UIElement {
+        #region Position
+        private protected int _x; // x position
+        private protected int _y; // y position
         public int lastX { get { return _x; } }
         public int lastY { get { return _y; } }
+        #endregion
 
-        private protected bool _intrctbl; // interactable
-        public bool Interactable { get => _intrctbl; }
-
-        private protected ConsoleColor _hbg; // hover background
-        private protected ConsoleColor _hfg; //       foreground
-        private protected ConsoleColor _dbg; // default background
-        private protected ConsoleColor _dfg; //         foreground
-        private protected ConsoleColor _bg; // background
-        private protected ConsoleColor _fg; // foreground
-
+        /**<summary>Determinies if this form using user text(chars) input.</summary>**/
         private protected bool useTxtInput = false;
 
+        #region Colors
+        public struct ElementColors {
+            public ConsoleColor hoverBackground;
+            public ConsoleColor hoverForeground;
+            public ConsoleColor defaultBackground;
+            public ConsoleColor defaultForeground;
+            public ConsoleColor background;
+            public ConsoleColor foreground;
+        }
+        private protected ElementColors colors;
+        #endregion
+        #region Accessors
+        public bool Interactable => _intrctbl;
         public bool isDisplayed => displayed;
-
         public bool usesTextInput => useTxtInput;
-
-        private protected string _intxt;
-        private protected bool currentlyHovered = false;
-        bool displayed = false;
         public string innerText {
             get { return _intxt; }
             set { _intxt = value; }
         }
+        #endregion
+        #region Constructors + overload
         public UIElement(bool interactable, ConsoleColor bgColor, ConsoleColor fgColor, ConsoleColor hoverBgColor, ConsoleColor hoverFgColor, ConsoleColor cmdBgDef, ConsoleColor cmdFgDef) {
             _intrctbl = interactable;
-            _hbg = hoverBgColor;
-            _hfg = hoverFgColor;
-            _dbg = cmdBgDef;
-            _dfg = cmdFgDef;
-            _bg = bgColor;
-            _fg = fgColor;
+            colors.background        = bgColor;
+            colors.foreground        = fgColor;
+            colors.hoverBackground   = hoverBgColor;
+            colors.hoverForeground   = hoverFgColor;
+            colors.defaultBackground = cmdBgDef;
+            colors.defaultForeground = cmdFgDef;
         }
         public UIElement(bool interactable) {
             _intrctbl = interactable;
-            _hbg = ConsoleColor.Gray;
-            _hfg = ConsoleColor.White;
-            _dbg = ConsoleColor.Black;
-            _dfg = ConsoleColor.White;
-            _bg = ConsoleColor.Black;
-            _fg = ConsoleColor.White;
+            colors.background        = ConsoleColor.Black;
+            colors.foreground        = ConsoleColor.White;
+            colors.hoverBackground   = ConsoleColor.Gray;
+            colors.hoverForeground   = ConsoleColor.White;
+            colors.defaultBackground = ConsoleColor.Black;
+            colors.defaultForeground = ConsoleColor.White;
         }
+        #endregion
+        #region Painting
+        /**<summary>Element displayed or not (print, remove)</summary>*/
+        bool displayed = false; /**<summary>Element interactable or not</summary>*/
+        private protected bool _intrctbl; /**<summary>Inner text</summary>*/
+        private protected string _intxt; /**<summary>Element hovered or not</summary>*/
+        private protected bool currentlyHovered = false; /**<summary>Print element to coordinates</summary>*/
         public virtual void print(int x, int y) {
             print(x, y, true);
         }
         public virtual void print(int x, int y, bool removeOld) {
             if (removeOld) {
-                if (displayed) User.UCO.WriteXY(_x, _y, new string(' ', _intxt.Length), _dbg, _dfg);
+                if (displayed) User.UCO.WriteXY(_x, _y, new string(' ', _intxt.Length), colors.defaultBackground, colors.defaultForeground);
                 _x = x;
                 _y = y;
             }
-            User.UCO.WriteXY(_x, _y, _intxt, _bg, _fg);
+            User.UCO.WriteXY(_x, _y, _intxt, colors.background, colors.foreground);
             displayed = true;
         }
         public virtual void remove() {
-            if (displayed) User.UCO.WriteXY(_x, _y, new string(' ', _intxt.Length), _dbg, _dfg);
+            if (displayed) User.UCO.WriteXY(_x, _y, new string(' ', _intxt.Length), colors.defaultBackground, colors.defaultForeground);
             displayed = false;
+        }
+        public virtual void hover(bool hovered) {
+            if (_intrctbl) { currentlyHovered = hovered;
+                if (hovered) {
+                    bg = colors.hoverBackground;
+                    txt = colors.hoverForeground;
+                } else {
+                    bg = colors.defaultBackground;
+                    txt = colors.defaultForeground;
+                }
+            }
         }
 
         private protected ConsoleColor _crrntbg; private protected ConsoleColor _crrntfg;
@@ -85,23 +104,11 @@ namespace LostMind.Classes.UI
                 _crrntfg = value;
             }
         }
-
-        public virtual void hover(bool hovered) {
-            if (_intrctbl) { currentlyHovered = hovered;
-                if (hovered) {
-                    bg = _hbg;
-                    txt = _hfg;
-                } else {
-                    bg = _bg;
-                    txt = _fg;
-                }
-            }
-        }
+        #endregion
 
         public virtual void click() {
             OnClick?.Invoke();
         }
-
         public delegate void OnClickEvent();
         public event OnClickEvent OnClick;
 
