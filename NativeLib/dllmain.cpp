@@ -5,6 +5,7 @@
 #include <iostream>
 #include <conio.h>
 #include "fileUtil.h"
+#include <sstream>
 
 HANDLE stdhndl;
 
@@ -25,13 +26,8 @@ BOOL APIENTRY DllMain( HMODULE hModule,
     return TRUE;
 }
 
-__declspec(dllexport) void __stdcall getTextInConsole() {
-    CONSOLE_SCREEN_BUFFER_INFO a;
-
-}
-
 LPCWSTR getLPCWSTR(char* value) {
-    int ssz = strlen(value)+1;
+    size_t ssz = strlen(value) + 1;
     wchar_t *__wchar = new wchar_t[ssz];
     size_t sz;
     mbstowcs_s(&sz, __wchar, ssz, value, ssz-1);
@@ -56,7 +52,6 @@ typedef enum FG_COLORS {
     FG_YELLOW = 14,
     FG_WHITE = 15
 }FG_COLORS;
-
 typedef enum BG_COLORS {
     BG_NAVYBLUE = 16,
     BG_GREEN = 32,
@@ -75,25 +70,54 @@ typedef enum BG_COLORS {
     BG_WHITE = 240
 }BG_COLORS;
 
+wchar_t* getWchar(char* value) {
+    size_t size = strlen(value) + 1;
+    wchar_t* wchr = new wchar_t[size];
+
+    size_t szz;
+    mbstowcs_s(&szz, wchr, size, value, size - 1);
+
+    return wchr;
+}
 
 extern "C" {
-    __declspec(dllexport) void __stdcall print(char* value) {
-        printf("%s", value);
+    __declspec(dllexport) void __stdcall setCurPos(short x, short y) {
+        COORD s = {x, y}; // COORDs
+        SetConsoleCursorPosition(stdhndl, s);
+    }
+
+    __declspec(dllexport) COORD __stdcall getConsoleCurPos() {
+        CONSOLE_SCREEN_BUFFER_INFO cbsi;
+        if (GetConsoleScreenBufferInfo(stdhndl, &cbsi)) {
+            return cbsi.dwCursorPosition;
+        } else {
+            return COORD{ -1, -1 };
+        }
+    }
+
+    __declspec(dllexport) void __stdcall print_(char* value) {
+        wchar_t* val = getWchar(value);
+        WriteConsole(stdhndl, val, lstrlenW(val), 0L, 0L);
     }
     __declspec(dllexport) void __stdcall printLn(char* value) {
-        printf("%s\n", value);
+        wchar_t* val = getWchar(value);
+        std::wstringstream sstrm;
+        sstrm << val << L"\n";
+
+        auto valv = sstrm.str().c_str();
+        WriteConsole(stdhndl, valv, lstrlenW(valv), 0L, 0L);
     }
 
     __declspec(dllexport) void __stdcall setConsoleColor(WORD color) {
         SetConsoleTextAttribute(stdhndl, color);
     }
 
-    __declspec(dllexport) void __stdcall printToXY(char *value, int x, int y) {
+    __declspec(dllexport) void __stdcall printToXY(char *value, short x, short y) {
         CONSOLE_SCREEN_BUFFER_INFO inf;
         COORD cords = { x, y };
         GetConsoleScreenBufferInfo(stdhndl, &inf);
         SetConsoleCursorPosition(stdhndl, cords);
-        print(value);
+        print_(value);
         SetConsoleCursorPosition(stdhndl, inf.dwCursorPosition);
     }
     __declspec(dllexport) void __stdcall placeButton(char* buttonText, int x, int y) {

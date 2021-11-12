@@ -10,47 +10,60 @@ using System.Management;
 using System.Diagnostics;
 using System.Threading;
 
-namespace LostMind.Classes.GameController
-{
-    // THIS IS NOT A PART OF A GAME ENGINE
-    internal class GameController {
-        Viewport titleView;
-        int consoleWidth = 0;
-        int consoleHeight = 16;
-        const int maxXP = 100;
-        int xp = 0;
-        Locale locale = new();
-        public void run() {
-            string title = $"[{locale.gameTitle}] | [{xp}/{maxXP}] | [{locale.mainMenu}]";
-            string sep = new string('-', title.Length + 2);
+namespace LostMind.Classes.GameController {
+    public struct GameControllerSettings {
+        public int SceneViewportWidth;
+        public int SceneViewportHeight;
+        public int SceneViewportXPlace;
+        public int SceneViewportYPlace;
 
-            consoleWidth = title.Length + 3;
-            consoleHeight = Convert.ToInt32(consoleWidth / 2);
-            UCO.TrySetSize(consoleWidth, consoleHeight);
+        public int TitleViewportWidth;
+        public int TitleViewportHeight;
+        public int TitleViewportXPlace;
+        public int TitleViewportYPlace;
 
-            titleView = new Viewport(0, 0, consoleWidth, 3);
-            titleView.AddElement(new UILabel(" " + sep));
-            titleView.AddElement(new UILabel("  " + title));
-            titleView.AddElement(new UILabel(" " + sep));
+        public string TitleText;
+        public string TItleSep;
+    }
+    public struct GameControllerData {
+        public List<Game.GamePlace> Places;
 
-            Viewport mainMenu = new Viewport(0, 4, consoleWidth, consoleHeight - titleView.rectHeight);
+    }
+    public class GameController {
 
-            mainMenu.marginLeft = 4;
-
-            mainMenu.AddElement(new UIButton("Start", () => { mainMenu.breakMainLoop(); }));
-            mainMenu.AddElement(new UIButton("Options"));
-            mainMenu.AddElement(new UIButton("Exit game", () => { Program.DoSafeExit(); }));
-            mainMenu.DrawElements();
-            mainMenu.WaitForEnterKeyUnpress();
-            mainMenu.mainloop();
-            mainMenu.RemoveAllElements();
-
-            mainMenu.AddElement(new UILabel("Enter your nickname:"));
-            mainMenu.AddElement(new UITextInput(24));
-            mainMenu.AddElement(new UIButton("SUBMIT"));
-            mainMenu.mainloop();
-
-            Program.DoSafeExit();
+        public GameController(GameControllerSettings controllerSettings, GameControllerData controllerData) {
+            settings = controllerSettings;
+            data = controllerData;
         }
+
+        #region Settings/Data
+        GameControllerSettings settings;
+        GameControllerData data;
+        public void Configure(GameControllerData gameControllerData) => data = gameControllerData;
+        public void Configure(GameControllerSettings gameControllerSettings) => settings = gameControllerSettings;
+        public GameControllerData Data => data;
+        public GameControllerSettings Settings => settings;
+        #endregion
+        #region Navigation
+        int CurrentScene = 0;
+        /**<summary>Method that provides scene navigation<br/>Note: up and down both true does nothing.</summary>*/
+        public void Navigate(bool up, bool down) {
+            if (data.Places.Count == 0) return;
+            if (up && down) return;
+            if (up) CurrentScene+=1;
+            if (down) CurrentScene-=1;
+        }
+        public void Navigate(int position) {
+            if (data.Places.Count == 0 | data.Places.Count < position
+               | position < 0) return;
+            CurrentScene = position;
+
+        }
+        #endregion
+        #region Places stuff
+        public void ShowPlace() {
+            data.Places[CurrentScene].Display();
+        }
+        #endregion
     }
 }

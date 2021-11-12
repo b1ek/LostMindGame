@@ -20,7 +20,7 @@ namespace LostMind
         public static extern bool Beep(int freq, int duration);
 
         /**<summary>Game controller.</summary>*/
-        public static GameController gameController = new GameController();
+        public static GameController gameController = new GameController(new(), new());
 
         /**<summary>
          * Main entry point.
@@ -86,7 +86,6 @@ namespace LostMind
             UserKeyInput.awaitKeyPress();
 
             UCO.FlushConsole();
-            gameController.run();
         }
 
         /**<summary>Method that is called on program exit.</summary>*/

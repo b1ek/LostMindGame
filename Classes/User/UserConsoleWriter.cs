@@ -33,13 +33,14 @@ namespace LostMind.Classes.User {
             int lx = 0;
             foreach (var val in valueSpl) {
                 Console.SetCursorPosition(_x, _y);
-                Console.Write(val);
+                //UserNativeLib.Set
+                UserNativeLib.Write(val);
                 _y++;
                 lx = _x;
                 _x = _sx;
             } _x = lx+1; _y--; Console.SetCursorPosition(_x, _y);
         }
-        
+
         /**<summary>
          * Write value to console, and print new line at the end.
          * </summary>
@@ -54,7 +55,7 @@ namespace LostMind.Classes.User {
                 _x = _sx;
             } Console.SetCursorPosition(_x, _y);
         }
-        
+
         public async Task FancyWrite(string value)
         {
             string toPrint = value;
@@ -65,7 +66,7 @@ namespace LostMind.Classes.User {
                 await Task.Delay(Util.RandomGen.getInt(1, 4));
             } _y++; _x = _sx; Console.SetCursorPosition(_x, _y);
         }
-        
+
         public async Task FancyWrite(string value, int delay)
         {
             string toPrint = value;
@@ -76,7 +77,7 @@ namespace LostMind.Classes.User {
                 await Task.Delay(delay);
             } _y++; _x = _sx; Console.SetCursorPosition(_x, _y);
         }
-        
+
         public async Task FancyWrite(string value, int floor, int roof)
         {
             string toPrint = value;
@@ -87,7 +88,7 @@ namespace LostMind.Classes.User {
                 await Task.Delay(Util.RandomGen.getInt(floor, roof));
             } _y++; _x = _sx; Console.SetCursorPosition(_x, _y);
         }
-        
+
         public async Task FancyWrite(string value, string end)
         {
             string toPrint = value;

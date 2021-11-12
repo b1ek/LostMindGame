@@ -13,23 +13,37 @@ namespace LostMind.Classes.User {
         public static extern bool printToXY(string value, int x, int y);
 
         [DllImport(@"Resources\Libraries\NativeLib.dll")]
-        static extern bool print(string value = "");
+        public static extern bool setCurPos(int x, int y);
+
+        public struct COORD {
+            public short x;
+            public short y;
+        }
+
+        [DllImport(@"Resources\Libraries\NativeLib.dll")]
+        public static extern COORD getConsoleCurPos();
+
+        public static int ConsoleCursor_X { get => getConsoleCurPos().x; set { setCurPos(value, getConsoleCurPos().y); } }
+        public static int ConsoleCursor_Y { get => getConsoleCurPos().y; set { setCurPos(getConsoleCurPos().x, value); } }
+
+        [DllImport(@"Resources\Libraries\NativeLib.dll")]
+        static extern bool print_(string value = "");
 
         public static void Write(string value) {
-            print(value);
+            print_(value);
         }
         public static void Write(char c) {
-            print(new string(c, 1));
+            print_(new string(c, 1));
         }
 
         [DllImport(@"Resources\Libraries\NativeLib.dll")]
         static extern bool printLn(string value = "");
 
         public static void WriteLn(string value) {
-            print(value + "\n");
+            print_(value + "\n");
         }
         public static void WriteLn(char c) {
-            print(new string(c, 1) + "\n");
+            print_(new string(c, 1) + "\n");
         }
 
         [DllImport(@"Resources\Libraries\NativeLib.dll")]
