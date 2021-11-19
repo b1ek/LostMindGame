@@ -40,5 +40,12 @@ namespace LostMind.Engine.Config
                 return Convert.ToString(val);
             }
         }
+        public static bool localeSafe {
+            get {
+                var val = root.GetValue("localeSafe", null);
+                if (val == null) return true;
+                return val.ToString().ToLower() == "true";
+            }
+        }
     }
 }

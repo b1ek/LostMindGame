@@ -63,7 +63,6 @@ namespace LostMind.Engine.UI {
         private protected string _intxt; /**<summary>Element hovered or not</summary>*/
         private protected bool currentlyHovered = false; /**<summary>Print element to coordinates</summary>*/
 
-
         public virtual void print(int x, int y) {
             print(x, y, true);
         }

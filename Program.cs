@@ -11,7 +11,7 @@ using LostMind.Engine.Animation;
 using LostMind.Engine.Config;
 using System.IO;
 using System.Threading;
-using LostMind.Engine.Localization;
+using LostMind.Game.Game;
 
 namespace LostMind
 {
@@ -35,65 +35,10 @@ namespace LostMind
             Process.GetCurrentProcess().EnableRaisingEvents = true;
             Process.GetCurrentProcess().Exited += (s, e) => { OnProcessExit(s, e); };
             if (RegistryConfig.AllowBSODStyleException) AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
-
-
             UserKeyInput.InstallHook();
-
-            Console.CursorVisible = false;
-            Console.ResetColor(); Console.Clear();
-            UCO.TrySetSize(120, 30);
-            UserConsoleNativeInterface.setFont("system", 1, 10, -1);
-            UserConsoleNativeInterface.setTransparency(255);
-
-
-            var cp = Console.GetCursorPosition();
-            const int animMarginTop = 3;
-            const int animMarginLeft = 20;
-            string pathToLogo = Environment.CurrentDirectory + @"\Resources\Logo.txt";
-            if (RegistryConfig.noStartupLogoAnim) {
-                Animation anim = Animation.createSimple(File.ReadAllText(pathToLogo), animMarginLeft, animMarginTop, 1, ConsoleColor.DarkGreen);
-                anim.run();
-            }
-            else {
-                Animation anim = Animation.createSimple(File.ReadAllText(pathToLogo), animMarginLeft, animMarginTop, 32);
-                anim.run();
-            }
-            #region Bootload
-            if (!RegistryConfig.startGameWithoutBootloader) {
-                UserConsoleWriter writer = new UserConsoleWriter(animMarginLeft, Console.CursorTop+2);
-                writer.FancyWrite("Booting up...", 1).Wait();
-                Thread.Sleep(64);
-                writer.FancyWrite("Operating system: " + Environment.OSVersion, 1).Wait();
-                writer.FancyWrite("Using .NET runtime version " + Environment.Version, 1).Wait();
-
-                var myProcess = Process.GetCurrentProcess();
-
-                writer.Write("\n");
-                writer._sx += 2; writer._x = writer._sx;
-                var msg =
-                $"Physical memory usage     : " + myProcess.WorkingSet64 + "\n" +
-                $"Base priority             : " + myProcess.BasePriority + "\n" +
-                $"Priority class            : " + myProcess.PriorityClass + "\n" +
-                $"User processor time       : " + myProcess.UserProcessorTime + "\n" +
-                $"Privileged processor time : " + myProcess.PrivilegedProcessorTime + "\n" +
-                $"Total processor time      : " + myProcess.TotalProcessorTime + "\n" +
-                $"Paged system memory size  : " + myProcess.PagedSystemMemorySize64 + "\n" +
-                $"Paged memory size         : " + myProcess.PagedMemorySize64 + "\n"; writer.Write(msg);
-                writer._sx -= 2; writer._x = writer._sx;
-                Thread.Sleep(512);
-                writer.FancyWrite("\n\nPress any key to launch the game...").Wait();
-            } else { UCO.WriteXY(animMarginLeft, Console.CursorTop + 2, "Press any key to launch the game..."); }
-            #endregion
-
-            UserKeyInput.awaitKeyPress();
-
+            Game.Game.GameRunner entry = new Game.Game.GameRunner();
+            entry.Run();
             UCO.FlushConsole();
-            GameControllerSettings settings;
-            Locale locale = new();
-            settings.TitleText = $"[{locale.gameTitle}] | [0/100] | [{locale.mainMenu}]";
-            GameControllerData data;
-            data.Places = new();
-            data.Places.Add(new());
         }
 
         /**<summary>Method that is called on program exit.</summary>*/

@@ -85,7 +85,6 @@ extern "C" {
         COORD s = {x, y}; // COORDs
         SetConsoleCursorPosition(stdhndl, s);
     }
-
     __declspec(dllexport) COORD __stdcall getConsoleCurPos() {
         CONSOLE_SCREEN_BUFFER_INFO cbsi;
         if (GetConsoleScreenBufferInfo(stdhndl, &cbsi)) {
@@ -94,7 +93,6 @@ extern "C" {
             return COORD{ -1, -1 };
         }
     }
-
     __declspec(dllexport) void __stdcall print_(char* value) {
         wchar_t* val = getWchar(value);
         WriteConsole(stdhndl, val, lstrlenW(val), 0L, 0L);
@@ -107,11 +105,9 @@ extern "C" {
         auto valv = sstrm.str().c_str();
         WriteConsole(stdhndl, valv, lstrlenW(valv), 0L, 0L);
     }
-
     __declspec(dllexport) void __stdcall setConsoleColor(WORD color) {
         SetConsoleTextAttribute(stdhndl, color);
     }
-
     __declspec(dllexport) void __stdcall printToXY(char *value, short x, short y) {
         CONSOLE_SCREEN_BUFFER_INFO inf;
         COORD cords = { x, y };
@@ -125,26 +121,20 @@ extern "C" {
             x, y, 75, 23, NULL, NULL, (HINSTANCE)GetWindowLongPtr(GetConsoleWindow(), GWLP_HINSTANCE), NULL);
     }
     #pragma region Messages
-
-
     __declspec(dllexport) int __stdcall displayMessage(char* message, char* title, UINT styles) {
         return MessageBox(NULL, getLPCWSTR(message), getLPCWSTR(title), styles);
         return 1;
     }
-
     __declspec(dllexport) int __stdcall infoMessageBox(char* message) {
         return MessageBox(NULL, getLPCWSTR(message), L"Info", MB_OK | MB_ICONINFORMATION);
     }
-
     __declspec(dllexport) int __stdcall warningMessageBox(char* message) {
         return MessageBox(NULL, getLPCWSTR(message), L"Warning!", MB_OK | MB_ICONWARNING);
     }
-
     __declspec(dllexport) int __stdcall errorMessageBox(char* message) {
         return MessageBox(NULL, getLPCWSTR(message), L"ERROR!!", MB_OK | MB_ICONERROR);
     }
     #pragma endregion
-
     __declspec(dllexport) void __stdcall flushConsole() {
         COORD coord = { 0, 0 };
         DWORD count;
@@ -155,7 +145,6 @@ extern "C" {
             coord, &count);
         SetConsoleCursorPosition(stdhndl, coord);
     }
-
     __declspec(dllexport) void __stdcall centerWindow() {
         RECT rc;
         HWND hWnd = GetConsoleWindow();
@@ -165,5 +154,14 @@ extern "C" {
         int yPos = (GetSystemMetrics(SM_CYSCREEN) - rc.bottom) / 2;
 
         SetWindowPos(hWnd, 0, xPos, yPos, 0, 0, SWP_NOZORDER | SWP_NOSIZE);
+    }
+    __declspec(dllexport) int __stdcall setFont(char* fontName, short charWidth) {
+        CONSOLE_FONT_INFOEX fontInfo;
+        int retv = GetCurrentConsoleFontEx(stdhndl, TRUE, &fontInfo);
+        if (!retv) return retv;
+        wchar_t* wchrs = getWchar(fontName);
+        wcsncpy_s(wchrs, lstrlen(wchrs), fontInfo.FaceName, LF_FACESIZE);
+        fontInfo.dwFontSize.X = charWidth;
+        return SetCurrentConsoleFontEx(stdhndl, TRUE, &fontInfo);
     }
 }

@@ -13,7 +13,7 @@ namespace LostMind.Engine.User
      * Macros for easy console output
      * </summary>
      */
-    public static class UCO
+    public class UCO
     {
         [DllImport("kernel32.dll")]
         public static extern bool Beep(int freq, int duration);
@@ -37,6 +37,15 @@ namespace LostMind.Engine.User
         }
         public static void TrySetSize(int width, int height) { try { SetSize(width, height); } catch (Exception) { } }
 
+        public static Exception TrySetCurPos(int x, int y) {
+            try {
+                Console.SetCursorPosition(x, y);
+                return null;
+            } catch (Exception e) {
+                return e;
+            }
+        }
+
         public static async Task BeepAsync(int freq, int duration) {
             Beep(freq, duration);
             await Task.Delay(0);
@@ -51,13 +60,20 @@ namespace LostMind.Engine.User
             Console.Write("\n");
         }
 
-        public static void WriteXY(int x, int y, string val) {
-            UserNativeLib.printToXY(val, x, y);
-        }
-        public static void WriteXY(int x, int y, string val, ConsoleColor bgClr, ConsoleColor txtClr) {
+
+        public static bool WriteXY(int x, int y, string val, ConsoleColor bgClr = ConsoleColor.Black, ConsoleColor txtClr = ConsoleColor.White, bool doTry = false) {
+            if (doTry) {
+                try {
+                    Console.BackgroundColor = bgClr;
+                    Console.ForegroundColor = txtClr;
+                    UserNativeLib.printToXY(val, x, y);
+                    return true;
+                } catch (Exception) { return false; }
+            }
             Console.BackgroundColor = bgClr;
             Console.ForegroundColor = txtClr;
             UserNativeLib.printToXY(val, x, y);
+            return true;
         }
     }
 }

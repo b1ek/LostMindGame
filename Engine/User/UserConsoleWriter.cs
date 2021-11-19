@@ -28,17 +28,16 @@ namespace LostMind.Engine.User {
          * </summary>
          * <param name="value">The value to print.</param>
          */
-        public void Write(string value) {
+        public void Write(string value = "") {
             var valueSpl = value.Split('\n');
             int lx = 0;
             foreach (var val in valueSpl) {
-                Console.SetCursorPosition(_x, _y);
-                //UserNativeLib.Set
+                UserNativeLib.setCurPos(_x, _y);
                 UserNativeLib.Write(val);
                 _y++;
                 lx = _x;
                 _x = _sx;
-            } _x = lx+1; _y--; Console.SetCursorPosition(_x, _y);
+            } _x = lx+1; _y--; UserNativeLib.setCurPos(_x, _y);
         }
 
         /**<summary>
@@ -46,51 +45,43 @@ namespace LostMind.Engine.User {
          * </summary>
          * <param name="value">The value to print.</param>
          */
-        public void WriteLine(string value) {
+        public void WriteLine(string value = "") {
             var valueSpl = value.Split('\n');
             foreach (var val in valueSpl) {
-                Console.SetCursorPosition(_x, _y);
-                Console.Write(val);
+                UserNativeLib.setCurPos(_x, _y);
+                UserNativeLib.Write(val);
                 _y++;
                 _x = _sx;
-            } Console.SetCursorPosition(_x, _y);
+            } UserNativeLib.setCurPos(_x, _y);
         }
 
-        public async Task FancyWrite(string value)
-        {
-            string toPrint = value;
-            foreach (var c in value) {
-                Write(c.ToString());
-                toPrint = toPrint.Substring(1);
-                if (UserKeyInput.isKeyPressed(ConsoleKey.Spacebar)) { Write(toPrint); break; }
-                await Task.Delay(Util.RandomGen.getInt(1, 4));
-            } _y++; _x = _sx; Console.SetCursorPosition(_x, _y);
-        }
-
-        public async Task FancyWrite(string value, int delay)
-        {
+        public async Task FancyWrite(string value, int delay = -1) {
+            bool delayDefined = true;
+            if (delay == -1) {
+                delay = Util.RandomGen.getInt(1, 4);
+                delayDefined = false;
+            }
             string toPrint = value;
             foreach (var c in value) {
                 Write(c.ToString());
                 toPrint = toPrint.Substring(1);
                 if (UserKeyInput.isKeyPressed(ConsoleKey.Spacebar)) { Write(toPrint); break; }
                 await Task.Delay(delay);
-            } _y++; _x = _sx; Console.SetCursorPosition(_x, _y);
+                if (!delayDefined) delay = Util.RandomGen.getInt(1, 4);
+            } _y++; _x = _sx; UserNativeLib.setCurPos(_x, _y);
         }
 
-        public async Task FancyWrite(string value, int floor, int roof)
-        {
+        public async Task FancyWrite(string value, int floor, int roof) {
             string toPrint = value;
             foreach (var c in value) {
                 Write(c.ToString());
                 toPrint = toPrint.Substring(1);
                 if (UserKeyInput.isKeyPressed(ConsoleKey.Spacebar)) { Write(toPrint); break; }
                 await Task.Delay(Util.RandomGen.getInt(floor, roof));
-            } _y++; _x = _sx; Console.SetCursorPosition(_x, _y);
+            } _y++; _x = _sx; UserNativeLib.setCurPos(_x, _y);
         }
 
-        public async Task FancyWrite(string value, string end)
-        {
+        public async Task FancyWrite(string value, string end) {
             string toPrint = value;
             foreach (var c in value) {
                 Write(c.ToString());

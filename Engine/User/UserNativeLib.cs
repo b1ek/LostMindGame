@@ -23,6 +23,9 @@ namespace LostMind.Engine.User {
         [DllImport(@"Resources\Libraries\NativeLib.dll")]
         public static extern COORD getConsoleCurPos();
 
+        [DllImport(@"Resources\Libraries\NativeLib.dll")]
+        public static extern int setFont(string fontName, byte charWidth = 10);
+
         public static int ConsoleCursor_X { get => getConsoleCurPos().x; set { setCurPos(value, getConsoleCurPos().y); } }
         public static int ConsoleCursor_Y { get => getConsoleCurPos().y; set { setCurPos(getConsoleCurPos().x, value); } }
 
