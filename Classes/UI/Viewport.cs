@@ -115,31 +115,6 @@ namespace LostMind.Classes.UI {
             closed = true;
         }
 
-        public void breakMainLoop() {
-            _ = Task.Run(() => {
-                breakLoop = true;
-                Task.Delay(32);
-                breakLoop = false;
-            });
-        }
-
-        public void mainloop() {
-            breakLoop = false;
-            while (!closed) {
-                if (breakLoop) break;
-                if (Console.KeyAvailable)
-                    UserKeyInput.CallEvent(Console.ReadKey(true));
-            }
-        }
-
-        public Thread WrapLoopInThread() => new Thread(mainloop);
-        public async Task WrapLoopAsync() => await Task.Run(mainloop);
-        public LoopThread WrapLoopThread() {
-            return new LoopThread(() => {
-                if (Console.KeyAvailable)
-                    UserKeyInput.CallEvent(Console.ReadKey(true));
-            });
-        }
 
         /**<summary>Add element to viewport.</summary>*/
         public void AddElement(UIElement element) {
@@ -170,6 +145,35 @@ namespace LostMind.Classes.UI {
             foreach (var item in _elements)
                 item.remove();
             _elements.RemoveRange(0, _elements.Count);
+        }
+        #endregion
+        #region Loop
+        public void breakMainLoop() {
+            _ = Task.Run(() => {
+                breakLoop = true;
+                Task.Delay(32);
+                breakLoop = false;
+            });
+        }
+
+        public void mainloop() {
+            breakLoop = false;
+            while (!closed) {
+                if (breakLoop) break;
+                Update();
+            }
+        }
+
+        public Thread WrapLoopInThread() => new Thread(mainloop);
+        public async Task WrapLoopAsync() => await Task.Run(mainloop);
+        public LoopThread WrapLoopThread() {
+            return new LoopThread(() => {
+                mainloop();
+            });
+        }
+        public void Update() {
+            if (Console.KeyAvailable)
+                UserKeyInput.CallEvent(Console.ReadKey(true));
         }
         #endregion
         #region Cursor

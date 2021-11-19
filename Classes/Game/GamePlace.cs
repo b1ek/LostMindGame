@@ -25,5 +25,10 @@ namespace LostMind.Classes.Game {
             Viewport.FillColor(Background, Foreground);
             Viewport.DrawElements();
         }
+        public void Update() {
+            Viewport.Update();
+        }
+        public bool IsEmpty => Viewport == null;
+        public static GamePlace Empty => new GamePlace(null);
     }
 }

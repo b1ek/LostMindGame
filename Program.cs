@@ -11,6 +11,7 @@ using LostMind.Classes.Animation;
 using LostMind.Classes.Config;
 using System.IO;
 using System.Threading;
+using LostMind.Classes.Localization;
 
 namespace LostMind
 {
@@ -27,6 +28,7 @@ namespace LostMind
          * </summary>
          */
         static void Main(string[] args) {
+
             MachineTest.runDefaultNotBrokenTest();
 
             // DONT TOUCH
@@ -86,6 +88,12 @@ namespace LostMind
             UserKeyInput.awaitKeyPress();
 
             UCO.FlushConsole();
+            GameControllerSettings settings;
+            Locale locale = new();
+            settings.TitleText = $"[{locale.gameTitle}] | [0/100] | [{locale.mainMenu}]";
+            GameControllerData data;
+            data.Places = new();
+            data.Places.Add(new());
         }
 
         /**<summary>Method that is called on program exit.</summary>*/
