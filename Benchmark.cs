@@ -6,7 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using LostMind.Classes.User;
+using LostMind.Engine.User;
 
 namespace LostMind {
     class Benchmark {

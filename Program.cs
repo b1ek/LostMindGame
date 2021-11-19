@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using LostMind.Classes.User;
+using LostMind.Engine.User;
 using System.Diagnostics;
-using LostMind.Classes.GameController;
-using LostMind.Classes.UI;
-using LostMind.Classes.Util;
+using LostMind.Engine.GameController;
+using LostMind.Engine.UI;
+using LostMind.Engine.Util;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
-using LostMind.Classes.Animation;
-using LostMind.Classes.Config;
+using LostMind.Engine.Animation;
+using LostMind.Engine.Config;
 using System.IO;
 using System.Threading;
-using LostMind.Classes.Localization;
+using LostMind.Engine.Localization;
 
 namespace LostMind
 {
@@ -81,8 +81,8 @@ namespace LostMind
                 $"Paged memory size         : " + myProcess.PagedMemorySize64 + "\n"; writer.Write(msg);
                 writer._sx -= 2; writer._x = writer._sx;
                 Thread.Sleep(512);
-                writer.FancyWrite("\n\nPress ESC to launch the game...").Wait();
-            } else { UCO.WriteXY(animMarginLeft, Console.CursorTop + 2, "Press ESC to launch the game..."); }
+                writer.FancyWrite("\n\nPress any key to launch the game...").Wait();
+            } else { UCO.WriteXY(animMarginLeft, Console.CursorTop + 2, "Press any key to launch the game..."); }
             #endregion
 
             UserKeyInput.awaitKeyPress();
