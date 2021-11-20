@@ -54,7 +54,7 @@ namespace LostMind.Game.Game {
                 writer._sx -= 2; writer._x = writer._sx;
                 Thread.Sleep(512);
                 writer.FancyWrite("\n\n" + presskeyTxt).Wait();
-            } else { UCO.WriteXY(marginLeft, Console.CursorTop + 2, presskeyTxt); }
+            } else { UserNativeLib.printToXY(presskeyTxt, marginLeft, Console.CursorTop + 2); }
             UserKeyInput.awaitKeyPress();
         }
     }

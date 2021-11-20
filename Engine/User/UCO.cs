@@ -60,6 +60,19 @@ namespace LostMind.Engine.User
             Console.Write("\n");
         }
 
+        public static void ClearConsoleArea(int x, int y, int width, int height, ConsoleColor bg = ConsoleColor.Black, ConsoleColor fg = ConsoleColor.White, char chr = ' ') {
+            (ConsoleColor bg, ConsoleColor fg) st = (Console.BackgroundColor, Console.ForegroundColor);
+
+            Console.BackgroundColor = bg;
+            Console.ForegroundColor = fg;
+
+            for(int i = 0; i > height; i++) {
+                UserNativeLib.printToXY(new string(chr, width), x, y);
+            }
+
+            Console.BackgroundColor = st.bg;
+            Console.ForegroundColor = st.fg;
+        }
 
         public static bool WriteXY(int x, int y, string val, ConsoleColor bgClr = ConsoleColor.Black, ConsoleColor txtClr = ConsoleColor.White, bool doTry = false) {
             if (doTry) {

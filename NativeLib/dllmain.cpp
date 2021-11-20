@@ -6,6 +6,8 @@
 #include <conio.h>
 #include "fileUtil.h"
 #include <sstream>
+#include <mmsystem.h>
+#pragma comment(lib, "winmm.lib")
 
 HANDLE stdhndl;
 
@@ -25,7 +27,6 @@ BOOL APIENTRY DllMain( HMODULE hModule,
     }
     return TRUE;
 }
-
 LPCWSTR getLPCWSTR(char* value) {
     size_t ssz = strlen(value) + 1;
     wchar_t *__wchar = new wchar_t[ssz];
@@ -33,8 +34,7 @@ LPCWSTR getLPCWSTR(char* value) {
     mbstowcs_s(&sz, __wchar, ssz, value, ssz-1);
     return __wchar;
 }
-
-typedef enum FG_COLORS {
+typedef enum FG_COLOR {
     FG_BLACK = 0,
     FG_BLUE = 1,
     FG_GREEN = 2,
@@ -51,8 +51,8 @@ typedef enum FG_COLORS {
     FG_LIGHTMAGENTA = 13,
     FG_YELLOW = 14,
     FG_WHITE = 15
-}FG_COLORS;
-typedef enum BG_COLORS {
+}FG_COLOR;
+typedef enum BG_COLOR {
     BG_NAVYBLUE = 16,
     BG_GREEN = 32,
     BG_TEAL = 48,
@@ -68,7 +68,7 @@ typedef enum BG_COLORS {
     BG_MAGENTA = 208,
     BG_YELLOW = 224,
     BG_WHITE = 240
-}BG_COLORS;
+}BG_COLOR;
 
 wchar_t* getWchar(char* value) {
     size_t size = strlen(value) + 1;
@@ -79,7 +79,6 @@ wchar_t* getWchar(char* value) {
 
     return wchr;
 }
-
 extern "C" {
     __declspec(dllexport) void __stdcall setCurPos(short x, short y) {
         COORD s = {x, y}; // COORDs
@@ -163,5 +162,20 @@ extern "C" {
         wcsncpy_s(wchrs, lstrlen(wchrs), fontInfo.FaceName, LF_FACESIZE);
         fontInfo.dwFontSize.X = charWidth;
         return SetCurrentConsoleFontEx(stdhndl, TRUE, &fontInfo);
+    }
+    __declspec(dllexport) void __stdcall setBackground(BG_COLOR clr) {
+        SetConsoleTextAttribute(stdhndl, clr);
+    }
+    __declspec(dllexport) void __stdcall setForeground(FG_COLOR clr) {
+        SetConsoleTextAttribute(stdhndl, clr);
+    }
+    __declspec(dllexport) void __stdcall setColors(BG_COLOR bclr, FG_COLOR fclr) {
+        SetConsoleTextAttribute(stdhndl, bclr | fclr);
+    }
+    __declspec(dllexport) void __stdcall playAudio(char* filename) {
+        PlaySound(getWchar(filename), NULL, SND_SYNC);
+    }
+    __declspec(dllexport) void __stdcall playAudioAsync(char* filename) {
+        PlaySound(getWchar(filename), NULL, SND_ASYNC);
     }
 }

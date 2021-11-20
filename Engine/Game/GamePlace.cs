@@ -1,34 +1,38 @@
 ﻿using LostMind.Engine.UI;
+using LostMind.Engine.User;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace LostMind.Engine.Game {
-    public struct GamePlace {
-        public Viewport Viewport;
-        public string Name;
-        public string NameId;
-        public int Id;
-        public ConsoleColor Background;
-        public ConsoleColor Foreground;
-        public GamePlace(Viewport viewport = null, string name = "", string nameID = "", int id = -1, ConsoleColor bg = ConsoleColor.Black, ConsoleColor fg = ConsoleColor.White) {
-            Viewport = viewport;
-            Name = name;
-            NameId = nameID;
-            Id = id;
-            Background = bg;
-            Foreground = fg;
+    public class GamePlace {
+        private protected int screenWidth = 0;
+        private protected int screenHeight = 0;
+        private protected int screenMarginLeft = 0;
+        private protected int screenMarginTop = 0;
+
+        private protected int cursorX = 0;
+        private protected int cursorY = 0;
+
+
+        public GamePlace(int width = 5, int height = 10, int marginLeft = 0, int marginTop = 3) {
+            screenWidth = width;
+            screenHeight = height;
+            screenMarginLeft = marginLeft;
+            screenMarginTop = marginTop;
         }
-        public void Display() {
-            Viewport.FillColor(Background, Foreground);
-            Viewport.DrawElements();
+
+        private protected void Write(string text) {
+            string[] spl = text.Replace('\n', '\0').Split("\n");
+            if (spl.Length > 1) {
+                foreach (string value in spl) {
+                    UserNativeLib.printToXY(value, cursorX, cursorY);
+
+                }
+            }
         }
-        public void Update() {
-            Viewport.Update();
-        }
-        public bool IsEmpty => Viewport == null;
-        public static GamePlace Empty => new GamePlace(null);
     }
 }

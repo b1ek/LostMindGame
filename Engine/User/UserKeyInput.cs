@@ -11,35 +11,32 @@ namespace LostMind.Engine.User
     public static class UserKeyInput
     {
         #region Hook
-        static Task hookLoopTask;
-        static CancellationTokenSource cts = new CancellationTokenSource();
-        static bool terminateThread = false;
         /**<summary>
          * End the thread loop, which in theory will make it stop.
          * </summary>
          */
         public static void stopThread() {
-            terminateThread = true;
-
-            cts.Cancel();
-            cts.Dispose();
-            hookLoopTask.Dispose();
         }
         /**
          <summary>
-         Method that starts background thread for KeyPress event handling.
-         Should be called in the first lines of the main method.
+         Method that creates background worker for processing console keys.<br/>
+         <paramref name="createCancellation"/> Note: if you set this to true, WORKER WILL RUN AUTOMATIALLY.
          </summary>
          */
-        public static void InstallHook() {
-            terminateThread = false;
-            hookLoopTask = new Task(() => {
-                ProcessConsoleKeys();
-            }, cts.Token);
+        public static (BackgroundWorker worker, CancellationTokenSource cancellation)
+            CreateWorker(bool createCancellation = true) {
+            BackgroundWorker work = new BackgroundWorker();
+            work.DoWork += (s, e) => { ProcessConsoleKeys(); };
+            if (createCancellation) {
+                CancellationTokenSource sauce = new CancellationTokenSource();
+                work.RunWorkerAsync(sauce.Token);
+                return (work, sauce);
+            }
+            return (work, null);
         }
 
         public static void ProcessConsoleKeys() {
-            while (!terminateThread)
+            while (true)
                 if (Console.KeyAvailable)
                     KeyPress?.Invoke(Console.ReadKey(true));
             Console.Beep(500, 1000);

@@ -12,33 +12,23 @@ using LostMind.Engine.Config;
 using System.IO;
 using System.Threading;
 using LostMind.Game.Game;
+using LostMind.Engine.Core;
 
 namespace LostMind
 {
     class Program
     {
         [DllImport("kernel32.dll")]
-        public static extern bool Beep(int freq, int duration);
-
-        /**<summary>Game controller.</summary>*/
-        public static GameController gameController = new GameController(new(), new());
+        public extern static void Beep(int freq, int delay);
+        static Core core = new();
+        public static Core Core => core;
 
         /**<summary>
          * Main entry point.
          * </summary>
          */
         static void Main(string[] args) {
-
-            MachineTest.runDefaultNotBrokenTest();
-
-            // DONT TOUCH
-            Process.GetCurrentProcess().EnableRaisingEvents = true;
-            Process.GetCurrentProcess().Exited += (s, e) => { OnProcessExit(s, e); };
-            if (RegistryConfig.AllowBSODStyleException) AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledException);
-            UserKeyInput.InstallHook();
-            Game.Game.GameRunner entry = new Game.Game.GameRunner();
-            entry.Run();
-            UCO.FlushConsole();
+            Core.Run();
         }
 
         /**<summary>Method that is called on program exit.</summary>*/
@@ -76,7 +66,7 @@ namespace LostMind
             var beepTask = Task.Run(() => { Beep(0, int.MaxValue); });
 
             Console.WriteLine("A problem has been detected and the game was shut down to prevent damage to your computer.\n");
-            Console.WriteLine(Util.camelCaseSplit(e.ExceptionObject.GetType().Name).ToUpper().Replace(' ', '_') + "\n> " + ((Exception)e.ExceptionObject).Message);
+            Console.WriteLine(Util.CamelCaseSplit(e.ExceptionObject.GetType().Name).ToUpper().Replace(' ', '_') + "\n> " + ((Exception)e.ExceptionObject).Message);
             Console.WriteLine("\nIf this is the first time you've seen this stop error screen, restart your computer.\nIf these screen appears again, follow these steps:\n");
 
             Console.WriteLine("Check to make sure any new mods or updates to the game or runtime was properly installed.");

@@ -156,6 +156,9 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <Optimization>MinSpace</Optimization>
       <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
+      <PreprocessToFile>false</PreprocessToFile>
+      <ExceptionHandling>false</ExceptionHandling>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -166,7 +169,7 @@
       <ShowProgress>LinkVerbose</ShowProgress>
     </Link>
     <PostBuildEvent>
-      <Command>copy /B "C:\Users\blek\source\repos\MyLifeGame\NativeLib\x64\Release" "C:\Users\blek\source\repos\MyLifeGame\Resources\Libraries"</Command>
+      <Command>copy /B "C:\Users\blek\source\repos\MyLifeGame\NativeLib\x64\Release\*.dll" "C:\Users\blek\source\repos\MyLifeGame\Resources\Libraries"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
