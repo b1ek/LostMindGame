@@ -66,7 +66,7 @@ namespace LostMind
             var beepTask = Task.Run(() => { Beep(0, int.MaxValue); });
 
             Console.WriteLine("A problem has been detected and the game was shut down to prevent damage to your computer.\n");
-            Console.WriteLine(Util.CamelCaseSplit(e.ExceptionObject.GetType().Name).ToUpper().Replace(' ', '_') + "\n> " + ((Exception)e.ExceptionObject).Message);
+            Console.WriteLine(LostMind.Engine.Utils.CamelCaseSplit(e.ExceptionObject.GetType().Name).ToUpper().Replace(' ', '_') + "\n> " + ((Exception)e.ExceptionObject).Message);
             Console.WriteLine("\nIf this is the first time you've seen this stop error screen, restart your computer.\nIf these screen appears again, follow these steps:\n");
 
             Console.WriteLine("Check to make sure any new mods or updates to the game or runtime was properly installed.");

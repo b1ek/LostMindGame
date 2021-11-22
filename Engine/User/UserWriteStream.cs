@@ -29,7 +29,7 @@ namespace LostMind.Engine.User {
             foreach(var str in spl) {
 
                 if (str.Length > _width) {
-                    var sppl = Util.Util.SplitByCount(str, Width);
+                    var sppl = Utils.SplitByCount(str, Width);
 
                     foreach (var _str in sppl) {
                         UserNativeLib.printToXY(_str, _x, _y);

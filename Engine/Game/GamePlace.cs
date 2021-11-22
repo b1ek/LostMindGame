@@ -1,5 +1,6 @@
 ﻿using LostMind.Engine.UI;
 using LostMind.Engine.User;
+using LostMind.Engine.Util;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,6 +18,8 @@ namespace LostMind.Engine.Game {
         private protected int cursorX = 0;
         private protected int cursorY = 0;
 
+        string id = "unset";
+        public string Id { get => id; set { id = value; } }
 
         public GamePlace(int width = 5, int height = 10, int marginLeft = 0, int marginTop = 3) {
             screenWidth = width;
@@ -26,7 +29,10 @@ namespace LostMind.Engine.Game {
         }
 
         private protected void Write(string text) {
-            string[] spl = text.Replace('\n', '\0').Split("\n");
+            string[] spl = Utils.SplitByCount(
+                text.Replace('\n', '\0'), screenWidth)
+                .ToArray();
+
             if (spl.Length > 1) {
                 foreach (string value in spl) {
                     UserNativeLib.printToXY(value, cursorX, cursorY);
@@ -34,5 +40,8 @@ namespace LostMind.Engine.Game {
                 }
             }
         }
+
+        public virtual void Start() { }
+        public virtual void Update() { }
     }
 }

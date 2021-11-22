@@ -172,10 +172,4 @@ extern "C" {
     __declspec(dllexport) void __stdcall setColors(BG_COLOR bclr, FG_COLOR fclr) {
         SetConsoleTextAttribute(stdhndl, bclr | fclr);
     }
-    __declspec(dllexport) void __stdcall playAudio(char* filename) {
-        PlaySound(getWchar(filename), NULL, SND_SYNC);
-    }
-    __declspec(dllexport) void __stdcall playAudioAsync(char* filename) {
-        PlaySound(getWchar(filename), NULL, SND_ASYNC);
-    }
 }
