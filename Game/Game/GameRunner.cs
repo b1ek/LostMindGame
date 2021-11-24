@@ -8,8 +8,8 @@ using System.Threading;
 
 namespace LostMind.Game.Game {
     public class GameRunner {
-        public void Run() {
 
+        public void Run() {
             Console.CursorVisible = false;
             Console.ResetColor(); Console.Clear();
             UCO.TrySetSize(120, 30);

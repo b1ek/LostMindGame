@@ -10,7 +10,8 @@ using System.Threading.Tasks;
 
 namespace LostMind.Engine.UI {
     public class TooMuchElementsException : Exception { }
-    public class Viewport {
+    public class Viewport : IDisposable {
+        #region Fields
         int _x = 0;
         int _y = 0;
         int _width = 0;
@@ -39,7 +40,7 @@ namespace LostMind.Engine.UI {
 
         /**<summary>Max elements limiter</summary>*/
         public const int maxElements = 128;
-        #region margin
+        #region Margin
         int _marginLeft;
         int _marginTop;
 
@@ -59,7 +60,8 @@ namespace LostMind.Engine.UI {
             }
         }
         #endregion
-
+        #endregion
+        #region Constructor
         /**
          * <summary>
          * Crete new viewport
@@ -78,6 +80,7 @@ namespace LostMind.Engine.UI {
             }
             UserKeyInput.KeyPress += OnKeyPress;
         }
+        #endregion
         #region Key event handler
         /**<summary>Key press event handler.</summary>*/
         public void OnKeyPress(ConsoleKeyInfo key) {
@@ -232,6 +235,19 @@ namespace LostMind.Engine.UI {
             if (isPressed) {
                 UserKeyInput.awaitKeyPress(keysPressed);
             }
+        }
+
+        /**
+         * <summary>
+         * Close the viewport and release all memory used.
+         * </summary>
+         */
+        public void Dispose() {
+            foreach (var e in _elements) e.remove();
+            closed = true;
+            _elements.Clear();
+            _elements = null;
+
         }
     }
 }

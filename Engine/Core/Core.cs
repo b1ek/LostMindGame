@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace LostMind.Engine.Core {
     public class Core {
-        Game.GameController controller;
         BackgroundWorker ControlsWorker;
         CancellationTokenSource sauce;
         LostMind.Game.Game.GameRunner gameRunner;
@@ -19,7 +18,7 @@ namespace LostMind.Engine.Core {
         public void Run() {
             Console.ResetColor();
             Console.Clear();
-            User.UserConsoleNativeInterface.setFont("Lucida Console", 1);
+            User.UserConsoleNativeInterface.setFont("Lucida Console", 100);
             Console.TreatControlCAsInput = true;
             Console.WriteLine(
                 "Running LostEngine version \x1b[36m" + version +
@@ -29,7 +28,7 @@ namespace LostMind.Engine.Core {
             var workerPack = User.UserKeyInput.CreateWorker();
             ControlsWorker = workerPack.worker;
             sauce = workerPack.cancellation;
-            double c = 5;
+            double c = 2;
             int cy = User.UserNativeLib.ConsoleCursor_Y + 2;
             Console.CursorVisible = false;
             while (true) {
@@ -41,7 +40,7 @@ namespace LostMind.Engine.Core {
             }
             Console.ResetColor();
             Console.Clear();
-            controller = new Game.GameController();
+            //controller = new Game.GameController();
             gameRunner = new LostMind.Game.Game.GameRunner();
             gameRunner.Run();
 
