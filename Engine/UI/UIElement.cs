@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 namespace LostMind.Engine.UI {
     public class UIElement {
         #region Position
-        private protected int _x; // x position
-        private protected int _y; // y position
-        public int lastX { get { return _x; } }
-        public int lastY { get { return _y; } }
+        private protected int _x = 0; // x position
+        private protected int _y = 0; // y position
+        public int PositionX { get => _x; set { _x = value; } }
+        public int PositionY { get => _y; set { _y = value; } }
         #endregion
 
         /**<summary>Determinies if this form using user text(chars) input.</summary>**/
@@ -63,18 +63,23 @@ namespace LostMind.Engine.UI {
         private protected string _intxt; /**<summary>Element hovered or not</summary>*/
         private protected bool currentlyHovered = false; /**<summary>Print element to coordinates</summary>*/
 
-        public virtual void print(int x, int y) {
-            print(x, y, true);
-        }
-        public virtual void print(int x, int y, bool removeOld) {
+        public virtual void print(int x, int y, bool removeOld = true, int maxLen = -1) {
+            string _prn = _intxt;
+            if (maxLen > 0) {
+                var spl = Utils.SplitByCount(_prn, maxLen);
+                _prn = spl.First();
+            }
+
             if (removeOld) {
-                if (displayed) User.UCO.WriteXY(_x, _y, new string(' ', _intxt.Length), colors.defaultBackground, colors.defaultForeground);
+                if (displayed) remove();
                 _x = x;
                 _y = y;
             }
-            User.UCO.WriteXY(_x, _y, _intxt, colors.background, colors.foreground);
+
+            User.UCO.WriteXY(_x, _y, _prn, colors.background, colors.foreground);
             displayed = true;
         }
+
         public virtual void remove() {
             if (displayed) User.UCO.WriteXY(_x, _y, new string(' ', _intxt.Length), colors.defaultBackground, colors.defaultForeground);
             displayed = false;

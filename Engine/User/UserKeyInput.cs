@@ -35,11 +35,14 @@ namespace LostMind.Engine.User
             return (work, null);
         }
 
+        public static void IterateLoop() {
+            if (Console.KeyAvailable)
+                KeyPress?.Invoke(Console.ReadKey(true));
+        }
+
         public static void ProcessConsoleKeys() {
             while (true)
-                if (Console.KeyAvailable)
-                    KeyPress?.Invoke(Console.ReadKey(true));
-            Console.Beep(500, 1000);
+                IterateLoop();
         }
 
         internal static void CallEvent(ConsoleKeyInfo key)

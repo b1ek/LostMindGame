@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+// that shit is bothering me
+#pragma warning disable
+
 namespace LostMind.Engine.Native {
     // this is copy of
     // https://referencesource.microsoft.com/#system/compmod/microsoft/win32/SafeNativeMethods.cs

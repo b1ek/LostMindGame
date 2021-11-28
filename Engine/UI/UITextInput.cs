@@ -50,10 +50,12 @@ namespace LostMind.Engine.UI
             if (_cursor + moveCharsToRight > _text.Length | _cursor + moveCharsToRight < 0) return;
             _cursor += moveCharsToRight;
         }
-        public override void print(int x, int y, bool displayCursor = true) {
+        public override void print(int x, int y, bool displayCursor = true, int maxLen = -1) {
             try {
                 int curr = _cursor;
-                User.UCO.WriteXY(x, y, "[" + new string(' ', _text.Length) + "]", bg, txt);
+                string text = "[" + new string(' ', _text.Length) + "]";
+                if (maxLen > 0) text = Utils.SplitByCount(text, maxLen).First();
+                User.UCO.WriteXY(x, y, text, ConsoleColor.Black, ConsoleColor.White, true);
                 User.UCO.WriteXY(x + 1, y, _text, bg, txt);
                 if (displayCursor)  User.UCO.WriteXY(x + curr+2, y, _text[curr+1].ToString(), ConsoleColor.DarkBlue, txt);
             } catch (Exception) { }

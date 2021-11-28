@@ -13,9 +13,14 @@ namespace LostMind.Engine.Core {
             Id = id;
         }
 
+        private event EventHandler onDispose;
+
+        public virtual void Start() { }
+        public virtual void Update() { }
         public void Dispose() {
-            view.breakMainLoop();
-            view.close();
+            onDispose?.Invoke(this, new EventArgs());
+            //view.breakMainLoop();
+            //view.close();
         }
     }
 }
