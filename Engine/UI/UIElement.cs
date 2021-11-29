@@ -35,6 +35,8 @@ namespace LostMind.Engine.UI {
             get { return _intxt; }
             set { _intxt = value; }
         }
+        /**<summary>Is element hovered or not</summary>*/
+        public bool isHovered => currentlyHovered;
         #endregion
         #region Constructors + overload
         public UIElement(bool interactable, ConsoleColor bgColor, ConsoleColor fgColor, ConsoleColor hoverBgColor, ConsoleColor hoverFgColor, ConsoleColor cmdBgDef, ConsoleColor cmdFgDef) {

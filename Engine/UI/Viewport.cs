@@ -113,13 +113,23 @@ namespace LostMind.Engine.UI {
             _readOnly = paramReadonly;
             UserKeyInput.KeyPress += ProcessKeyEvent;
         }
-
-        public void Draw() {
+        #region Drawing
+        public void Draw(bool removeOld = true) {
             Console.CursorVisible = false;
-            (int x, int y) cursor = (_x, _y);
+            (int x, int y) cursor = (_x, _y-1);
             if (data.elements.Count == 0) {
                 Debug.Fail("Cannot draw viewport with zero elements!");
                 return;
+            }
+            List<int> _widths = new List<int>();
+            int[] widths = { };
+            int maxwid = 0;
+            if (DrawOrder == DrawOrder.Horizontal) {
+                for (int i = 0; i < data.elements.Count; i++) {
+                    _widths.Add(data.elements[i].innerText.Length);
+                }
+                widths = _widths.ToArray();
+                maxwid = widths.Max();
             }
             for (int i = 0; i < data.elements.Count; i++) {
                 switch (data.order) {
@@ -128,50 +138,27 @@ namespace LostMind.Engine.UI {
                         cursor.x = _x;
                         break;
                     case DrawOrder.Horizontal:
-                        if (cursor.x + data.elements[i].innerText.Length > _width) {
-                            cursor.y++;
-                            cursor.x = _x + data.elements[i].innerText.Length;
-                        }
-                        cursor.x += data.elements[i].innerText.Length;
-                        cursor.x += data.distance;
+                        cursor.x = ((maxwid / 2) - (data.elements[i].innerText.Length / 2)) - (_width / 2);
+                        cursor.y++;
                         break;
                     case DrawOrder.Absolute:
                         cursor.x = data.elements[i].PositionX;
                         cursor.y = data.elements[i].PositionY;
                         break;
                 }
-                data.elements[i].print(cursor.x, cursor.y, true, cursor.x - _width);
+                data.elements[i].print(cursor.x, cursor.y, removeOld, _width - cursor.x);
             }
             Console.CursorLeft = data.elements[data.selection].PositionX + data.elements[data.selection].innerText.Length - 1;
             Console.CursorTop = data.elements[data.selection].PositionY;
             Console.CursorVisible = true;
         }
-        public void Dispose() {
-            for (int i = 0; i > data.elements.Count; i++) {
-                data.elements[i].remove();
-            }
-            data.elements.Clear();
+        public void DumpArea(ConsoleColor bg = ConsoleColor.Black, ConsoleColor fg = ConsoleColor.White, char chr = ' ') {
+            UCO.ClearConsoleArea(_x, _y, _width, _height, bg, fg, chr);
         }
-        public void AddElement(UIElement element, bool select = false) {
-            data.elements.Add(element);
-            if (select) {
-                data.selection = data.elements.Count;
-                Draw();
-            }
-        }
-        public void IterateLoop() {
-            UserKeyInput.IterateLoop();
-        }
-        public void ProcessKeyEvent(ConsoleKeyInfo key) {
-            if (key.Key == UISysConfig.UIEnterKey_txtIn)
-                Click();
-            if (key.Key == UISysConfig.UIMoveUpKey_txtIn)
-                MoveCursor(true);
-            if (key.Key == UISysConfig.UIMoveDownKey_txtIn)
-                MoveCursor(false);
-            return;
-        }
+        #endregion
+        #region Cursor
         public void MoveCursor(bool up) {
+            if (data.elements.Count == 0) return;
             data.elements[data.selection].hover(false);
 
             if (up) {
@@ -190,6 +177,7 @@ namespace LostMind.Engine.UI {
             Draw();
         }
         public void SetCursor(int pos, bool unsafe_ = false) {
+            if (!unsafe_ && data.elements.Count == 0) return;
             if (unsafe_) {
                 data.selection = pos;
                 return;
@@ -203,17 +191,68 @@ namespace LostMind.Engine.UI {
             Debug.WriteLine("Clicked " + data.elements[data.selection].innerText);
             data.elements[data.selection].click();
         }
+        #endregion
+        #region Loops
         public void Mainloop() {
             Draw();
             if (data.elements.Count == 0) {
                 throw new Exception("Cannot start mainloop without elements!");
             }
+            UserKeyInput.CallEvent(new ConsoleKeyInfo((char)UISysConfig.UIMoveDownKey_txtIn, UISysConfig.UIMoveDownKey_txtIn, false, false, false));
+            UserKeyInput.CallEvent(new ConsoleKeyInfo((char)UISysConfig.UIMoveUpKey_txtIn, UISysConfig.UIMoveUpKey_txtIn, false, false, false));
             while (!data.breakLoop) {
-                UserKeyInput.IterateLoop();
+                if (!data.breakLoop) UserKeyInput.IterateLoop();
+                else {
+                    Debug.WriteLine("Terminating loop...");
+                    break;
+                }
             }
         }
-        public void DumpArea() {
-            UCO.ClearConsoleArea(_x, _y, _width, _height);
+        public void IterateLoop() => UserKeyInput.IterateLoop();
+        public void ProcessKeyEvent(ConsoleKeyInfo key) {
+            if (key.Key == UISysConfig.UIEnterKey_txtIn)
+                Click();
+            if (key.Key == UISysConfig.UIMoveUpKey_txtIn)
+                MoveCursor(true);
+            if (key.Key == UISysConfig.UIMoveDownKey_txtIn)
+                MoveCursor(false);
+            return;
         }
+        public async Task _StopLoop() {
+            data.breakLoop = true;
+            await Task.Delay(150);
+            data.breakLoop = false;
+        }
+        public void StopLoop() => _ = _StopLoop();
+        #endregion
+        #region Memory
+        public void AddElement(UIElement element, bool select = false) {
+            data.elements.Add(element);
+            if (select) {
+                data.selection = data.elements.Count;
+                Draw();
+            }
+        }
+        public void RemoveElement(UIElement element) {
+            data.elements.Remove(element);
+        }
+        public void RemoveElement(int index) {
+            data.elements.RemoveAt(index);
+        }
+        public void RemoveElement(string elementText) {
+            for (int i = 0; i > data.elements.Count; i++) {
+                if (data.elements[i].innerText == elementText) {
+                    RemoveElement(i);
+                    return;
+                }
+            }
+        }
+
+        public void Dispose() {
+            StopLoop();
+            DumpArea(ConsoleColor.Black, ConsoleColor.White, ' ');
+            data.elements.Clear();
+        }
+        #endregion
     }
 }

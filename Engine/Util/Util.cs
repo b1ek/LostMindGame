@@ -16,6 +16,11 @@ namespace LostMind.Engine {
             return Enumerable.Range(0, str.Length / chunkSize)
                 .Select(i => str.Substring(i * chunkSize, chunkSize));
         }
+        public static int DigitsAfterDecimal(double value) {
+            string str = Convert.ToString(value);
+            if (str.Split(new char[] { '.', ',' }).Length == 1) return 0;
+            return str.Split(new char[] { '.', ',' })[1].Length;
+        }
 
     }
 }
