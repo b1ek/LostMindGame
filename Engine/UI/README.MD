@@ -39,14 +39,18 @@ yourViewport.AddElement(new UIButton("Click me!", yourHandler));
 ---
 ### UILabel.cs
 Holds only one string. Actually, you can use bare UIElement,<br/>
-but using label is way easier:```cs
+but using label is way easier:
+```cs
 UILabel txt = new UILabel("Some text", ConsoleColor.IfYouWant);
 txt.Color = ConsoleColor.SomeNewColor; // dont forget to re-print the element
-```cs
-# UISysConfig.cs
+```
+
+---
+### UISysConfig.cs
 Class with keys config<br/>
 (it will be removed _soon_)
-# UITextInput.cs
+
+---
+### UITextInput.cs
 Used for getting user text input. <br/>
 Pretty much raw stuff. Needs more development.
-```
