@@ -15,15 +15,14 @@ namespace LostMind.Engine.Core {
 
         long hiResTimestamp;
         int delta = 0;
-        BackgroundWorker worker;
-        Thread controllerThread;
+        public int DeltaTime => delta;
+        BackgroundWorker worker = new BackgroundWorker();
 
         private GameController() {
             worker.DoWork += doWork;
             SafeNativeMethods.QueryPerformanceCounter(out hiResTimestamp);
             worker.RunWorkerAsync();
         }
-
         void doWork(object sender, DoWorkEventArgs e) {
             long now = 0;
             SafeNativeMethods.QueryPerformanceCounter(out now);

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -21,6 +23,17 @@ namespace LostMind.Engine {
             if (str.Split(new char[] { '.', ',' }).Length == 1) return 0;
             return str.Split(new char[] { '.', ',' })[1].Length;
         }
+        static public T ForgeDeepCopy<T>(T obj)
+        {
+            BinaryFormatter s = new BinaryFormatter();
+            using (MemoryStream ms = new MemoryStream())
+            {
+                s.Serialize(ms, obj);
+                ms.Position = 0;
+                T t = (T)s.Deserialize(ms);
 
+                return t;
+            }
+        }
     }
 }

@@ -9,20 +9,55 @@ using System.Threading;
 using System.Threading.Tasks;
 
 namespace LostMind.Engine.UI {
+    #region Other stuff
+    #region Structs
     internal struct ViewportData {
         public List<UIElement> elements;
         public int selection;
         public bool breakLoop;
         public DrawOrder order;
-        public int distance;
     }
+    public struct ViewportSettings {
+        public int inlineSpace;
+        public int x;
+        public int y;
+        public int width;
+        public int height;
+        bool ridOnly;
+        bool createdThruConstructor;
+        public bool readOnly {
+            get {
+                if (createdThruConstructor) return ridOnly;
+                else return true;
+            }
+        }
+        public ViewportSettings(int inlSpace, int positionX, int positionY, int width_, int height_, bool readOnly_) {
+            inlineSpace = inlSpace;
+            x = positionX;
+            y = positionY;
+            width = width_;
+            height = height_;
+            ridOnly = readOnly_;
+            createdThruConstructor = true;
+        }
+    }
+    #endregion
     public enum DrawOrder {
-        Vertical,
+        /**<summary></summary>*/
+        /**<summary>Draw in the vertical layout, with centering(makes the best look!)</summary>*/
+        VerticalCenter,
+        /**<summary>Draw in the vertical layout, without centering each element</summary>*/
+        VerticalNoCent,
+        /**<summary>Draw in inline order, just like this: <br/><code>[ELEM1] [ELEM2] [ELEM3]</code></summary>*/
+        Inline,
+        InlineNoBreak,
+        /**<summary>Draw in horizontal layout, just like this:<br/><code>[ELEM1]<br/>[ELEM2]<br/>[ELEM3]</code></summary>*/
         Horizontal,
+        /**<summary>Be careful! Make sure to set every singe element coordinates by using ELEMENT.PositionX/Y = ...</summary>*/
         Absolute
     }
+    #endregion
     public class Viewport : IDisposable {
-        bool _readOnly;
         #region Position/Dimensions
         int _x, _y, _width, _height;
         #region Accessors
@@ -30,7 +65,7 @@ namespace LostMind.Engine.UI {
         public int PositionX {
             get => _x;
             set {
-                if (_readOnly) {
+                if (settings.readOnly) {
                     Debug.Fail("WARNING: TRYING TO SET PositionX VIEWPORT FIELD WHILE ITS READONLY");
                     return;
                 }
@@ -40,7 +75,7 @@ namespace LostMind.Engine.UI {
         public int PositionY {
             get => _y;
             set {
-                if (_readOnly) {
+                if (settings.readOnly) {
                     Debug.Fail("WARNING: TRYING TO SET PositionY VIEWPORT FIELD WHILE ITS READONLY");
                     return;
                 }
@@ -52,7 +87,7 @@ namespace LostMind.Engine.UI {
         public int Width {
             get => _width;
             set {
-                if (_readOnly) {
+                if (settings.readOnly) {
                     Debug.Fail("WARNING: TRYING TO SET PositionX VIEWPORT FIELD WHILE ITS READONLY");
                     return;
                 }
@@ -62,7 +97,7 @@ namespace LostMind.Engine.UI {
         public int Height {
             get => _height;
             set {
-                if (_readOnly) {
+                if (settings.readOnly) {
                     Debug.Fail("WARNING: TRYING TO SET PositionX VIEWPORT FIELD WHILE ITS READONLY");
                     return;
                 }
@@ -73,12 +108,15 @@ namespace LostMind.Engine.UI {
         #endregion
         #endregion
         #region Data
+        ViewportSettings settings;
         ViewportData data;
+        /**<summary>Be careful with that. Create new settings instance only through a parameter constructor.</summary>*/
+        public ViewportSettings Settings { get => settings; set { settings = value; } }
         public DrawOrder DrawOrder { get => data.order; set { data.order = value; } }
         public List<UIElement> Elements {
             get => data.elements;
             set {
-                if (_readOnly) {
+                if (settings.readOnly) {
                     Debug.Fail("WARNING: TRYING TO SET Elements VIEWPORT FIELD WHILE ITS READONLY");
                     return;
                 }
@@ -88,7 +126,7 @@ namespace LostMind.Engine.UI {
         public int Selection {
             get => data.selection;
             set {
-                if (_readOnly) {
+                if (settings.readOnly) {
                     Debug.Fail("WARNING: TRYING TO SET Selection VIEWPORT FIELD WHILE ITS READONLY");
                     return;
                 }
@@ -97,7 +135,7 @@ namespace LostMind.Engine.UI {
             }
         }
         #endregion
-
+        #region Constructor
         /**<summary>
          * Create a new Viewport instance
          * </summary>
@@ -109,10 +147,21 @@ namespace LostMind.Engine.UI {
             data.order = DrawOrder.Horizontal;
             data.selection = 0;
             data.breakLoop = false;
-            data.distance = distance;
-            _readOnly = paramReadonly;
+            settings = new ViewportSettings(1, x, y, width, height, paramReadonly);
+            Debug.WriteLine(settings.readOnly);
             UserKeyInput.KeyPress += ProcessKeyEvent;
         }
+        public Viewport(ViewportSettings viewSettings) {
+            settings = new ViewportSettings(
+                viewSettings.inlineSpace,
+                viewSettings.x,
+                viewSettings.y,
+                viewSettings.width,
+                viewSettings.height,
+                viewSettings.readOnly
+                );
+        }
+        #endregion
         #region Drawing
         public void Draw(bool removeOld = true) {
             Console.CursorVisible = false;
@@ -121,29 +170,36 @@ namespace LostMind.Engine.UI {
                 Debug.Fail("Cannot draw viewport with zero elements!");
                 return;
             }
+
+            // this variables are used only if it is vertical layout
             List<int> _widths = new List<int>();
-            int[] widths = { };
             int maxwid = 0;
-            if (DrawOrder == DrawOrder.Vertical) {
+            if (DrawOrder == DrawOrder.VerticalCenter | DrawOrder == DrawOrder.VerticalNoCent) {
                 for (int i = 0; i < data.elements.Count; i++) {
                     _widths.Add(data.elements[i].innerText.Length);
                 }
-                widths = _widths.ToArray();
-                maxwid = widths.Max();
+                maxwid = _widths.ToArray().Max();
             }
             for (int i = 0; i < data.elements.Count; i++) {
                 switch (data.order) {
-                    case DrawOrder.Horizontal:
+                    case DrawOrder.Horizontal: // just move the cursor down
                         cursor.y++;
                         cursor.x = _x;
                         break;
-                    case DrawOrder.Vertical:
+                    case DrawOrder.VerticalCenter: // move cursor down & center x position
                         cursor.x = ((maxwid / 2) - (data.elements[i].innerText.Length / 2)) - (_width / 2);
                         cursor.y++;
                         break;
-                    case DrawOrder.Absolute:
+                    case DrawOrder.VerticalNoCent: // move cursor down & center x position
+                        cursor.x = (maxwid / 2) - (_width / 2);
+                        cursor.y++;
+                        break;
+                    case DrawOrder.Absolute: // just follow every element position
                         cursor.x = data.elements[i].PositionX;
                         cursor.y = data.elements[i].PositionY;
+                        break;
+                    case DrawOrder.Inline:
+
                         break;
                 }
                 data.elements[i].print(cursor.x, cursor.y, removeOld, _width - cursor.x);
@@ -158,21 +214,29 @@ namespace LostMind.Engine.UI {
         #endregion
         #region Cursor
         public void MoveCursor(bool up) {
-            if (data.elements.Count == 0) return;
-            data.elements[data.selection].hover(false);
+            while (true)
+            {
+                if (data.elements.Count == 0) return;
+                data.elements[data.selection].hover(false);
 
-            if (up) {
-                data.selection--;
-                if (data.selection < 0) {
-                    data.selection++;
-                }
-            } else {
-                data.selection++;
-                if (data.selection > data.elements.Count - 1) {
+                if (up)
+                {
                     data.selection--;
+                    if (data.selection < 0)
+                    {
+                        data.selection++;
+                    }
                 }
+                else
+                {
+                    data.selection++;
+                    if (data.selection > data.elements.Count - 1)
+                    {
+                        data.selection--;
+                    }
+                }
+                if (data.elements[data.selection].Interactable)
             }
-
             data.elements[data.selection].hover(true);
             Draw();
         }
@@ -193,6 +257,9 @@ namespace LostMind.Engine.UI {
         }
         #endregion
         #region Loops
+        public async Task MainloopAsync() {
+            await Task.Run(Mainloop);
+        }
         public void Mainloop() {
             Draw();
             if (data.elements.Count == 0) {

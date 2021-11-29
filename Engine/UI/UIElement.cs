@@ -30,6 +30,7 @@ namespace LostMind.Engine.UI {
         #region Accessors
         public bool Interactable => _intrctbl;
         public bool isDisplayed => displayed;
+        public bool isHoverable => _intrctbl;
         public bool usesTextInput => useTxtInput;
         public string innerText {
             get { return _intxt; }
@@ -64,9 +65,25 @@ namespace LostMind.Engine.UI {
         private protected bool _intrctbl; /**<summary>Inner text</summary>*/
         private protected string _intxt; /**<summary>Element hovered or not</summary>*/
         private protected bool currentlyHovered = false; /**<summary>Print element to coordinates</summary>*/
+        private protected bool printedBefore = false;
 
+        /**
+         * <summary>
+         * Print the element in a specific coordinates.
+         * </summary>
+         * <param name="removeOld">
+         * Whether remove old element or not.<br/>
+         * For the curious: it prints <i>spaces</i> on the old place
+         * </param>
+         * <param name="maxLen">
+         * Maximum length of the element, it will be cut if it has more length.<br/>
+         * Example: <br/>
+         * <code>ElementWithSomeText (maxLen = 16) → ElementWithSomeT</code>
+         * </param>
+         */
         public virtual void print(int x, int y, bool removeOld = true, int maxLen = -1) {
             string _prn = _intxt;
+            printedBefore = true;
             if (maxLen > 0) {
                 var spl = Utils.SplitByCount(_prn, maxLen);
                 _prn = spl.First();
@@ -81,13 +98,18 @@ namespace LostMind.Engine.UI {
             User.UCO.WriteXY(_x, _y, _prn, colors.background, colors.foreground);
             displayed = true;
         }
-
+        /**<summary>Re-print the element in the last printed position</summary>*/
+        public virtual void reprint(bool removeOld = true) {
+            if (printedBefore)
+                print(PositionX, PositionY, removeOld);
+        }
         public virtual void remove() {
             if (displayed) User.UCO.WriteXY(_x, _y, new string(' ', _intxt.Length), colors.defaultBackground, colors.defaultForeground);
             displayed = false;
         }
         public virtual void hover(bool hovered) {
-            if (_intrctbl) { currentlyHovered = hovered;
+            if (_intrctbl) {
+                currentlyHovered = hovered;
                 if (hovered) {
                     bg = colors.hoverBackground;
                     txt = colors.hoverForeground;
@@ -115,6 +137,7 @@ namespace LostMind.Engine.UI {
         #endregion
 
         public virtual void click() {
+            if (_intrctbl)
             OnClick?.Invoke();
         }
         public delegate void OnClickEvent();
