@@ -7,7 +7,7 @@ Element developing in 3 lines:<br/>
  - if you demand custom printing method, simply overload `print(...)`
  - to process click, overload `click()`
 Element API documentation is in elApi.MD.
-# Viewport.
+# Viewport.cs
 Base class for displaying elements.<br/>
 ```cs
 Viewport view = new Viewport(0, 0, Console.BufferWidth, Console.BufferHeight);
