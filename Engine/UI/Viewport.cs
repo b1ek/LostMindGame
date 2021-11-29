@@ -17,8 +17,8 @@ namespace LostMind.Engine.UI {
         public int distance;
     }
     public enum DrawOrder {
-        Horizontal,
         Vertical,
+        Horizontal,
         Absolute
     }
     public class Viewport : IDisposable {
@@ -106,7 +106,7 @@ namespace LostMind.Engine.UI {
          */
         public Viewport(int x, int y, int width, int height, bool paramReadonly = true, int distance = 1) {
             data.elements = new List<UIElement>();
-            data.order = DrawOrder.Vertical;
+            data.order = DrawOrder.Horizontal;
             data.selection = 0;
             data.breakLoop = false;
             data.distance = distance;
@@ -124,7 +124,7 @@ namespace LostMind.Engine.UI {
             List<int> _widths = new List<int>();
             int[] widths = { };
             int maxwid = 0;
-            if (DrawOrder == DrawOrder.Horizontal) {
+            if (DrawOrder == DrawOrder.Vertical) {
                 for (int i = 0; i < data.elements.Count; i++) {
                     _widths.Add(data.elements[i].innerText.Length);
                 }
@@ -133,11 +133,11 @@ namespace LostMind.Engine.UI {
             }
             for (int i = 0; i < data.elements.Count; i++) {
                 switch (data.order) {
-                    case DrawOrder.Vertical:
+                    case DrawOrder.Horizontal:
                         cursor.y++;
                         cursor.x = _x;
                         break;
-                    case DrawOrder.Horizontal:
+                    case DrawOrder.Vertical:
                         cursor.x = ((maxwid / 2) - (data.elements[i].innerText.Length / 2)) - (_width / 2);
                         cursor.y++;
                         break;

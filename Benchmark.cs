@@ -15,7 +15,7 @@ namespace LostMind {
             UIButton button = new UIButton("Bye");
             Console.SetBufferSize(120, 30);
             Viewport view = new Viewport(2, 0, Console.BufferWidth, Console.BufferHeight, true);
-            view.DrawOrder = DrawOrder.Horizontal;
+            view.DrawOrder = DrawOrder.Vertical;
             view.AddElement(new UIButton("Hi", () => { UserNativeLib.displayMessage("Hi!!!"); }));
             view.AddElement(button);
             button.OnClick += () => { button.buttonText += "e"; view.Draw(); };
