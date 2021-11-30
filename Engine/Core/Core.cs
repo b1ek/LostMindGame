@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Runtime.InteropServices;
 
 namespace LostMind.Engine.Core {
     public class Core {
@@ -17,8 +18,11 @@ namespace LostMind.Engine.Core {
         public const string version  = "1__0.1.3 INDEV";
         public const string codename = "MATRIX_MIX";
 
+        [DllImport(@"Resources\Libraries\NativeLib.dll")]
+        public static extern void centerWindow();
 
         public void Run() {
+            
             Console.ResetColor();
             Console.Clear();
             UserConsoleNativeInterface.setFont("Lucida Console", 100);
