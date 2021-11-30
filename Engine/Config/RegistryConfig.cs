@@ -11,7 +11,7 @@ namespace LostMind.Engine.Config {
         public RegistryKey BaseKey {
             get => baseKey;
             set {
-                baseKey = value.CreateSubKey(rootPath);
+                baseKey = value.CreateSubKey(_rootPath);
             }
         }
         string path = "";

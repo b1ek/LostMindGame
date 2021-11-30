@@ -13,9 +13,10 @@ namespace LostMind {
     class Benchmark {
         static void Main(string[] args) {
             UIButton button = new UIButton("Bye");
+            Console.SetWindowSize(120, 30);
             Console.SetBufferSize(120, 30);
-            Viewport view = new Viewport(2, 0, Console.BufferWidth, Console.BufferHeight, true);
-            view.DrawOrder = DrawOrder.VerticalNoCent;
+            Viewport view = new Viewport(2, 1, Console.BufferWidth, Console.BufferHeight, true);
+            view.DrawOrder = DrawOrder.VerticalCenter;
             view.AddElement(new UIButton("Hi", () => { UserNativeLib.displayMessage("Hi!!!"); }));
             view.AddElement(button);
             

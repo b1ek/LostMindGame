@@ -63,6 +63,7 @@ namespace LostMind.Engine.UI
             innerText = prefix[0] + buttonText + prefix[1];
             var _prn = innerText;
             if (maxLen > 0) {
+                maxLen += 2;
                 var intxt = Utils.SplitByCount(_btnTxt, maxLen).First();
                 _prn = prefix[0] + intxt + prefix[1];
             }

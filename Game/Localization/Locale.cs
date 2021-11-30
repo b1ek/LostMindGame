@@ -38,7 +38,7 @@ namespace LostMind.Game.Localization {
 
             Debug.WriteLine("Got locale file with MD5 checksum " + chckSum);
 
-            if (tmp.Length != 16 && RegistryConfig.localeSafe) {
+            /*if (tmp.Length != 16 && RegistryConfig.localeSafe) {
                 stopwatch.Stop();
                 Debug.WriteLine("Error! File length is not as expected!");
                 Debug.WriteLine($"Lines got: {tmp.Length}, expected: {DemandedFileLengthMin}");
@@ -50,7 +50,7 @@ namespace LostMind.Game.Localization {
                 #pragma warning disable CS0162 // fuck this warning
                 Environment.Exit(-1);
             }
-            Debug.WriteLine("Localization mechanizm initalization took " + stopwatch.ElapsedMilliseconds + " ms");
+            Debug.WriteLine("Localization mechanizm initalization took " + stopwatch.ElapsedMilliseconds + " ms");*/
         }
     }
 }

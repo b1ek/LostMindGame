@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.31624.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LostMind", "LostMind.csproj", "{C99CCF07-2B22-4972-AE6F-DDD6A25C3B9D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LostTests", "..\LostTests\LostTests.csproj", "{578923BB-6F54-4B2E-B4EF-068D1B9B647B}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{93C7459A-6CE5-4DE5-B0F2-80952EBD3409}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
@@ -34,18 +32,6 @@ Global
 		{C99CCF07-2B22-4972-AE6F-DDD6A25C3B9D}.Release|x64.Build.0 = Release|Any CPU
 		{C99CCF07-2B22-4972-AE6F-DDD6A25C3B9D}.Release|x86.ActiveCfg = Release|Any CPU
 		{C99CCF07-2B22-4972-AE6F-DDD6A25C3B9D}.Release|x86.Build.0 = Release|Any CPU
-		{578923BB-6F54-4B2E-B4EF-068D1B9B647B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{578923BB-6F54-4B2E-B4EF-068D1B9B647B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{578923BB-6F54-4B2E-B4EF-068D1B9B647B}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{578923BB-6F54-4B2E-B4EF-068D1B9B647B}.Debug|x64.Build.0 = Debug|Any CPU
-		{578923BB-6F54-4B2E-B4EF-068D1B9B647B}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{578923BB-6F54-4B2E-B4EF-068D1B9B647B}.Debug|x86.Build.0 = Debug|Any CPU
-		{578923BB-6F54-4B2E-B4EF-068D1B9B647B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{578923BB-6F54-4B2E-B4EF-068D1B9B647B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{578923BB-6F54-4B2E-B4EF-068D1B9B647B}.Release|x64.ActiveCfg = Release|Any CPU
-		{578923BB-6F54-4B2E-B4EF-068D1B9B647B}.Release|x64.Build.0 = Release|Any CPU
-		{578923BB-6F54-4B2E-B4EF-068D1B9B647B}.Release|x86.ActiveCfg = Release|Any CPU
-		{578923BB-6F54-4B2E-B4EF-068D1B9B647B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

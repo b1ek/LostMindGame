@@ -9,8 +9,9 @@ using System.Threading;
 using System.Threading.Tasks;
 
 namespace LostMind.Engine.UI {
+
+
     #region Other stuff
-    #region Structs
     internal struct ViewportData {
         public List<UIElement> elements;
         public int selection;
@@ -41,7 +42,12 @@ namespace LostMind.Engine.UI {
             createdThruConstructor = true;
         }
     }
-    #endregion
+    public struct ViewportMargins {
+        public int marginLeft;
+        public int marginRight;
+        public int marginTop;
+        public int marginBottom;
+    }
     public enum DrawOrder {
         /**<summary></summary>*/
         /**<summary>Draw in the vertical layout, with centering(makes the best look!)</summary>*/
@@ -57,57 +63,55 @@ namespace LostMind.Engine.UI {
         Absolute
     }
     #endregion
+    
+    
     public class Viewport : IDisposable {
-        #region Position/Dimensions
-        int _x, _y, _width, _height;
-        #region Accessors
-        #region Position
+        // Position/Dimensions
         public int PositionX {
-            get => _x;
+            get => settings.x;
             set {
                 if (settings.readOnly) {
                     Debug.Fail("WARNING: TRYING TO SET PositionX VIEWPORT FIELD WHILE ITS READONLY");
                     return;
                 }
-                _x = value;
+                settings.x = value;
             }
         }
         public int PositionY {
-            get => _y;
+            get => settings.y;
             set {
                 if (settings.readOnly) {
                     Debug.Fail("WARNING: TRYING TO SET PositionY VIEWPORT FIELD WHILE ITS READONLY");
                     return;
                 }
-                _y = value;
+                settings.y = value;
             }
         }
-        #endregion
-        #region Width/height
         public int Width {
-            get => _width;
+            get => settings.width;
             set {
                 if (settings.readOnly) {
                     Debug.Fail("WARNING: TRYING TO SET PositionX VIEWPORT FIELD WHILE ITS READONLY");
                     return;
                 }
-                _width = value;
+                settings.width = value;
             }
         }
         public int Height {
-            get => _height;
+            get => settings.width;
             set {
                 if (settings.readOnly) {
                     Debug.Fail("WARNING: TRYING TO SET PositionX VIEWPORT FIELD WHILE ITS READONLY");
                     return;
                 }
-                _height = value;
+                settings.width = value;
             }
         }
-        #endregion
-        #endregion
-        #endregion
-        #region Data
+        ViewportMargins margins;
+        public ViewportMargins Margins { get => margins; set { margins = value; Draw(); } }
+                
+        
+        // Data
         ViewportSettings settings;
         ViewportData data;
         /**<summary>Be careful with that. Create new settings instance only through a parameter constructor.</summary>*/
@@ -134,21 +138,22 @@ namespace LostMind.Engine.UI {
                 Draw();
             }
         }
-        #endregion
-        #region Constructor
+        
+        
+        // Constructor
         /**<summary>
          * Create a new Viewport instance
          * </summary>
          * <param name="distance">Distance between elements in characters.</param>
          * <param name="paramReadonly">Set whether the fields are readonly or not<br/>Note: consider setting it to true in case to make it safer.</param>
          */
-        public Viewport(int x, int y, int width, int height, bool paramReadonly = true, int distance = 1) {
+        public Viewport(int x, int y, int width, int height, bool paramReadonly = true, int distance = 1, ViewportMargins viewMargins = new ViewportMargins()) {
             data.elements = new List<UIElement>();
             data.order = DrawOrder.Horizontal;
             data.selection = 0;
             data.breakLoop = false;
+            margins = viewMargins;
             settings = new ViewportSettings(1, x, y, width, height, paramReadonly);
-            Debug.WriteLine(settings.readOnly);
             UserKeyInput.KeyPress += ProcessKeyEvent;
         }
         public Viewport(ViewportSettings viewSettings) {
@@ -161,11 +166,12 @@ namespace LostMind.Engine.UI {
                 viewSettings.readOnly
                 );
         }
-        #endregion
-        #region Drawing
+
+
+        // Drawing
         public void Draw(bool removeOld = true) {
             Console.CursorVisible = false;
-            (int x, int y) cursor = (_x, _y-1);
+            (int x, int y) cursor = (PositionX, PositionY-1);
             if (data.elements.Count == 0) {
                 Debug.Fail("Cannot draw viewport with zero elements!");
                 return;
@@ -184,14 +190,14 @@ namespace LostMind.Engine.UI {
                 switch (data.order) {
                     case DrawOrder.Horizontal: // just move the cursor down
                         cursor.y++;
-                        cursor.x = _x;
+                        cursor.x = PositionX; 
                         break;
                     case DrawOrder.VerticalCenter: // move cursor down & center x position
-                        cursor.x = ((maxwid / 2) - (data.elements[i].innerText.Length / 2)) - (_width / 2);
+                        cursor.x = PositionX + ((maxwid / 2) - (data.elements[i].innerText.Length / 2) - (PositionX - Width / 2));
                         cursor.y++;
                         break;
                     case DrawOrder.VerticalNoCent: // move cursor down & center x position
-                        cursor.x = (maxwid / 2) - (_width / 2);
+                        cursor.x = PositionX + (maxwid / 2) - (Width / 2);
                         cursor.y++;
                         break;
                     case DrawOrder.Absolute: // just follow every element position
@@ -202,20 +208,25 @@ namespace LostMind.Engine.UI {
 
                         break;
                 }
-                data.elements[i].print(cursor.x, cursor.y, removeOld, _width - cursor.x);
+                data.elements[i].print(cursor.x, cursor.y, removeOld, Width - cursor.x - 1);
             }
+            if (data.elements[data.selection].PositionX + data.elements[data.selection].innerText.Length - 1 < Console.BufferWidth)
             Console.CursorLeft = data.elements[data.selection].PositionX + data.elements[data.selection].innerText.Length - 1;
+            if (data.elements[data.selection].PositionY < Console.BufferHeight)
             Console.CursorTop = data.elements[data.selection].PositionY;
+            if (Console.CursorLeft+1 < Console.BufferWidth)
+            UCO.WriteXY(Console.CursorLeft + 1, Console.CursorTop, " ", doTry: true);
+            
             Console.CursorVisible = true;
         }
         public void DumpArea(ConsoleColor bg = ConsoleColor.Black, ConsoleColor fg = ConsoleColor.White, char chr = ' ') {
-            UCO.ClearConsoleArea(_x, _y, _width, _height, bg, fg, chr);
+            UCO.ClearConsoleArea(PositionX, PositionY, Width, Height, bg, fg, chr);
         }
-        #endregion
-        #region Cursor
+        
+        
+        // Cursor
         public void MoveCursor(bool up) {
-            while (true)
-            {
+            while (true) {
                 if (data.elements.Count == 0) return;
                 data.elements[data.selection].hover(false);
 
@@ -235,7 +246,7 @@ namespace LostMind.Engine.UI {
                         data.selection--;
                     }
                 }
-                if (data.elements[data.selection].Interactable)
+                if (data.elements[data.selection].Interactable) break;
             }
             data.elements[data.selection].hover(true);
             Draw();
@@ -252,11 +263,11 @@ namespace LostMind.Engine.UI {
             data.selection = pos;
         }
         public void Click() {
-            Debug.WriteLine("Clicked " + data.elements[data.selection].innerText);
             data.elements[data.selection].click();
         }
-        #endregion
-        #region Loops
+
+
+        // Loops
         public async Task MainloopAsync() {
             await Task.Run(Mainloop);
         }
@@ -265,12 +276,13 @@ namespace LostMind.Engine.UI {
             if (data.elements.Count == 0) {
                 throw new Exception("Cannot start mainloop without elements!");
             }
-            UserKeyInput.CallEvent(new ConsoleKeyInfo((char)UISysConfig.UIMoveDownKey_txtIn, UISysConfig.UIMoveDownKey_txtIn, false, false, false));
-            UserKeyInput.CallEvent(new ConsoleKeyInfo((char)UISysConfig.UIMoveUpKey_txtIn, UISysConfig.UIMoveUpKey_txtIn, false, false, false));
+            UserKeyInput.CallEvent(new ConsoleKeyInfo((char)UISysConfig.UIMoveDownKey_txtIn, UISysConfig.UIMoveDownKey_txtIn, false, false, false)); Thread.Sleep(2);
+            UserKeyInput.CallEvent(new ConsoleKeyInfo((char)UISysConfig.UIMoveUpKey_txtIn, UISysConfig.UIMoveUpKey_txtIn, false, false, false)); Thread.Sleep(2);
             while (!data.breakLoop) {
                 if (!data.breakLoop) UserKeyInput.IterateLoop();
                 else {
                     Debug.WriteLine("Terminating loop...");
+                    UCO.WriteXY(Console.CursorLeft + 1, Console.CursorTop, " ");
                     break;
                 }
             }
@@ -291,8 +303,9 @@ namespace LostMind.Engine.UI {
             data.breakLoop = false;
         }
         public void StopLoop() => _ = _StopLoop();
-        #endregion
-        #region Memory
+        
+
+        // Memory
         public void AddElement(UIElement element, bool select = false) {
             data.elements.Add(element);
             if (select) {
@@ -320,6 +333,5 @@ namespace LostMind.Engine.UI {
             DumpArea(ConsoleColor.Black, ConsoleColor.White, ' ');
             data.elements.Clear();
         }
-        #endregion
     }
 }
