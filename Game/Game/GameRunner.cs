@@ -16,14 +16,13 @@ namespace LostMind.Game.Game {
             UCO.TrySetSize(120, 30);
             UserConsoleNativeInterface.setFont("system", 1, 10, -1);
             AppDomain.CurrentDomain.UnhandledException += BSOD;
-            throw new Exception();
         }
 
         private void BSOD(object sender, UnhandledExceptionEventArgs e) {
             UserConsoleNativeInterface.setFont("Lucida Console", 3, 9, 1);
             var exc = ((Exception)e.ExceptionObject);
             Console.BackgroundColor = ConsoleColor.DarkBlue;
-            
+            Console.WriteLine("");
 
         }
     }

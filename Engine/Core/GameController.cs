@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using LostMind.Engine.Native;
 
 namespace LostMind.Engine.Core {
     public class GameController {
@@ -18,17 +17,17 @@ namespace LostMind.Engine.Core {
         public int DeltaTime => delta;
         BackgroundWorker worker = new BackgroundWorker();
 
-        private GameController() {
+        private GameController(GamePlace startPlace) {
             worker.DoWork += doWork;
-            SafeNativeMethods.QueryPerformanceCounter(out hiResTimestamp);
             worker.RunWorkerAsync();
+            places.Add(startPlace);
         }
         void doWork(object sender, DoWorkEventArgs e) {
-            long now = 0;
-            SafeNativeMethods.QueryPerformanceCounter(out now);
-            delta = (int) (now - hiResTimestamp);
-            hiResTimestamp = now;
+            
         }
 
+        public List<GamePlace> Places { get => places; set { places = value; } }
+        List<GamePlace> places = new List<GamePlace>();
+        int currentPlaceIndex = 0;
     }
 }

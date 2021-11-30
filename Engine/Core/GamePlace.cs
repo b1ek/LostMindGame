@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace LostMind.Engine.Core {
-    class GamePlace : IDisposable {
+    public class GamePlace : IDisposable {
         public string Id;
         Viewport view;
         public GamePlace(string id) {
