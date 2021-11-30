@@ -25,9 +25,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Resources\Libraries\NativeLib.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="Resources\Libraries\WinApiDLL.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -58,10 +55,6 @@
     <None Update="Resources\Music\Trauma.2.mp3">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Resources\Libraries\" />
   </ItemGroup>
 
 </Project>

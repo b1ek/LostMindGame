@@ -15,7 +15,7 @@
 ## LostMind
 [![Time wasted for this shit](https://wakatime.com/badge/github/b1ek/LostMindGame.svg?style=plastic)](https://wakatime.com/badge/github/b1ek/LostMindGame)
 [![Code QA](https://img.shields.io/codefactor/grade/github/b1ek/LostMindGame?label=Code%20quality&style=plastic)](https://www.codefactor.io/repository/github/b1ek/lostmindgame)
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/b1ek/LostMindGame/.NET%20Core%20Desktop?style=plastic)(https://github.com/b1ek/LostMindGame/actions)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/b1ek/LostMindGame/.NET%20Core%20Desktop?style=plastic)](https://github.com/b1ek/LostMindGame/actions)
 
 My first game. Building an engine for it from scratch
 using C# and .NET 5.
