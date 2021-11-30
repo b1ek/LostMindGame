@@ -8,16 +8,12 @@ using System.Threading.Tasks;
 
 namespace LostMind.Engine.Core {
     public class GameController {
-        public static GameController CreateNew() {
-            return new GameController();
-        }
 
         long hiResTimestamp;
         int delta = 0;
         public int DeltaTime => delta;
         BackgroundWorker worker = new BackgroundWorker();
-
-        private GameController(GamePlace startPlace) {
+        public GameController(GamePlace startPlace) {
             worker.DoWork += doWork;
             worker.RunWorkerAsync();
             places.Add(startPlace);

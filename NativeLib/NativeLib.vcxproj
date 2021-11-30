@@ -114,6 +114,7 @@
       </PrecompiledHeaderFile>
       <Optimization>MinSpace</Optimization>
       <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
+      <ExceptionHandling>false</ExceptionHandling>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -122,6 +123,8 @@
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalOptions>/ALIGN:64 %(AdditionalOptions)</AdditionalOptions>
+      <ShowProgress>LinkVerbose</ShowProgress>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -177,8 +180,7 @@
     <ClInclude Include="framework.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="fileUtilities.cpp" />
+    <ClCompile Include="dllc.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -23,10 +23,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dllmain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="fileUtilities.cpp">
+    <ClCompile Include="dllc.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
